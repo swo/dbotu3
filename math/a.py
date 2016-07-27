@@ -64,3 +64,10 @@ q = scipy.stats.chi2.cdf(D, df=(n - 1))
 print("D:", D)
 print("p:", p)
 print("q:", q)
+
+
+# and now compute it in an entirely different way
+f = lambda xs: sum([x * np.log(x) for x in xs if x > 0]) - sum(xs) * np.log(sum(xs))
+x12s = [a + b for a, b in zip(x1s, x2s)]
+D2 = -2.0 * (f(x12s) - f(x1s) - f(x2s))
+print("D2:", D2)
