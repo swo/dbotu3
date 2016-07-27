@@ -3,7 +3,8 @@
 # author: scott olesen <swo@mit.edu>
 
 import argparse, sys
-import pandas as pd
+import pandas as pd, numpy as np
+import scipy.stats
 
 def read_otu_table(fn):
     return pd.read_table(fn, index_col=0, header=0)
@@ -24,8 +25,20 @@ def merge_seq(table, abundances, otu, merged_seq):
 
     return table, abundances
 
-def abundance_test(x, y):
-    pass
+def D_helper(x):
+    x = np.array(x)
+    x = x[x > 0]
+    return np.sum(x * np.log(x)) - (np.sum(x) * np.log(np.sum(x)))
+
+def D(x, y):
+    x = np.array(x)
+    y = np.array(y)
+    return -2.0 * (D_helper(x + y) - D_helper(x) - D_helper(y))
+
+def abundance_test_pval(x, y):
+    assert len(x) == len(y)
+    df = len(x) - 1
+    return scipy.stats.chi2.sf(D(x, y), df=df)
 
 
 if __name__ == '__main__':
@@ -47,7 +60,7 @@ if __name__ == '__main__':
     # read in the distance matrix
     matrix = read_fasttree_matrix(args.matrix)
 
-    # get a list of the names of the sequences in order of their (decreasing) abundance 
+    # get a list of the names of the sequences in order of their (decreasing) abundance
     seq_abunds = seq_table.sum(axis=1).sort_values(ascending=False)
 
     # initialize an OTU table
@@ -67,12 +80,17 @@ if __name__ == '__main__':
         # do any remaining candidates pass the distribution test?
         merged = False
         for otu in candidate_otus:
-            abund_pval = abundance_test(otu_table.loc[otu], seq_table.loc[seq])
-            if abund_pval > args.pval:
+            test_pval = abundance_test_pval(otu_table.loc[otu], seq_table.loc[seq])
+            if test_pval > args.pval:
                 # merge this sequence into that otu
+                #args.output.write('> {} had dist: {}\n'.format(otu, otu_table.loc[otu]))
                 otu_table.loc[otu] += seq_table.loc[seq]
                 otu_abunds[otu] += seq_abunds[seq]
                 args.output.write('\t'.join([seq, 'match', otu]) + '\n')
+                #args.output.write('> {} has dist: {}\n'.format(seq, seq_table.loc[seq]))
+                #args.output.write('> {} now has dist: {}\n'.format(otu, otu_table.loc[otu]))
+                #args.output.write('> pval: {}\n'.format(test_pval))
+                merged = True
                 break
 
         if not merged:
@@ -80,6 +98,7 @@ if __name__ == '__main__':
             otu_table = otu_table.append(seq_table.loc[seq])
             otu_abunds = otu_abunds.append(pd.Series(seq_abunds[seq], index=[seq]))
             args.output.write('\t'.join([seq, 'otu', '']) + '\n')
+            #args.output.write('> {} has dist: {}\n'.format(seq, seq_table.loc[seq]))
 
         # make sure the otu abundances have remained sorted
         otu_abunds.sort_values(ascending=False, inplace=True)
