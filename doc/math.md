@@ -38,6 +38,8 @@ H_1: a_i \sim \mathrm{Poisson}(\lambda_{\mathrm{a}i}) \text{ and } b_i \sim \mat
 $$
 where there are no constraints on the relationships between the Poisson parameters.
 
+[^1]: [McMurdie and Holmes, 2014](http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1003531). doi:10.1371/journal.pcbi.1003531
+
 The null model asserts that there is some relationship between the two OTUs,
 specifically that second OTU is distributed "the same as" the first one, just
 rescaled to some lower abundance. I articulate this as
@@ -86,4 +88,31 @@ one for each OTU and sample, and the null has $N + 1$, one for each sample and t
 factor $\sigma$.) The cumulative distribution function of $\chi^2$ at $\Lambda$ is easy
 to compute.
 
-[^1]: [McMurdie and Holmes, 2014](http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1003531). doi:10.1371/journal.pcbi.1003531
+# Comparisons with other solutions
+## The $\chi^2$ test
+The "vanilla" Pearson's $\chi^2$ test has a statistic
+$$
+\chi^2 = \sum_i \sum_t \frac{(O_{ti} - E_{ti})^2}{E_{ti}},
+$$
+where $t$ stands for the two taxa ($a$ and $b$), $O_{ti}$ is the observed number of counts in
+that cell of the table, and $E_{ti}$ is the expected number of counts. The expected counts
+are computed using the marginals, e.g.,
+$$
+E_{ai} = (a_i + b_i) \frac{A}{A + B}.
+$$
+Plugging in these values gives
+$$
+\chi^2 = (A + B) \sum_i \left( \frac{a_i}{a_i + b_i} \frac{a_i}{A} + \frac{b_i}{a_i + b_i} \frac{b_i}{B} - 1 \right),
+$$
+which does not bear any immediate obvious relationship to the other statistic $\Lambda$.
+
+## JSD
+Defining $m_i = \tfrac{1}{2}(a_i + b_i)$, then the JSD between the two taxa is
+$$
+\mathrm{JSD} = \frac{1}{2} \sum_i a_i \log \frac{a_i}{m_i} + \frac{1}{2} \sum_i b_i \log \frac{b_i}{m_i},
+$$
+which simplifies to
+$$
+\mathrm{JSD} = \sum_i \left[ \frac{1}{2} \left( a_i \log a_i + b_i \log b_i \right) + (a_i + b_i) \log (a_i + b_i) \right].
+$$
+This bears a greater resemblance to the equation for $\Lambda$, excepting some factors of two and the "sum" terms in $f(\boldsymbol{x})$.
