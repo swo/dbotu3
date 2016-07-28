@@ -16,6 +16,13 @@ def read_fasttree_matrix(fn):
     matrix.columns = matrix.index
     return matrix
 
+def genetic_candidates(matrix, otu_table, seq, max_dist):
+    dists_to_otus = matrix[seq][otu_table.index]
+    return dists_to_otus[dists_to_otus < args.dist].sort_values(ascending=True).index
+
+def abundance_candidates(otu_abunds, cutoff):
+    return otu_abunds[otu_abunds > cutoff].index
+
 def merge_seq(table, abundances, otu, merged_seq):
     table.loc[otu] += table.loc[merged_seq]
     table = table.drop(merged_seq)
@@ -45,11 +52,12 @@ if __name__ == '__main__':
     p = argparse.ArgumentParser(description='')
     p.add_argument('matrix', type=argparse.FileType('r'), help='distance matrix from FastTree')
     p.add_argument('table', type=argparse.FileType('r'), help='sequence count table')
-    p.add_argument('--abund', type=float, default=0.0, help='minimum fold difference for comparing two OTUs')
-    p.add_argument('--dist', type=float, default=0.1, help='maximum genetic difference for comparing two OTUs')
-    p.add_argument('--pval', type=float, default=0.001, help='minimum p-value for merging OTUs')
-    p.add_argument('--output', '-o', default=sys.stdout, type=argparse.FileType('w'))
-    p.add_argument('--save', default=None, help='save OTU table?')
+    p.add_argument('--abund', '-a', jtype=float, default=0.0, help='minimum fold difference for comparing two OTUs')
+    p.add_argument('--dist', '-d', type=float, default=0.1, help='maximum genetic difference for comparing two OTUs')
+    p.add_argument('--pval', '-p', type=float, default=0.001, help='minimum p-value for merging OTUs')
+    p.add_argument('--log', '-l', default=sys.stdout, type=argparse.FileType('w'), help='log output')
+    p.add_argument('--verbose', '-v', action='store_true', help='record checks in log?')
+    p.add_argument('--output', '-o', default=None, help='save OTU table?')
     args = p.parse_args()
 
     assert args.abund >= 0.0
@@ -69,32 +77,32 @@ if __name__ == '__main__':
 
     for seq in seq_abunds.index:
         # which OTUs pass the genetic cutoff criteria?
-        # get a list of OTUs in order of increasing distance
-        dists_to_otus = matrix[seq][otu_table.index]
-        g_candidates = dists_to_otus[dists_to_otus < args.dist].sort_values(ascending=True).index
-        print('genetic_check', seq, *g_candidates, sep='\t')
+        # get a list of genetic candidate OTUs in order of increasing distance
+        candidates1 = genetic_candidates(matrix, otu_table, seq, args.dist)
+
+        if args.verbose:
+            print('genetic_check', seq, *candidates1, sep='\t', file=args.log)
 
         # which of those OTUs also pass the abundance criterion?
-        candidate_abunds = otu_abunds[g_candidates]
         cutoff = seq_abunds[seq] * args.abund
-        ga_candidates = candidate_abunds[candidate_abunds > cutoff].index
-        print('abundance_check', seq, *ga_candidates, sep='\t')
+        candidates2 = abundance_candidates(otu_abunds[g_candidates], cutoff=cutoff)
+
+        if len(g_candidates) > 0 and args.verbose:
+            print('abundance_check', seq, *ga_candidates, sep='\t', file=args.log)
 
         # do any remaining candidates pass the distribution test?
         merged = False
         for otu in ga_candidates:
             test_pval = abundance_test_pval(otu_table.loc[otu], seq_table.loc[seq])
-            print('distribution_check', seq, otu, test_pval, sep='\t')
+
+            if verbose:
+                print('distribution_check', seq, otu, test_pval, sep='\t', file=args.log)
+
             if test_pval > args.pval:
                 # merge this sequence into that otu
-                #args.output.write('> {} had dist: {}\n'.format(otu, otu_table.loc[otu]))
                 otu_table.loc[otu] += seq_table.loc[seq]
                 otu_abunds[otu] += seq_abunds[seq]
-                print('match', seq, otu, sep='\t')
-                args.output.write('\t'.join([seq, 'match', otu]) + '\n')
-                #args.output.write('> {} has dist: {}\n'.format(seq, seq_table.loc[seq]))
-                #args.output.write('> {} now has dist: {}\n'.format(otu, otu_table.loc[otu]))
-                #args.output.write('> pval: {}\n'.format(test_pval))
+                print('match', seq, otu, sep='\t', file=args.log)
                 merged = True
                 break
 
@@ -102,12 +110,10 @@ if __name__ == '__main__':
             # this is its own OTU
             otu_table = otu_table.append(seq_table.loc[seq])
             otu_abunds = otu_abunds.append(pd.Series(seq_abunds[seq], index=[seq]))
-            print('otu', seq, sep='\t')
-            args.output.write('\t'.join([seq, 'otu', '']) + '\n')
-            #args.output.write('> {} has dist: {}\n'.format(seq, seq_table.loc[seq]))
+            print('otu', seq, sep='\t', file=args.log)
 
         # make sure the otu abundances have remained sorted
         otu_abunds.sort_values(ascending=False, inplace=True)
 
-    if args.save is not None:
-        otu_table.to_csv(args.save, sep='\t')
+    if args.output is not None:
+        otu_table.to_csv(args.output, sep='\t')
