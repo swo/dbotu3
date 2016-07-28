@@ -7,7 +7,7 @@ import pandas as pd, numpy as np
 import scipy.stats
 
 def read_otu_table(fn):
-    return pd.read_table(fn, index_col=0, header=0)
+    return pd.read_table(fn, index_col=0, header=0).astype(int)
 
 def read_fasttree_matrix(fn):
     # FastTree put it in a funny format: the number of rows in its own line at the top,
@@ -69,23 +69,28 @@ if __name__ == '__main__':
 
     for seq in seq_abunds.index:
         # which OTUs pass the genetic cutoff criteria?
+        # get a list of OTUs in order of increasing distance
         dists_to_otus = matrix[seq][otu_table.index]
-        candidate_otus = dists_to_otus[dists_to_otus < args.dist].index
+        g_candidates = dists_to_otus[dists_to_otus < args.dist].sort_values(ascending=True).index
+        print('genetic_check', seq, *g_candidates, sep='\t')
 
         # which of those OTUs also pass the abundance criterion?
-        candidate_abunds = otu_abunds[candidate_otus]
+        candidate_abunds = otu_abunds[g_candidates]
         cutoff = seq_abunds[seq] * args.abund
-        candidate_otus = candidate_abunds[candidate_abunds > cutoff].index
+        ga_candidates = candidate_abunds[candidate_abunds > cutoff].index
+        print('abundance_check', seq, *ga_candidates, sep='\t')
 
         # do any remaining candidates pass the distribution test?
         merged = False
-        for otu in candidate_otus:
+        for otu in ga_candidates:
             test_pval = abundance_test_pval(otu_table.loc[otu], seq_table.loc[seq])
+            print('distribution_check', seq, otu, test_pval, sep='\t')
             if test_pval > args.pval:
                 # merge this sequence into that otu
                 #args.output.write('> {} had dist: {}\n'.format(otu, otu_table.loc[otu]))
                 otu_table.loc[otu] += seq_table.loc[seq]
                 otu_abunds[otu] += seq_abunds[seq]
+                print('match', seq, otu, sep='\t')
                 args.output.write('\t'.join([seq, 'match', otu]) + '\n')
                 #args.output.write('> {} has dist: {}\n'.format(seq, seq_table.loc[seq]))
                 #args.output.write('> {} now has dist: {}\n'.format(otu, otu_table.loc[otu]))
@@ -97,6 +102,7 @@ if __name__ == '__main__':
             # this is its own OTU
             otu_table = otu_table.append(seq_table.loc[seq])
             otu_abunds = otu_abunds.append(pd.Series(seq_abunds[seq], index=[seq]))
+            print('otu', seq, sep='\t')
             args.output.write('\t'.join([seq, 'otu', '']) + '\n')
             #args.output.write('> {} has dist: {}\n'.format(seq, seq_table.loc[seq]))
 
