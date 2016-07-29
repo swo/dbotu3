@@ -63,6 +63,9 @@ class DBCaller:
 
     @classmethod
     def _D(cls, x, y):
+        '''
+        Statistic for the likelihood ratio test. See docs for mathematical derivation.
+        '''
         x = np.array(x)
         y = np.array(y)
         return -2.0 * (cls._D_helper(x + y) - cls._D_helper(x) - cls._D_helper(y))
