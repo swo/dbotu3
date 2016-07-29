@@ -33,6 +33,7 @@ file intended to be turned into a pdf with
 
 ### Prerequisites
 
+- A table of sequence counts. The first column is sequence IDs; the rest of the column headers are sample names. Each cell is the number of times that sequence appears in that sample.
 - A matrix describing genetic distances between your sequences. This software is currently configured to accept the input that comes from [FastTree](http://www.microbesonline.org/fasttree/)'s `-makematrix` option.
 - Python 3
 - Numpy, SciPy
@@ -40,6 +41,22 @@ file intended to be turned into a pdf with
 ### Installing
 
 (placeholder)
+
+### Example workflow
+
+1. Align your cleaned, processed reads with [pynast](http://biocore.github.io/pynast/):
+
+    pynast -t core_set_aligned.fasta.imputed -i my-sequences.fasta -l 0 -a my-aligned-sequences.fasta
+
+2. Make a distance matrix using those sequences:
+
+    FastTree -makematrix < my-aligned-sequences.fasta > matrix.txt
+
+3. Feed the matrix and the table of sequence counts by samples into this program:
+
+    dbotu.py matrix.txt my-sequence-table.txt -o my-otu-table.txt
+
+4. Chimera-check the OTUs.
 
 ## Running the tests
 

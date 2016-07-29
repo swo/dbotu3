@@ -7,7 +7,33 @@ import pandas as pd, numpy as np
 import scipy.stats
 
 class DBCaller:
+    '''
+    Object for processing the sequence table and distance matrix into an OTU table.
+    '''
     def __init__(self, seq_table, matrix, max_dist, min_fold, threshold_pval, log=None, verbose=False):
+        '''
+        seq_table: pandas.DataFrame
+          Samples on the columns; sequences on the rows
+        matrix: pandas.DataFrame
+          Symmetric, square matrix with sequences on the rows and columns
+        max_dist: float
+          Genetic cutoff above which a sequence will not be merged into an OTU
+        min_fold: float
+          Multiply the sequence's abundance by this fold to get the minimum abundance
+          of an OTU for merging
+        threshold_pval: float
+          P-value below which a sequence will not be merged into an OTU
+        log: filehandle
+          Log file reporting how sequences are merged or placed into their own OTUs.
+          Tab-delimited, one line per sequence. If the sequence goes into its own
+          OTU, the line is sequence-"otu". If the sequence goes into an existing OTU,
+          the line is sequence-"match"-otu.
+        verbose: bool
+          If true, put extra lines into the log file. For every genetic threshold
+          check, a line "genetic_check"-sequence-[OTUs that meet the genetic threshold].
+          For every abundance check, a line "abundance_check"-sequence-[OTUs that meet].
+          For every distribution test, a line "distribution_check"-sequence-OTU-pvalue.
+        '''
         self.seq_table = seq_table
         self.matrix = matrix
         self.max_dist = max_dist
@@ -47,16 +73,23 @@ class DBCaller:
         return candidates2
 
     def merge_seq_into_otu(self, seq, otu):
+        '''Merge sequence into OTU, adjusting the OTU abundance'''
         self.otu_table.loc[otu] += self.seq_table.loc[seq]
         self.otu_abunds[otu] += self.seq_abunds[seq]
 
     def create_otu(self, seq):
+        '''
+        Create a new OTU by starting a new line in the OTU table,
+        creating an OTU abundance entry, and ensuring the the OTU
+        abundances remain sorted.
+        '''
         self.otu_table = self.otu_table.append(self.seq_table.loc[seq])
         self.otu_abunds = self.otu_abunds.append(pd.Series(self.seq_abunds[seq], index=[seq]))
         self.otu_abunds.sort_values(ascending=False, inplace=True)
 
     @staticmethod
     def _D_helper(x):
+        '''A helper function for the _D method'''
         x = np.array(x)
         x = x[x > 0]
         return np.sum(x * np.log(x)) - (np.sum(x) * np.log(np.sum(x)))
@@ -72,11 +105,19 @@ class DBCaller:
 
     @classmethod
     def abundance_test_pval(cls, x, y):
+        '''
+        P-value from the likelihood ratio test comparing the distribution of the abundances
+        of two taxa (x and y). See docs for explanation of the test.
+        '''
         assert len(x) == len(y)
         df = len(x) - 1
         return scipy.stats.chi2.sf(cls._D(x, y), df=df)
 
     def _process_seq(self, seq):
+        '''
+        Process a sequence: run the genetic, abundance, and distribution checks, either
+        merging the sequence into an existing OTU or creating a new OTU.
+        '''
         if self.verbose:
             print('seq', seq, sep='\t', file=self.log)
 
@@ -101,14 +142,37 @@ class DBCaller:
         return seq
 
     def generate_otu_table(self):
+        '''
+        Process all the input sequences to make an OTU table.
+
+        returns: pandas.DataFrame
+          OTU table (which can also be found at instance.otu_table)
+        '''
         for seq in self.seqs:
             self._process_seq(seq)
 
+        return self.otu_table
 
-def read_otu_table(fn):
+
+def read_sequence_table(fn):
+    '''
+    Read in a table of sequences. Expect a header and the sequence IDs in the
+    first column. Samples are on the columns.
+
+    fn: filename (or handle)
+
+    returns: pandas.DataFrame
+    '''
     return pd.read_table(fn, index_col=0, header=0).astype(int)
 
 def read_fasttree_matrix(fn):
+    '''
+    Read in a matrix produced by FastTree -makematrix
+    
+    fn: filename (or handle)
+
+    return: pandas.DataFrame
+    '''
     # FastTree put it in a funny format: the number of rows in its own line at the top,
     # then each row gets a label
     matrix = pd.read_table(fn, sep='\s+', skiprows=1, header=None, index_col=0)
@@ -128,6 +192,8 @@ if __name__ == '__main__':
     args = p.parse_args()
 
     assert args.abund >= 0.0
+    assert args.dist >= 0.0
+    assert args.pval >= 0.0 and args.pval <= 1.0
 
     # read in the sequences table
     seq_table = read_otu_table(args.table)
