@@ -44,19 +44,19 @@ file intended to be turned into a pdf with
 
 ### Example workflow
 
-1. Align your cleaned, processed reads with [pynast](http://biocore.github.io/pynast/):
+Align your cleaned, processed reads with [pynast](http://biocore.github.io/pynast/):
 
     pynast -t core_set_aligned.fasta.imputed -i my-sequences.fasta -l 0 -a my-aligned-sequences.fasta
 
-2. Make a distance matrix using those sequences:
+Make a distance matrix using those sequences:
 
     FastTree -makematrix < my-aligned-sequences.fasta > matrix.txt
 
-3. Feed the matrix and the table of sequence counts by samples into this program:
+Feed the matrix and the table of sequence counts by samples into this program:
 
     dbotu.py matrix.txt my-sequence-table.txt -o my-otu-table.txt
 
-4. Chimera-check the OTUs.
+Chimera-check the OTUs.
 
 ## Running the tests
 
