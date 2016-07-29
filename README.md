@@ -56,7 +56,7 @@ Feed the matrix and the table of sequence counts by samples into this program:
 
     dbotu.py matrix.txt my-sequence-table.txt -o my-otu-table.txt
 
-Chimera-check the OTUs.
+Chimera-check the OTUs, possibly with the script in `tools/`.
 
 ## Running the tests
 
