@@ -15,7 +15,7 @@ This project is aiming to replace step 3. In outline, step 3 meant:
 1. Make the most abundant sequence an OTU.
 2. For each sequence (in order of decreasing abundance), find the set of OTUs that is above some abundance cutoff with respect to this sequence. If no OTUs exceed that cutoff, make this sequence a new OTU and go to the next sequence.
 3. Otherwise, find the set of OTUs among that those satisfied the abundance criterion that also satisfy a genetic distance cutoff. If no OTUs are within that cutoff, make this sequence a new OTU and go to the next sequence.
-4. Otherwise, starting with the most abundant OTU, (is that right?) check if this sequence is distributed differently among the samples than that OTU. If not, merge this sequence into that OTU and go on to the next sequence.
+4. Otherwise, starting with the most closely-genetically-related OTU, check if this sequence is distributed differently among the samples than that OTU. If not, merge this sequence into that OTU and go on to the next sequence.
 5. Otherwise, make this sequence a new OTU and move on.
 
 In the original algorithm, two sequences were considered differently
@@ -33,7 +33,9 @@ file intended to be turned into a pdf with
 
 ### Prerequisites
 
-(placeholder)
+- A matrix describing genetic distances between your sequences. This software is currently configured to accept the input that comes from [FastTree](http://www.microbesonline.org/fasttree/)'s `-makematrix` option.
+- Python 3
+- Numpy, SciPy
 
 ### Installing
 
@@ -41,7 +43,7 @@ file intended to be turned into a pdf with
 
 ## Running the tests
 
-(placeholder)
+The testing framework is [py.test](http://docs.pytest.org/en/latest/). The tests (in `test/`) can be run with `make test` in the top directory.
 
 ## Contributing
 
