@@ -45,6 +45,12 @@ class DBCaller:
         if self.verbose and self.log is None:
             raise RuntimeError("verbose option requires a log")
 
+        if not (self.matrix.transpose() == self.matrix).all().all():
+            raise RuntimeError("distance matrix must be symmetric")
+
+        if not (self.matrix.index.sort_values() == self.seq_table.index.sort_values()).all():
+            raise RuntimeError("distance matrix and sequence table must have same sequence IDs")
+
         # get a list of the names of the sequences in order of their (decreasing) abundance
         self.seq_abunds = self.seq_table.sum(axis=1).sort_values(ascending=False)
 
@@ -196,7 +202,7 @@ if __name__ == '__main__':
     assert args.pval >= 0.0 and args.pval <= 1.0
 
     # read in the sequences table
-    seq_table = read_otu_table(args.table)
+    seq_table = read_sequence_table(args.table)
 
     # read in the distance matrix
     matrix = read_fasttree_matrix(args.matrix)

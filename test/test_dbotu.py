@@ -1,6 +1,39 @@
+import pytest
 from dbotu import *
-import numpy as np
+
+import numpy as np, pandas as pd
 import scipy.stats, scipy.optimize
+
+@pytest.fixture
+def caller():
+    names = ['seq1', 'seq2', 'seq3']
+    matrix = pd.DataFrame(np.array([[0.0, 0.1, 0.2], [0.1, 0.0, 0.3], [0.2, 0.3, 0.0]]), index=names, columns=names)
+    print(matrix)
+    table = pd.DataFrame(np.array([[0, 10, 20], [0, 1, 2], [10, 0, 0]]), index=['seq1', 'seq2', 'seq3'], columns=['sample1', 'sample2', 'sample3'])
+    return DBCaller(table, matrix, 0.1, 0.0, 0.001)
+
+
+class TestInit:
+    def test_seq_list(self, caller):
+        '''they should be in abundance order'''
+        assert (caller.seqs == ['seq1', 'seq3', 'seq2']).all()
+
+    def test_seq_abunds(self, caller):
+        assert (caller.seq_abunds == [30, 10, 3]).all()
+
+    def test_fail_on_asymmetric(self):
+        names = ['seq1', 'seq2']
+        matrix = pd.DataFrame(np.array([[1, 2], [3, 4]]), index=names, columns=names)
+        table = pd.DataFrame(np.array([[0, 0], [0, 0]]), index=names, columns=['sample1', 'sample2'])
+        with pytest.raises(RuntimeError):
+            DBCaller(table, matrix, 0.1, 0.0, 0.001)
+
+    def test_fail_on_nonsquare(self):
+        matrix = pd.DataFrame(np.array([[0, 0, 0], [0, 0, 0]]), index=['a', 'b'], columns=['a', 'b', 'c'])
+        table = pd.DataFrame(np.array([[0, 0], [0, 0]]), index=['a', 'b'], columns=['sample1', 'sample2'])
+        with pytest.raises(ValueError):
+            DBCaller(table, matrix, 0.1, 0.0, 0.001)
+
 
 class TestD:
     def test1(self):
