@@ -1,6 +1,8 @@
 # Distribution-based OTU calling
 
-A rework of Sarah Preheim's [dbOTU](http://aem.asm.org/content/79/21/6593.long) caller.
+A modification of Sarah Preheim's [dbOTU](http://aem.asm.org/content/79/21/6593.long) caller.
+The scope is narrower, the numerical comparisons are faster, and the interface may be more
+user-friendly.
 
 ## Scope of the project
 
@@ -63,6 +65,14 @@ Chimera-check the OTUs, possibly with the script in `tools/`.
 The testing framework is [py.test](http://docs.pytest.org/en/latest/). The tests (in `test/`) can be run with `make test` in the top directory.
 
 ## Contributing
+
+(placeholder)
+
+## To-do
+
+- Benchmark the quality of the output against gold standards and previous algorithm.
+- Benchmark the speed against the previous algorithm.
+- Figure out how to better integrate this into existing pipelines. Maybe there should be different kinds of output, like a table showing which sequence got assigned to which OTU.
 
 ## Authors
 
