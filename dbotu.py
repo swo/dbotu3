@@ -7,7 +7,7 @@ import pandas as pd, numpy as np
 from Bio import SeqIO
 import scipy.stats
 
-from dbotu import kmer
+import kmer
 
 class DBCaller:
     '''
@@ -182,15 +182,16 @@ if __name__ == '__main__':
     p = argparse.ArgumentParser(description='', )
     p.add_argument('table', type=argparse.FileType('r'), help='sequence count table')
     p.add_argument('fasta', type=argparse.FileType('r'), help='sequences (unaligned)')
-    p.add_argument('--kmer_length', '-k', type=int, default=4, help='kmer size')
-    p.add_argument('--abund', '-a', type=float, default=10, help='minimum fold difference for comparing two OTUs (0=no abundance criterion; default 10.0)')
-    p.add_argument('--dist', '-d', type=float, default=250.0, help='maximum genetic difference for comparing two OTUs (default: 0.1)')
+    p.add_argument('dist', type=float, help='maximum kmer difference for comparing two OTUs (recommended: kmer size * maximum number of acceptable mismatches)')
+    p.add_argument('--word_length', '-k', type=int, default=8, help='kmer size (default: 8)')
+    p.add_argument('--abund', '-a', type=float, default=10.0, help='minimum fold difference for comparing two OTUs (0=no abundance criterion; default 10.0)')
     p.add_argument('--pval', '-p', type=float, default=0.0005, help='minimum p-value for merging OTUs (default: 0.0005)')
     p.add_argument('--log', '-l', default=None, type=argparse.FileType('w'), help='log output')
     p.add_argument('--verbose', '-v', action='store_true', help='record checks in log?')
     p.add_argument('--output', '-o', default=sys.stdout, help='OTU table output (default: stdout)')
     args = p.parse_args()
 
+    assert args.dist >= 0
     assert args.abund >= 0.0
     assert args.dist >= 0.0
     assert args.pval >= 0.0 and args.pval <= 1.0
@@ -198,8 +199,11 @@ if __name__ == '__main__':
     # read in the sequences table
     seq_table = read_sequence_table(args.table)
 
+    # set up the input fasta records
+    records = SeqIO.parse(args.fasta, 'fasta')
+
     # generate the caller object
-    caller = DBCaller(seq_table, SeqIO.parse(args.fasta, 'fasta'), args.kmer_length, args.dist, args.abund, args.pval, args.log, args.verbose)
+    caller = DBCaller(seq_table, records, args.word_length, args.dist, args.abund, args.pval, args.log, args.verbose)
     caller.generate_otu_table()
 
     caller.otu_table.to_csv(args.output, sep='\t')
