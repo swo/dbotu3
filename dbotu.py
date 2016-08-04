@@ -7,19 +7,119 @@ import pandas as pd, numpy as np
 from Bio import SeqIO
 import scipy.stats
 
-import kmer
+class OTU:
+    '''
+    Object for keeping track of an OTU's kmer content and distribution
+    '''
+    def __init__(self, name, sequence, counts, word_size):
+        '''
+        name: str
+          OTU ID
+        sequence: str
+          OTU's nucleotide sequence
+        counts: numpy.Array
+          length of sequence should be the number of samples
+        word_size: int
+          size of kmers
+        '''
+        # make this assertion so that lists of counts don't get concatenated
+        assert isinstance(counts, np.array)
+
+        self.kmer_dict = self.kmer_composition(sequence, word_size)
+        self.counts = counts
+        self.abundance = sum(self.counts)
+
+    def absorb(self, other):
+        self.counts += other.counts
+        self.abundance += other.abundance
+
+    def distance_to(self, other):
+        '''
+        Squared Euclidean distance between the kmer composition dicts
+
+        other: OTU
+          distance to this OTU
+
+        returns: int
+        '''
+        assert isinstance(other, OTU)
+        return self.kmer_distance(self.kmer_dict, other.kmer_dict)
+
+    @staticmethod
+    def kmer_distance(comp1, comp2):
+        '''
+        Squared Euclidean distance between two kmer composition dicts
+
+        comp1: dict {str => int}
+          kmer => counts, like you get from kmer_composition
+
+        returns: int
+        '''
+        kmers = set(comp1.keys()) | set(comp2.keys())
+        return sum([(comp1.get(k, 0) - comp2.get(k, 0)) ** 2 for k in kmers])
+
+    @staticmethod
+    def kmer_composition(sequence, word_size):
+        '''
+        Compute kmer composition
+
+        sequence: str
+          where to get the kemrs
+        word_size: int
+          size of the kmer
+
+        returns: dict {str => int}
+        '''
+        dat = {}
+        for kmer in [nt[i: i + word_size] for i in range(len(nt) - word_size)]:
+            if kmer in dat:
+                dat[kmer] += 1
+            else:
+                dat[kmer] = 1
+
+        return dat
+
+    @staticmethod
+    def _D_helper(x):
+        '''A helper function for the _D method'''
+        x = np.array(x)
+        x = x[x > 0]
+        return np.sum(x * np.log(x)) - (np.sum(x) * np.log(np.sum(x)))
+
+    @classmethod
+    def _D(cls, x, y):
+        '''
+        Statistic for the likelihood ratio test. See docs for mathematical derivation.
+        '''
+        x = np.array(x)
+        y = np.array(y)
+        return -2.0 * (cls._D_helper(x + y) - cls._D_helper(x) - cls._D_helper(y))
+
+    @classmethod
+    def _distribution_test_pval(cls, x, y):
+        '''
+        P-value from the likelihood ratio test comparing the distribution of the abundances
+        of two taxa (x and y). See docs for explanation of the test.
+        '''
+        assert len(x) == len(y)
+        df = len(x) - 1
+        return scipy.stats.chi2.sf(cls._D(x, y), df=df)
+
+    def distribution_pval(self, other):
+        return self._distribution_test_pval(self.counts, other.counts)
+
 
 class DBCaller:
     '''
     Object for processing the sequence table and distance matrix into an OTU table.
     '''
-    def __init__(self, seq_table, records, k, max_dist, min_fold, threshold_pval, log=None, verbose=False):
+    def __init__(self, seq_table, records, word_size, max_dist, min_fold, threshold_pval, log=None, verbose=False):
         '''
         seq_table: pandas.DataFrame
           Samples on the columns; sequences on the rows
         records: sequence of Bio.Seq
           unaligned input sequences
-        k: int
+        word_size: int
           k for the k-mers
         max_dist: float
           kmer distance cutoff above which a sequence will not be merged into an OTU
@@ -41,7 +141,7 @@ class DBCaller:
         '''
         self.seq_table = seq_table
         self.records = records
-        self.k = k
+        self.word_size = word_size
         self.max_dist = max_dist
         self.min_fold = min_fold
         self.threshold_pval = threshold_pval
@@ -54,74 +154,35 @@ class DBCaller:
         # get a list of the names of the sequences in order of their (decreasing) abundance
         self.seq_abunds = self.seq_table.sum(axis=1).sort_values(ascending=False)
 
-        # initialize the OTU information
-        self.otu_table = pd.DataFrame(columns=self.seq_table.columns)
-        self.otu_abunds = pd.Series(index=self.otu_table.columns)
-        self.otu_kmers = {}
+        # initialize OTU information
+        self.otus = []
 
-    def ga_candidates(self, record):
-        '''OTUs that meet the genetic and abundance criteria'''
-        #dists_to_otus = self.matrix[seq][self.otu_table.index]
-        seq_kmers = kmer.kmer_dict(str(record.seq), self.k)
-        dists_to_otus = pd.Series({otu: kmer.distance(seq_kmers, self.otu_kmers[otu]) for otu in self.otu_table.index})
-        candidates1 = dists_to_otus[dists_to_otus < self.max_dist].sort_values(ascending=True).index
+    def ga_matches(self, candidate):
+        '''
+        OTUs that meet the genetic and abundance criteria
 
-        for c in candidates1:
-            print('genetic dist from', c, dists_to_otus[c], file=self.log)
+        candidate: OTU
+          sequence to evaluate
+        '''
+
+        # find abundance matches
+        min_abundance = self.min_fold * candidate_otu.abundance
+        abundance_matches = [otu for otu in self.otus if otu.abundance > min_abundance]
 
         if self.verbose:
-            print('genetic_check', *candidates1, sep='\t', file=self.log)
+            print('abundance_check', *[otu.name for otu in abundance_matches], sep='\t', file=self.log)
 
-        candidate_abunds = self.otu_abunds[candidates1]
-        cutoff = self.seq_abunds[record.id] * self.min_fold
-        candidates2 = candidate_abunds[candidate_abunds > cutoff].index
+        if len(abundance_matches) == 0:
+            return []
+        else:
+            # find genetic matches (in order of decreasing genetic distance)
+            matches_distances = sorted([(otu.distance_to(candidate_otu), otu) for otu in abundance_matches])
+            matches = [otu for dist, otu in matches_distances if dist < self.max_dist]
 
-        if self.verbose and len(candidates1) > 0:
-            print('abundance_check', *candidates2, sep='\t', file=self.log)
+            if self.verbose:
+                print('genetic_check', *[otu.name for otu in matches], sep='\t', file=self.log)
 
-        return candidates2
-
-    def merge_seq_into_otu(self, seq_id, otu):
-        '''Merge sequence into OTU, adjusting the OTU abundance'''
-        self.otu_table.loc[otu] += self.seq_table.loc[seq_id]
-        self.otu_abunds[otu] += self.seq_abunds[seq_id]
-
-    def create_otu(self, record):
-        '''
-        Create a new OTU by starting a new line in the OTU table,
-        creating an OTU abundance entry, and ensuring the the OTU
-        abundances remain sorted.
-        '''
-        self.otu_table = self.otu_table.append(self.seq_table.loc[record.id])
-        self.otu_abunds = self.otu_abunds.append(pd.Series(self.seq_abunds[record.id], index=[record.id]))
-        self.otu_abunds.sort_values(ascending=False, inplace=True)
-        self.otu_kmers[record.id] = kmer.kmer_dict(str(record.seq), self.k)
-
-    @staticmethod
-    def _D_helper(x):
-        '''A helper function for the _D method'''
-        x = np.array(x)
-        x = x[x > 0]
-        return np.sum(x * np.log(x)) - (np.sum(x) * np.log(np.sum(x)))
-
-    @classmethod
-    def _D(cls, x, y):
-        '''
-        Statistic for the likelihood ratio test. See docs for mathematical derivation.
-        '''
-        x = np.array(x)
-        y = np.array(y)
-        return -2.0 * (cls._D_helper(x + y) - cls._D_helper(x) - cls._D_helper(y))
-
-    @classmethod
-    def abundance_test_pval(cls, x, y):
-        '''
-        P-value from the likelihood ratio test comparing the distribution of the abundances
-        of two taxa (x and y). See docs for explanation of the test.
-        '''
-        assert len(x) == len(y)
-        df = len(x) - 1
-        return scipy.stats.chi2.sf(cls._D(x, y), df=df)
+            return matches
 
     def _process_record(self, record):
         '''
@@ -129,12 +190,14 @@ class DBCaller:
         merging the sequence into an existing OTU or creating a new OTU.
         '''
         assert record.id in self.seq_table.index
+        candidate = OTU(record.id, str(record.seq), self.seq_table[record.id], self.word_size)
 
         if self.verbose:
-            print('seq', record.id, sep='\t', file=self.log)
+            print('seq', candidate.name, sep='\t', file=self.log)
 
-        for otu in self.ga_candidates(record):
-            test_pval = self.abundance_test_pval(self.otu_table.loc[otu], self.seq_table.loc[record.id])
+        merged = False
+        for otu in self.ga_matches(record):
+            test_pval = candidate.distribution_pval(otu)
 
             if self.verbose:
                 print('distribution_check', otu, test_pval, sep='\t', file=args.log)
@@ -143,15 +206,16 @@ class DBCaller:
                 if self.log is not None:
                     print('match', record.id, otu, sep='\t', file=args.log)
 
-                self.merge_seq_into_otu(record.id, otu)
-                return otu
+                otu.absorb(candidate)
+                merged = True
+                break
 
-        # form own otu
-        if self.log is not None:
-            print('otu', record.id, sep='\t', file=args.log)
+        if not merged:
+            # form own otu
+            if self.log is not None:
+                print('otu', candidate.name, sep='\t', file=args.log)
 
-        self.create_otu(record)
-        return record
+            self.otus.append(candidate)
 
     def generate_otu_table(self):
         '''
@@ -162,6 +226,9 @@ class DBCaller:
         '''
         for record in self.records:
             self._process_record(record)
+
+        self.otu_table = pd.DataFrame({otu.name: otu for otu in self.otus})
+        self.otu_table.columns = self.seq_table.columns
 
         return self.otu_table
 

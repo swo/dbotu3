@@ -13,28 +13,6 @@ def caller():
     return DBCaller(table, matrix, 0.1, 0.0, 0.001)
 
 
-class TestInit:
-    def test_seq_list(self, caller):
-        '''they should be in abundance order'''
-        assert (caller.seqs == ['seq1', 'seq3', 'seq2']).all()
-
-    def test_seq_abunds(self, caller):
-        assert (caller.seq_abunds == [30, 10, 3]).all()
-
-    def test_fail_on_asymmetric(self):
-        names = ['seq1', 'seq2']
-        matrix = pd.DataFrame(np.array([[1, 2], [3, 4]]), index=names, columns=names)
-        table = pd.DataFrame(np.array([[0, 0], [0, 0]]), index=names, columns=['sample1', 'sample2'])
-        with pytest.raises(RuntimeError):
-            DBCaller(table, matrix, 0.1, 0.0, 0.001)
-
-    def test_fail_on_nonsquare(self):
-        matrix = pd.DataFrame(np.array([[0, 0, 0], [0, 0, 0]]), index=['a', 'b'], columns=['a', 'b', 'c'])
-        table = pd.DataFrame(np.array([[0, 0], [0, 0]]), index=['a', 'b'], columns=['sample1', 'sample2'])
-        with pytest.raises(ValueError):
-            DBCaller(table, matrix, 0.1, 0.0, 0.001)
-
-
 class TestD:
     def test1(self):
         '''check that the difference of log likelihoods is what I computed by hand'''
@@ -66,4 +44,4 @@ class TestD:
 
         # compare that numerical value against the analytical expression in DBCaller
         precision = 6
-        assert round(numerical_D, precision) == round(DBCaller._D(a, b), precision)
+        assert round(numerical_D, precision) == round(OTU._D(a, b), precision)
