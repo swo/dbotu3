@@ -15,14 +15,20 @@ The original pipeline was:
 This project is aiming to replace step 3. In outline, step 3 meant:
 
 1. Make the most abundant sequence an OTU.
-2. For each sequence (in order of decreasing abundance), find the set of OTUs that is above some abundance cutoff with respect to this sequence. If no OTUs exceed that cutoff, make this sequence a new OTU and go to the next sequence.
-3. Otherwise, find the set of OTUs among that those satisfied the abundance criterion that also satisfy a genetic distance cutoff. If no OTUs are within that cutoff, make this sequence a new OTU and go to the next sequence.
-4. Otherwise, starting with the most closely-genetically-related OTU, check if this sequence is distributed differently among the samples than that OTU. If not, merge this sequence into that OTU and go on to the next sequence.
-5. Otherwise, make this sequence a new OTU and move on.
+2. For each sequence (in order of decreasing abundance), find the set of OTUs that meet "abundance" and "genetic" cutoffs. The abundance cutoff requires that the candidate sequence be some fold smaller than the OTU (e.g., so that it can be considered sequencing error). The genetic cutoff requires that the candidate sequence be sufficiently similar to the OTU.  
+3. If no OTUs meet these two criteria, make this sequence into an OTU.
+4. If OTUs do meet these criteria, then, starting with the most closely-genetically-related OTU, check if this sequence is distributed differently among the samples than that OTU. If the distributions are sufficiently similar, merge this sequence into that OTU and go on to the next sequence.
+5. If this candidate sequence does not have a distribution across sample sufficiently similar to an existing OTU, then make this sequence a new OTU.
+6. Move on to the next candidate sequence.
+
+The original implementation took a genetic distance matrix (a Jukes-Cantor distance
+computed using FastTree) as input. When the number of sequences to be clustered
+became too large, the entire matrix would not fit into memory. In this implementation,
+the genetic dissimilarities between sequences and OTUs is computed using k-mers.
 
 In the original algorithm, two sequences were considered differently
-distributed based on $\chi^2$ test. Because many of the comparisons involved
-sequences with small numbers of counts, the $p$-value from the $\chi^2$ test
+distributed based on chi-square test. Because many of the comparisons involved
+sequences with small numbers of counts, the p-value from the chi-square test
 had to be computed empirically, which was expensive. In this software, I use
 a likelihood ratio test, which I think performs very well.
 
@@ -36,7 +42,7 @@ file intended to be turned into a pdf with
 ### Prerequisites
 
 - A table of sequence counts. The first column is sequence IDs; the rest of the column headers are sample names. Each cell is the number of times that sequence appears in that sample.
-- A matrix describing genetic distances between your sequences. This software is currently configured to accept the input that comes from [FastTree](http://www.microbesonline.org/fasttree/)'s `-makematrix` option.
+- A fasta file containing the sequences to be processed into OTUs. The sequences should *not* be aligned.
 - Python 3
 - Numpy, SciPy
 
@@ -46,17 +52,13 @@ file intended to be turned into a pdf with
 
 ### Example workflow
 
-Align your cleaned, processed reads with [pynast](http://biocore.github.io/pynast/):
+Decide on the maximum genetic distance you're willing to accept. This is encoded in a squared
+Euclidean distance between k-mer profiles (i.e., Equation 1 in [here](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2674673/)). As as a rule-of-thumb, you can say (maximum acceptable number of errors) x (length of kmer).
+The default k is 8.
 
-    pynast -t core_set_aligned.fasta.imputed -i my-sequences.fasta -l 0 -a my-aligned-sequences.fasta
+Feed the sequences and the table of sequence counts by samples into this program:
 
-Make a distance matrix using those sequences:
-
-    FastTree -makematrix < my-aligned-sequences.fasta > matrix.txt
-
-Feed the matrix and the table of sequence counts by samples into this program:
-
-    dbotu.py matrix.txt my-sequence-table.txt -o my-otu-table.txt
+    dbotu.py my-sequence-table.txt my-fasta.fasta X -o my-otu-table.txt
 
 Chimera-check the OTUs, possibly with the script in `tools/`.
 
@@ -77,7 +79,3 @@ The testing framework is [py.test](http://docs.pytest.org/en/latest/). The tests
 ## Authors
 
 * **Scott Olesen** - *swo at mit.edu*
-
-## License
-
-(placeholder)
