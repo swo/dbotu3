@@ -23,10 +23,9 @@ class OTU:
           size of kmers
         '''
         # make this assertion so that lists of counts don't get concatenated
-        assert isinstance(counts, np.array)
-
+        self.name = name
         self.kmer_dict = self.kmer_composition(sequence, word_size)
-        self.counts = counts
+        self.counts = np.array(counts)
         self.abundance = sum(self.counts)
 
     def absorb(self, other):
@@ -71,7 +70,7 @@ class OTU:
         returns: dict {str => int}
         '''
         dat = {}
-        for kmer in [nt[i: i + word_size] for i in range(len(nt) - word_size)]:
+        for kmer in [sequence[i: i + word_size] for i in range(len(sequence) - word_size + 1)]:
             if kmer in dat:
                 dat[kmer] += 1
             else:
@@ -166,7 +165,7 @@ class DBCaller:
         '''
 
         # find abundance matches
-        min_abundance = self.min_fold * candidate_otu.abundance
+        min_abundance = self.min_fold * candidate.abundance
         abundance_matches = [otu for otu in self.otus if otu.abundance > min_abundance]
 
         if self.verbose:
@@ -176,7 +175,8 @@ class DBCaller:
             return []
         else:
             # find genetic matches (in order of decreasing genetic distance)
-            matches_distances = sorted([(otu.distance_to(candidate_otu), otu) for otu in abundance_matches])
+            matches_distances = [(otu.distance_to(candidate), otu) for otu in abundance_matches]
+            matches_distances.sort(key=lambda x: (x[0], -x[1].abundance, x[1].name))
             matches = [otu for dist, otu in matches_distances if dist < self.max_dist]
 
             if self.verbose:
@@ -190,21 +190,21 @@ class DBCaller:
         merging the sequence into an existing OTU or creating a new OTU.
         '''
         assert record.id in self.seq_table.index
-        candidate = OTU(record.id, str(record.seq), self.seq_table[record.id], self.word_size)
+        candidate = OTU(record.id, str(record.seq), self.seq_table.loc[record.id], self.word_size)
 
         if self.verbose:
             print('seq', candidate.name, sep='\t', file=self.log)
 
         merged = False
-        for otu in self.ga_matches(record):
+        for otu in self.ga_matches(candidate):
             test_pval = candidate.distribution_pval(otu)
 
             if self.verbose:
-                print('distribution_check', otu, test_pval, sep='\t', file=args.log)
+                print('distribution_check', otu.name, test_pval, sep='\t', file=args.log)
 
             if test_pval > self.threshold_pval:
                 if self.log is not None:
-                    print('match', record.id, otu, sep='\t', file=args.log)
+                    print('match', record.id, otu.name, sep='\t', file=args.log)
 
                 otu.absorb(candidate)
                 merged = True
@@ -227,7 +227,8 @@ class DBCaller:
         for record in self.records:
             self._process_record(record)
 
-        self.otu_table = pd.DataFrame({otu.name: otu for otu in self.otus})
+        self.otus.sort(key=lambda otu: otu.abundance, reverse=True)
+        self.otu_table = pd.DataFrame([otu.counts for otu in self.otus], index=[otu.name for otu in self.otus])
         self.otu_table.columns = self.seq_table.columns
 
         return self.otu_table
