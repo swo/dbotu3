@@ -4,6 +4,8 @@ A modification of Sarah Preheim's [dbOTU](http://aem.asm.org/content/79/21/6593.
 The scope is narrower, the numerical comparisons are faster, and the interface may be more
 user-friendly.
 
+Read the [documentation](http://dbotu2.readthedocs.io/en/latest/).
+
 ## Scope of the project
 
 The original pipeline was:
@@ -56,11 +58,6 @@ Feed the sequences and the table of sequence counts by samples into this program
     dbotu.py my-sequence-table.txt my-fasta.fasta X -o my-otu-table.txt
 
 Chimera-check the OTUs, possibly with the script in `tools/`.
-
-## Documentation
-
-The `sphinx`-generated documentation is in `doc/`. It contains a rough API and
-some explanation of the math used in this implementation.
 
 ## Running the tests
 
