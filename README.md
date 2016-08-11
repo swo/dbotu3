@@ -32,11 +32,6 @@ sequences with small numbers of counts, the p-value from the chi-square test
 had to be computed empirically, which was expensive. In this software, I use
 a likelihood ratio test, which I think performs very well.
 
-More details about the math of DBC are in the `doc` folder, which is currently a markdown
-file intended to be turned into a pdf with
-
-    pandoc --to latex --output math.pdf math.md
-
 ## Getting started
 
 ### Prerequisites
@@ -61,6 +56,11 @@ Feed the sequences and the table of sequence counts by samples into this program
     dbotu.py my-sequence-table.txt my-fasta.fasta X -o my-otu-table.txt
 
 Chimera-check the OTUs, possibly with the script in `tools/`.
+
+## Documentation
+
+The `sphinx`-generated documentation is in `doc/`. It contains a rough API and
+some explanation of the math used in this implementation.
 
 ## Running the tests
 
