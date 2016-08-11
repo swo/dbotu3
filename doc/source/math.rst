@@ -1,6 +1,8 @@
-==================
-The math of dbOTUs
-==================
+.. _distribution_section:
+
+==========================
+The distribution criterion
+==========================
 
 The state of the problem
 ========================

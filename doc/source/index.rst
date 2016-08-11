@@ -11,9 +11,10 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   dbotu
    math
    kmers
-   dbotu
+   api
 
 
 Indices and tables

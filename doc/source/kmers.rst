@@ -1,5 +1,7 @@
+.. _genetic_section:
+
 ===========================
-Selecting genetic distances
+The genetic criterion
 ===========================
 
 Review of previous solutions
