@@ -31,6 +31,12 @@ To run this software, you will need:
 - A fasta file containing the sequences to be processed into OTUs. The
   sequences should *not* be aligned.
 
+The table of sequence counts will be read into memory, but the fasta file
+will be indexed. As per the algorithm, the sequences will be processed in
+order of decreasing abundance, but neither the table nor the fasta file need
+to be in any particular order. The software will throw an error if there are
+sequence IDs in the table that are not in the fasta.
+
 Deciding on parameters
 ======================
 

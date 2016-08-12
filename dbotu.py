@@ -163,6 +163,11 @@ class DBCaller:
         # get a list of the names of the sequences in order of their (decreasing) abundance
         self.seq_abunds = self.seq_table.sum(axis=1).sort_values(ascending=False)
 
+        # check that all sequence IDs in the table are in the fasta
+        missing_ids = [seq_id for seq_id in self.seq_abunds.index if seq_id not in self.records]
+        if len(missing_ids) > 0:
+            raise RuntimeError("{} sequence IDs found in the sequence table but not in the fasta: {}".format(len(missing_ids), missing_ids))
+
         # initialize OTU information
         self.otus = []
 

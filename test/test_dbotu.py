@@ -39,3 +39,12 @@ def test_process_three(caller):
     # seq2 got merged into seq1
     assert caller.otus[0] == OTU('seq1', 'AAAAAAA', [0, 11, 22], 3)
     assert caller.otus[1] == OTU('seq3', 'AATTTAA', [10, 0, 0], 3)
+
+def test_id_check():
+    '''fail if there are IDs in the table that are not in the fasta'''
+    fasta_fh = io.StringIO("\n".join(['>seq1', 'A', '>seq2', 'T']))
+    fasta_fh.seek(0)
+    records = SeqIO.to_dict(SeqIO.parse(fasta_fh, 'fasta'))
+    table = pd.DataFrame(np.array([[0, 1], [2, 3], [4, 5]]), index=['seq1', 'seq2', 'seq3'], columns=['sample1', 'sample2'])
+    with pytest.raises(RuntimeError):
+        DBCaller(table, records, word_size=1, max_dist=15, min_fold=0.0, threshold_pval=0.001)
