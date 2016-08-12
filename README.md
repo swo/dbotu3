@@ -5,7 +5,7 @@ A new implementation of Sarah Preheim's
 The scope is narrower, the numerical comparisons are faster, and the interface
 may be more user-friendly.
 
-Read the [documentation](http://dbotu2.readthedocs.io/en/latest/) for:
+Read the [documentation](http://dbotu3.readthedocs.io/en/latest/) for:
 
 - a guide to getting started,
 - an explanation of the algorithm, and
