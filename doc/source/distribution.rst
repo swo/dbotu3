@@ -4,64 +4,100 @@
 The distribution criterion
 ==========================
 
-The state of the problem
-========================
+The mathematically critical part of the dbOTU algorithm is deciding whether or
+not two OTUs are distributed identically.
 
-The mathematically critical part of DBC is deciding whether or not two
-OTUs are distributed identically. The original paper mentions two
-possibilities:
+Review of previous approaches
+=============================
 
-1. The :math:`\chi^2` test. This has good theoretical support, since it
-   tests exactly the question of whether two things are independent or
-   not, but it runs into two problems. First, when counts are small, the
-   asymptotic (and easy-to-compute) :math:`\chi^2` statistic is not
-   accurate, so the :math:`p`-value needs to be simulated empirically,
-   which is computationally expensive. Second, when counts are large,
-   the :math:`\chi^2` test seems to be *too* restrictive: the sorts of
-   variations that we don't find unusual in microbiome data are
-   construed as true differences by the statistic.
-2. The Jensen-Shannon divergence. Cutting off at some particular JSD
-   works well for large counts: it accords better with the sorts of
-   differences we would consider meaningful for microbiome data.
-   However, because the JSD works with proportions and not counts, it
-   tends to be overly sensitive when the counts for one OTU are small.
-   For example, if one OTU has only one count in one sample, the JSD
-   treats that the same as if that OTU has a million counts in only that
-   sample.
+:math:`\chi^2` test
+-------------------
 
-In informal discussions, I learned that:
+The original paper and implementations dbOTU1 and dbOTU2 both articulate
+the distribution criterion in terms of the :math:`\chi^2` test. The idea
+is that Pearson's :math:`\chi^2` `test of independence <https://en.wikipedia.org/wiki/Pearson%27s_chi-squared_test#Test_of_independence>`_
+evaluates whether the values of two outcomes (i.e., the distributions of
+the two OTUs) are statistically independent.
 
--  Correlation coefficients (e.g., Kendall :math:`\tau`) have similar
-   strengths and weaknesses as the JSD: they perform well when the
-   number of counts is small but tend to be overly sensitive when the
-   counts are small.
--  "De-blurring" or "cluster-free filtering" (which I think means
-   de-noising?) might be productive ways to reduce the number of
-   comparisons required.
+The :math:`\chi^2` test runs into two problems. First, when counts are small, the
+asymptotic (and easy-to-compute) :math:`\chi^2` statistic is not
+accurate, so the :math:`p`-value needs to be simulated empirically,
+which is computationally expensive. Second, when counts are large,
+the :math:`\chi^2` test tends to be oversensitive: the sorts of
+variations that we don't find unusual in microbiome data are
+construed as true differences by the statistic.
 
-My proposed solution
-====================
+Jensen-Shannon divergence
+-------------------------
 
-I found that, for a few example cases, the asymptotic *likelihood ratio
-test*, which is quick to compute, gives results similar to the simulated
+The original publication suggests that the distribution criterion can
+be articulated as a cutoff on the JSD between two the distribution of
+two OTUs (rather than on the :math:`p`-value from the :math:`\chi^2` test).
+
+A JSD cutoff works well for large counts: it accords better with the sorts of
+differences we would consider meaningful for microbiome data. This avoids
+the oversensitivity problem that the :math:`\chi^2` test exhibits for
+large numbers of counts.
+
+However, because the JSD works with proportions and not counts, it
+tends to be overly sensitive when the counts for one OTU are small.
+For example, if one OTU has only one count in one sample, the JSD
+treats that the same as if that OTU has a million counts in only that
+sample.
+
+Other approaches
+----------------
+
+Other distribution criteria have been informally evaluated. For example,
+correlation coefficients (e.g., Kendall :math:`\tau`) have similar
+strengths and weaknesses as the JSD: they perform well when the
+number of counts is small but tend to be overly sensitive when the
+counts are small.
+
+This implementation
+===================
+
+I found that, for a few example cases, the asymptotic
+`likelihood ratio test <https://en.wikipedia.org/wiki/Likelihood-ratio_test>`_,
+which is quick to compute, gives results similar to the simulated
 :math:`\chi^2` test. In the few examples I tested, the :math:`p`-value
-for the likelihood ratio test were around five times greater than the
+for the likelihood ratio test were around two- to five-fold greater than the
 :math:`p`-value from the simulated :math:`\chi^2` test. I consider this
 a push in the right direction, since the simulated :math:`\chi^2` test
 tended to be too sensitive.
 
-Definitions
------------
+Theoretical motivation
+----------------------
 
-There are :math:`N` samples. In sample :math:`i`, the number of reads
-assigned to the first, more abundant OTU is :math:`a_i`; the other OTU
-has :math:`b_i`. Define also :math:`A = \sum_{i=1}^N a_i` and similarly
-:math:`B`.
+The :math:`\chi^2` test measures whether two outcomes are independent.
+In other words, it asks, given that the sequence has some total number
+of counts, what is the probability that those counts would have been
+distributed across samples in the same way that the potential parent OTU's
+counts were distributed?
+
+This formulation of the question is theoretically unpleasant because
+this is not how sequence counts are distributed. It is not that a sequence
+gets some total number of counts and those counts get distributed across
+samples. Instead, each sample gets a total number of counts (based on
+its fractional representation in the library and the depth of sequencing),
+and that sample's counts get distributed among the sequences in that sample.
+
+The likelihood ratio test evaluates a more natural description of
+the question of ecologically identical distributions: allowing for some
+Poisson error, is it more likely that the relative abundance of the
+candidate sequence in each sample is proportional to the relative abundance
+of the OTU in each sample (where the constant of proportionality is the
+same for all samples)?
 
 Formulation of the null and alternative hypotheses
 --------------------------------------------------
 
-The alternative hypothesis is that the two OTUs are distributed
+First, some definitions. There are :math:`N` samples. In sample :math:`i`, the number of reads
+assigned to the more abundant OTU is :math:`a_i`; the candidate sequence
+has :math:`b_i`. Define also :math:`A = \sum_{i=1}^N a_i` and similarly
+:math:`B`.
+
+The alternative hypothesis is that the OTU and sequence are distributed
 differently, that is, that each of the :math:`a_i` and :math:`b_i` are
 all drawn from different random variables. Technical replicates from
 sequence data seem to be well-modeled by Poisson random variables [1]_,
@@ -74,9 +110,9 @@ so I formulate this hypothesis as
 where there are no constraints on the relationships between the Poisson
 parameters.
 
-The null model asserts that there is some relationship between the two
-OTUs, specifically that second OTU is distributed "the same as" the
-first one, just rescaled to some lower abundance. I articulate this as
+The null model asserts that there is some relationship between the sequence
+and the OTU, specifically that candidate sequence is distributed "the same as" the
+OTU, just rescaled to some lower abundance. I articulate this as
 
 .. math::
 
@@ -85,8 +121,8 @@ first one, just rescaled to some lower abundance. I articulate this as
 that is, that the :math:`a_i` are all free to be distributed
 differently from one another, but each :math:`b_i` is constrained to be
 distributed according a Poisson random variable that has the same mean
-as :math:`a_i`'s random variable, just rescaled by some common scaling
-factor :math:`\sigma`. (Because the second OTU is less abundant, we
+as the random variable corresponding to :math:`a_i`, just rescaled by some common scaling
+factor :math:`\sigma`. (Because the sequence is less abundant than the OTU, we
 expect that :math:`0 < \sigma < 1`.)
 
 Maximum likelihood of models
@@ -99,7 +135,7 @@ that :math:`\lambda_{\mathrm{a}i} = a_i` and
 the Poisson parameters are just the single number that distribution
 produces. For the null hypothesis, we find that
 :math:`\sigma = \frac{B}{A}`, i.e., the scaling factor is just the ratio
-of the total counts for the two OTUs, and
+of the total counts for the sequence and OTU, and
 
 .. math::
 
@@ -115,7 +151,7 @@ Inserting these variables shows that the log likelihoods are:
      &\quad + \sum_i \left[ (a_i + b_i) \ln (a_i + b_i) - \ln a_i! - \ln b_i! \right]
    \end{aligned}
 
-The difference between the log can be conveniently written in terms of
+The difference between the logs can be conveniently written in terms of
 a helper function:
 
 .. math::
@@ -136,13 +172,13 @@ The likelihood ratio test uses the statistic
 is distributed according to a :math:`\chi^2` distribution with
 :math:`(N - 1)` degrees of freedom. (This is the difference in the
 number of parameters in the two models: the alternative has :math:`2N`,
-i.e., one for each OTU and sample, and the null has :math:`N + 1`, one
+i.e., one for the OTU and the sequence in each sample, and the null has :math:`N + 1`, one
 for each sample and the scaling factor :math:`\sigma`.) The cumulative
 distribution function of :math:`\chi^2` at :math:`\Lambda` is easy to
 compute.
 
-Comparisons with other solutions
-================================
+Mathematical comparison with other approaches
+=============================================
 
 The :math:`\chi^2` test
 -----------------------
@@ -168,7 +204,7 @@ Plugging in these values gives
 
    \chi^2 = (A + B) \sum_i \left( \frac{a_i}{a_i + b_i} \frac{a_i}{A} + \frac{b_i}{a_i + b_i} \frac{b_i}{B} - 1 \right),
 
-which does not bear any immediate obvious relationship to the other
+which does not bear any immediate obvious relationship to our
 statistic :math:`\Lambda`.
 
 JSD

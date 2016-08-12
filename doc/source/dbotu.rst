@@ -77,15 +77,18 @@ dbOTU1
 The original implementation (`dbOTU1 <https://github.com/spacocha/Distribution-based-clustering>`_),
 coded in Perl and shell scripts,
 took a genetic distance matrix (a Jukes-Cantor distance
-computed using `FastTree <http://www.microbesonline.org/fasttree/>`_) as input.
+computed using FastTree_) as input.
 using that distance matrix.
 
 In this implementation, the genetic criterion was evaluated using the
 minimum of the aligned and unaligned Jukes-Cantor distances. This was a
 weird hack: sometimes the alignment, made using NAST [#nast]_ (actually the
-`PyNAST <http://biocore.github.io/pynast/>`_ implementation), led to a greater
+PyNAST_ implementation), led to a greater
 distance between two sequences than would be computed by just comparing
 the unaligned sequences.
+
+.. _FastTree: http://www.microbesonline.org/fasttree/
+.. _PyNAST: http://biocore.github.io/pynast/
 
 In this implementation the distribution criterion was evaluated using
 the |chisq-test|_ function in R_,

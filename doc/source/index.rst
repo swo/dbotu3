@@ -17,15 +17,18 @@ about the distribution of sequences across samples. This allows dbOTU to
 distinguish ecologically-distinct but sequence-similar organisms or
 populations.
 
-This documentation includes a description of the algorithm, a comparison of the
-methodologies of the different implementations, and an API reference.
+This documentation includes a guide to getting started, description of the
+algorithm, a comparison of the methodologies of the different implementations,
+and an API reference.
 
 .. toctree::
    :maxdepth: 2
 
+   getting-started
    dbotu
    genetic
    distribution
+   development
    api
 
 
