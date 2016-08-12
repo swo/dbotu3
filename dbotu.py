@@ -24,9 +24,18 @@ class OTU:
         '''
         # make this assertion so that lists of counts don't get concatenated
         self.name = name
-        self.kmer_dict = self.kmer_composition(sequence, word_size)
+        self.sequence = sequence
         self.counts = np.array(counts)
+        self.word_size = word_size
+
+        self.kmer_dict = self._kmer_composition(sequence, word_size)
         self.abundance = sum(self.counts)
+
+    def __eq__(self, other):
+        return self.name == other.name and self.sequence == other.sequence and all(self.counts == other.counts) and self.word_size == other.word_size
+
+    def __repr__(self):
+        return "OTU(name={}, sequence={}, counts={}, word_size={})".format(repr(self.name), repr(self.sequence), repr(self.counts), repr(self.word_size))
 
     def absorb(self, other):
         self.counts += other.counts
@@ -42,23 +51,24 @@ class OTU:
         returns: int
         '''
         assert isinstance(other, OTU)
-        return self.kmer_distance(self.kmer_dict, other.kmer_dict)
+        return self._kmer_distance(self.kmer_dict, other.kmer_dict)
 
     @staticmethod
-    def kmer_distance(comp1, comp2):
+    def _kmer_distance(comp1, comp2):
         '''
         Squared Euclidean distance between two kmer composition dicts
 
         comp1: dict {str => int}
-          kmer => counts, like you get from kmer_composition
+          kmer => counts, like you get from _kmer_composition
 
         returns: int
         '''
+        # get the union of keys in the two dictionaries
         kmers = set(comp1.keys()) | set(comp2.keys())
         return sum([(comp1.get(k, 0) - comp2.get(k, 0)) ** 2 for k in kmers])
 
     @staticmethod
-    def kmer_composition(sequence, word_size):
+    def _kmer_composition(sequence, word_size):
         '''
         Compute kmer composition
 
@@ -200,11 +210,11 @@ class DBCaller:
             test_pval = candidate.distribution_pval(otu)
 
             if self.verbose:
-                print('distribution_check', otu.name, test_pval, sep='\t', file=args.log)
+                print('distribution_check', otu.name, test_pval, sep='\t', file=self.log)
 
             if test_pval > self.threshold_pval:
                 if self.log is not None:
-                    print('match', record.id, otu.name, sep='\t', file=args.log)
+                    print('match', record.id, otu.name, sep='\t', file=self.log)
 
                 otu.absorb(candidate)
                 merged = True
@@ -213,7 +223,7 @@ class DBCaller:
         if not merged:
             # form own otu
             if self.log is not None:
-                print('otu', candidate.name, sep='\t', file=args.log)
+                print('otu', candidate.name, sep='\t', file=self.log)
 
             self.otus.append(candidate)
 

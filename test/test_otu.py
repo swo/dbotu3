@@ -5,10 +5,14 @@ import numpy as np, pandas as pd
 import scipy.stats, scipy.optimize
 
 
-class TestInit:
-    def test1(self):
-        otu = OTU('id', 'ACGTACGT', [1, 2, 3, 4], 3)
-        assert otu.abundance == 1 + 2 + 3 + 4
+def test_init():
+    otu = OTU('id', 'ACGTACGT', [1, 2, 3, 4], 3)
+    assert otu.abundance == 1 + 2 + 3 + 4
+
+def test_equal():
+    otu1 = OTU('id', 'ACGT', [1, 2, 3], 3)
+    otu2 = OTU('id', 'ACGT', [1, 2, 3], 3)
+    assert otu1 == otu2
 
 
 class TestAbsorb:
@@ -29,7 +33,7 @@ class TestDistanceTo:
 
 class TestKmerComposition:
     def test1(self):
-        assert OTU.kmer_composition('AACCAACC', 4) == {'AACC': 2, 'ACCA': 1, 'CCAA': 1, 'CAAC': 1}
+        assert OTU._kmer_composition('AACCAACC', 4) == {'AACC': 2, 'ACCA': 1, 'CCAA': 1, 'CAAC': 1}
 
 
 class TestD:
