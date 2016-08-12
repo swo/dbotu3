@@ -56,8 +56,9 @@ You'll need to pick values for a few parameters:
 - The *distribution cutoff*. This is the :math:`p`-value from the statistical
   test of distribution described in :ref:`distribution_section`. The default
   value is :math:`0.0005` (as suggested in the original publication).
-- The *word size*. The default value is 8. I would change this value only if
-  you validate a different size as described in :ref:`evaluating-genetic-section`. 
+- The *word size*. This is the :math:`k` in :math:`k`-mer. The default value is
+  8. I would change this value only if you validate a different size as
+  described in :ref:`evaluating-genetic-section`. 
 
 Engage!
 =======
