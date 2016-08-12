@@ -169,6 +169,7 @@ class DBCaller:
             raise RuntimeError("{} sequence IDs found in the sequence table but not in the fasta: {}".format(len(missing_ids), missing_ids))
 
         # initialize OTU information
+        self.membership = {}
         self.otus = []
 
     def ga_matches(self, candidate):
@@ -224,6 +225,7 @@ class DBCaller:
                     print('match', record.id, otu.name, sep='\t', file=self.log)
 
                 otu.absorb(candidate)
+                self.membership[otu.name].append(candidate.name)
                 merged = True
                 break
 
@@ -233,6 +235,7 @@ class DBCaller:
                 print('otu', candidate.name, sep='\t', file=self.log)
 
             self.otus.append(candidate)
+            self.membership[candidate.name] = [candidate.name]
 
     def generate_otu_table(self):
         '''
@@ -250,6 +253,13 @@ class DBCaller:
 
         return self.otu_table
 
+    def write_otu_table(self, output):
+        self.otu_table.to_csv(output, sep='\t')
+
+    def write_membership(self, output):
+        for otu in self.otus:
+            print(otu.name, *self.membership[otu.name], sep='\t', file=output)
+
 
 def read_sequence_table(fn):
     '''
@@ -266,7 +276,7 @@ def read_sequence_table(fn):
 if __name__ == '__main__':
     p = argparse.ArgumentParser(description='', )
     p.add_argument('table', type=argparse.FileType('r'), help='sequence count table')
-    p.add_argument('fasta', type=argparse.FileType('r'), help='sequences (unaligned)')
+    p.add_argument('fasta', help='sequences (unaligned)')
     p.add_argument('dist', type=float, help='maximum kmer difference for comparing two OTUs (recommended: kmer size * maximum number of acceptable mismatches)')
     p.add_argument('--word_length', '-k', type=int, default=8, help='kmer size (default: 8)')
     p.add_argument('--abund', '-a', type=float, default=10.0, help='minimum fold difference for comparing two OTUs (0=no abundance criterion; default 10.0)')
@@ -274,6 +284,7 @@ if __name__ == '__main__':
     p.add_argument('--log', '-l', default=None, type=argparse.FileType('w'), help='log output')
     p.add_argument('--verbose', '-v', action='store_true', help='record checks in log?')
     p.add_argument('--output', '-o', default=sys.stdout, help='OTU table output (default: stdout)')
+    p.add_argument('--membership', '-m', type=argparse.FileType('w'), help='QIIME-style OTU mapping file output')
     args = p.parse_args()
 
     assert args.dist >= 0
@@ -290,5 +301,7 @@ if __name__ == '__main__':
     # generate the caller object
     caller = DBCaller(seq_table, records, args.word_length, args.dist, args.abund, args.pval, args.log, args.verbose)
     caller.generate_otu_table()
+    caller.write_otu_table(args.output)
 
-    caller.otu_table.to_csv(args.output, sep='\t')
+    if args.membership is not None:
+        caller.write_membership(args.membership)
