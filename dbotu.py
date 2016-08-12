@@ -50,7 +50,6 @@ class OTU:
 
         returns: int
         '''
-        assert isinstance(other, OTU)
         return self._kmer_distance(self.kmer_dict, other.kmer_dict)
 
     @staticmethod
@@ -126,8 +125,9 @@ class DBCaller:
         '''
         seq_table: pandas.DataFrame
           Samples on the columns; sequences on the rows
-        records: sequence of Bio.Seq
-          unaligned input sequences
+        records: index of Bio.Seq
+          Indexed, unaligned input sequences. This could come from BioPython's
+          SeqIO.to_dict or SeqIO.index.
         word_size: int
           k for the k-mers
         max_dist: float
@@ -194,12 +194,14 @@ class DBCaller:
 
             return matches
 
-    def _process_record(self, record):
+    def _process_record(self, record_id):
         '''
         Process the next sequence: run the genetic, abundance, and distribution checks, either
         merging the sequence into an existing OTU or creating a new OTU.
         '''
-        assert record.id in self.seq_table.index
+        assert record_id in self.seq_table.index
+        record = self.records[record_id]
+
         candidate = OTU(record.id, str(record.seq), self.seq_table.loc[record.id], self.word_size)
 
         if self.verbose:
@@ -234,8 +236,8 @@ class DBCaller:
         returns: pandas.DataFrame
           OTU table (which can also be found at instance.otu_table)
         '''
-        for record in self.records:
-            self._process_record(record)
+        for record_id in self.seq_abunds.index:
+            self._process_record(record_id)
 
         self.otus.sort(key=lambda otu: otu.abundance, reverse=True)
         self.otu_table = pd.DataFrame([otu.counts for otu in self.otus], index=[otu.name for otu in self.otus])
@@ -278,7 +280,7 @@ if __name__ == '__main__':
     seq_table = read_sequence_table(args.table)
 
     # set up the input fasta records
-    records = SeqIO.parse(args.fasta, 'fasta')
+    records = SeqIO.index(args.fasta, 'fasta')
 
     # generate the caller object
     caller = DBCaller(seq_table, records, args.word_length, args.dist, args.abund, args.pval, args.log, args.verbose)
