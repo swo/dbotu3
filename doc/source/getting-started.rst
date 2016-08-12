@@ -66,6 +66,8 @@ Push the button::
 
     dbotu.py my-sequence-table.txt my-fasta.fasta D -o my-otu-table.txt
 
+where ``D`` is the genetic distance you picked (e.g., :math:`240` in the
+example calculation).
 If you wanted to change some of the default parameters, you can find the
 relevant options using::
 
