@@ -3,17 +3,29 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to dbotu's documentation!
-=================================
+Distribution-based OTU calling
+==============================
 
-Contents:
+This software, dbOTU3, is the third major implementation of the
+distribution-based OTU-calling algorithm formulated by Preheim *et al.*
+[#preheim]_, an extremely accurate algorithm for grouping DNA sequences from
+microbial communities into OTUs for ecological or biomedical research.
+
+Unlike most OTU-calling approaches, which group sequences based only on the
+similarities of the sequences themselves, this algorithm also uses information
+about the distribution of sequences across samples. This allows dbOTU to
+distinguish ecologically-distinct but sequence-similar organisms or
+populations.
+
+This documentation includes a description of the algorithm, a comparison of the
+methodologies of the different implementations, and an API reference.
 
 .. toctree::
    :maxdepth: 2
 
    dbotu
-   math
-   kmers
+   genetic
+   distribution
    api
 
 
@@ -24,3 +36,6 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
+.. [#preheim] Preheim *et al.* Distribution-Based Clustering: Using Ecology To
+   Refine the Operational Taxonomic Unit. *Appl Environ Microbiol* (2013)
+   doi:`10.1128/AEM.00342-13 <http://dx.doi.org/10.1128/AEM.00342-13>`_.
