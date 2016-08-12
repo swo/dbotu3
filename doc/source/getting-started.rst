@@ -9,7 +9,7 @@ Sorry, we're still in development, so there isn't a flashy way to install yet.
 I recommend you clone the github repo::
 
     cd directory_for_code
-    git clone https://github.com/swo/dbotu2.git
+    git clone https://github.com/swo/dbotu3.git
 
 Then set it up in "development" mode with::
 
@@ -42,9 +42,9 @@ Deciding on parameters
 
 You'll need to pick values for a few parameters:
 
-- The *abundance cutoff*. The original paper suggests using 10 to create OTUs
-  that account just for sequencing error and 0 to create OTUs that merge
-  ecological populations. The default is 10.
+- The *abundance cutoff*. The original paper suggests using :math:`10.0` to create OTUs
+  that account just for sequencing error and :math:`0.0` to create OTUs that merge
+  ecological populations. The default is :math:`10.0`.
 - The *genetic cutoff*. As described in :ref:`genetic_section`, the genetic
   cutoff is a :math:`k`-mer distance. As a rule of thumb, you can use the product
   of the maximum number of acceptable differences between sequences times the

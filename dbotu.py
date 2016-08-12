@@ -38,6 +38,13 @@ class OTU:
         return "OTU(name={}, sequence={}, counts={}, word_size={})".format(repr(self.name), repr(self.sequence), repr(self.counts), repr(self.word_size))
 
     def absorb(self, other):
+        '''
+        Add another OTU's counts to this one
+
+        other: OTU
+
+        returns: nothing
+        '''
         self.counts += other.counts
         self.abundance += other.abundance
 
@@ -114,6 +121,14 @@ class OTU:
         return scipy.stats.chi2.sf(cls._D(x, y), df=df)
 
     def distribution_pval(self, other):
+        '''
+        P-value from the likelihood ratio test comparing the distribution of the abundances
+        of two OTU objects. See docs for explanation of the test.
+
+        other: OTU
+
+        returns: float
+        '''
         return self._distribution_test_pval(self.counts, other.counts)
 
 
@@ -254,9 +269,19 @@ class DBCaller:
         return self.otu_table
 
     def write_otu_table(self, output):
+        '''
+        Write the QIIME-style OTU table to a file.
+
+        output: filehandle
+        '''
         self.otu_table.to_csv(output, sep='\t')
 
     def write_membership(self, output):
+        '''
+        Write the QIIME-style OTU mapping information to a file.
+
+        output: filehandle
+        '''
         for otu in self.otus:
             print(otu.name, *self.membership[otu.name], sep='\t', file=output)
 
