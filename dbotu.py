@@ -4,6 +4,7 @@
 
 import argparse, sys
 import pandas as pd, numpy as np
+import Levenshtein
 from Bio import SeqIO
 import scipy.stats
 
@@ -11,7 +12,7 @@ class OTU:
     '''
     Object for keeping track of an OTU's kmer content and distribution
     '''
-    def __init__(self, name, sequence, counts, word_size):
+    def __init__(self, name, sequence, counts):
         '''
         name: str
           OTU ID
@@ -19,23 +20,19 @@ class OTU:
           OTU's nucleotide sequence
         counts: numpy.Array
           length of sequence should be the number of samples
-        word_size: int
-          size of kmers
         '''
         # make this assertion so that lists of counts don't get concatenated
         self.name = name
         self.sequence = sequence
         self.counts = np.array(counts)
-        self.word_size = word_size
 
-        self.kmer_dict = self._kmer_composition(sequence, word_size)
         self.abundance = sum(self.counts)
 
     def __eq__(self, other):
-        return self.name == other.name and self.sequence == other.sequence and all(self.counts == other.counts) and self.word_size == other.word_size
+        return self.name == other.name and self.sequence == other.sequence and all(self.counts == other.counts)
 
     def __repr__(self):
-        return "OTU(name={}, sequence={}, counts={}, word_size={})".format(repr(self.name), repr(self.sequence), repr(self.counts), repr(self.word_size))
+        return "OTU(name={}, sequence={}, counts={})".format(repr(self.name), repr(self.sequence), repr(self.counts))
 
     def absorb(self, other):
         '''
@@ -50,49 +47,14 @@ class OTU:
 
     def distance_to(self, other):
         '''
-        Squared Euclidean distance between the kmer composition dicts
+        Levenshtein ratio "distance" to other OTU
 
         other: OTU
           distance to this OTU
 
-        returns: int
+        returns: float
         '''
-        return self._kmer_distance(self.kmer_dict, other.kmer_dict)
-
-    @staticmethod
-    def _kmer_distance(comp1, comp2):
-        '''
-        Squared Euclidean distance between two kmer composition dicts
-
-        comp1: dict {str => int}
-          kmer => counts, like you get from _kmer_composition
-
-        returns: int
-        '''
-        # get the union of keys in the two dictionaries
-        kmers = set(comp1.keys()) | set(comp2.keys())
-        return sum([(comp1.get(k, 0) - comp2.get(k, 0)) ** 2 for k in kmers])
-
-    @staticmethod
-    def _kmer_composition(sequence, word_size):
-        '''
-        Compute kmer composition
-
-        sequence: str
-          where to get the kemrs
-        word_size: int
-          size of the kmer
-
-        returns: dict {str => int}
-        '''
-        dat = {}
-        for kmer in [sequence[i: i + word_size] for i in range(len(sequence) - word_size + 1)]:
-            if kmer in dat:
-                dat[kmer] += 1
-            else:
-                dat[kmer] = 1
-
-        return dat
+        return 1.0 - Levenshtein.ratio(self.sequence, other.sequence)
 
     @staticmethod
     def _D_helper(x):
@@ -136,15 +98,13 @@ class DBCaller:
     '''
     Object for processing the sequence table and distance matrix into an OTU table.
     '''
-    def __init__(self, seq_table, records, word_size, max_dist, min_fold, threshold_pval, log=None, verbose=False):
+    def __init__(self, seq_table, records, max_dist, min_fold, threshold_pval, log=None, verbose=False):
         '''
         seq_table: pandas.DataFrame
           Samples on the columns; sequences on the rows
         records: index of Bio.Seq
           Indexed, unaligned input sequences. This could come from BioPython's
           SeqIO.to_dict or SeqIO.index.
-        word_size: int
-          k for the k-mers
         max_dist: float
           kmer distance cutoff above which a sequence will not be merged into an OTU
         min_fold: float
@@ -165,7 +125,6 @@ class DBCaller:
         '''
         self.seq_table = seq_table
         self.records = records
-        self.word_size = word_size
         self.max_dist = max_dist
         self.min_fold = min_fold
         self.threshold_pval = threshold_pval
@@ -223,7 +182,7 @@ class DBCaller:
         assert record_id in self.seq_table.index
         record = self.records[record_id]
 
-        candidate = OTU(record.id, str(record.seq), self.seq_table.loc[record.id], self.word_size)
+        candidate = OTU(record.id, str(record.seq), self.seq_table.loc[record.id])
 
         if self.verbose:
             print('seq', candidate.name, sep='\t', file=self.log)
@@ -303,7 +262,6 @@ if __name__ == '__main__':
     p.add_argument('table', type=argparse.FileType('r'), help='sequence count table')
     p.add_argument('fasta', help='sequences (unaligned)')
     p.add_argument('dist', type=float, help='maximum kmer difference for comparing two OTUs (recommended: kmer size * maximum number of acceptable mismatches)')
-    p.add_argument('--word_length', '-k', type=int, default=8, help='kmer size (default: 8)')
     p.add_argument('--abund', '-a', type=float, default=10.0, help='minimum fold difference for comparing two OTUs (0=no abundance criterion; default 10.0)')
     p.add_argument('--pval', '-p', type=float, default=0.0005, help='minimum p-value for merging OTUs (default: 0.0005)')
     p.add_argument('--log', '-l', default=None, type=argparse.FileType('w'), help='log output')
@@ -324,7 +282,7 @@ if __name__ == '__main__':
     records = SeqIO.index(args.fasta, 'fasta')
 
     # generate the caller object
-    caller = DBCaller(seq_table, records, args.word_length, args.dist, args.abund, args.pval, args.log, args.verbose)
+    caller = DBCaller(seq_table, records, args.dist, args.abund, args.pval, args.log, args.verbose)
     caller.generate_otu_table()
     caller.write_otu_table(args.output)
 

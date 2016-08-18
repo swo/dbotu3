@@ -6,19 +6,19 @@ import scipy.stats, scipy.optimize
 
 
 def test_init():
-    otu = OTU('id', 'ACGTACGT', [1, 2, 3, 4], 3)
+    otu = OTU('id', 'ACGTACGT', [1, 2, 3, 4])
     assert otu.abundance == 1 + 2 + 3 + 4
 
 def test_equal():
-    otu1 = OTU('id', 'ACGT', [1, 2, 3], 3)
-    otu2 = OTU('id', 'ACGT', [1, 2, 3], 3)
+    otu1 = OTU('id', 'ACGT', [1, 2, 3])
+    otu2 = OTU('id', 'ACGT', [1, 2, 3])
     assert otu1 == otu2
 
 
 class TestAbsorb:
     def test1(self):
-        otu1 = OTU('1', 'ACGT', [1, 2, 3, 4], 2)
-        otu2 = OTU('2', 'ACGT', [1, 2, 3, 4], 2)
+        otu1 = OTU('1', 'ACGT', [1, 2, 3, 4])
+        otu2 = OTU('2', 'ACGT', [1, 2, 3, 4])
         otu1.absorb(otu2)
         assert all(otu1.counts == np.array([2, 4, 6, 8]))
         assert all(otu2.counts == np.array([1, 2, 3, 4]))
@@ -26,14 +26,9 @@ class TestAbsorb:
 
 class TestDistanceTo:
     def test1(self):
-        otu1 = OTU('1', 'AAGT', [], 2)
-        otu2 = OTU('2', 'ACGT', [], 2)
-        assert otu1.distance_to(otu2) == 4
-
-
-class TestKmerComposition:
-    def test1(self):
-        assert OTU._kmer_composition('AACCAACC', 4) == {'AACC': 2, 'ACCA': 1, 'CCAA': 1, 'CAAC': 1}
+        otu1 = OTU('1', 'AAGT', [])
+        otu2 = OTU('2', 'ACGT', [])
+        assert otu1.distance_to(otu2) == 1.0 / 4
 
 
 class TestD:
