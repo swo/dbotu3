@@ -14,13 +14,13 @@ Read the [documentation](http://dbotu3.readthedocs.io/en/latest/) for:
 ## Requirements
 - Python 3
 - Numpy, SciPy, BioPython, Pandas
+- Levenshtein
 
 ## To-do
 
 - Benchmark the quality of the output against gold standards and previous algorithm.
 - Benchmark the speed against the previous algorithm.
 - Figure out how to better integrate this into existing pipelines. Maybe there should be different kinds of output, like a table showing which sequence got assigned to which OTU.
-- Improve speed of k-mer computations
 - Better coverage for unit tests
 
 ## Authors
