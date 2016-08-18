@@ -98,7 +98,7 @@ class DBCaller:
     '''
     Object for processing the sequence table and distance matrix into an OTU table.
     '''
-    def __init__(self, seq_table, records, max_dist, min_fold, threshold_pval, log=None, verbose=False):
+    def __init__(self, seq_table, records, max_dist, min_fold, threshold_pval, log=None):
         '''
         seq_table: pandas.DataFrame
           Samples on the columns; sequences on the rows
@@ -113,15 +113,7 @@ class DBCaller:
         threshold_pval: float
           P-value below which a sequence will not be merged into an OTU
         log: filehandle
-          Log file reporting how sequences are merged or placed into their own OTUs.
-          Tab-delimited, one line per sequence. If the sequence goes into its own
-          OTU, the line is sequence-"otu". If the sequence goes into an existing OTU,
-          the line is sequence-"match"-otu.
-        verbose: bool
-          If true, put extra lines into the log file. For every genetic threshold
-          check, a line "genetic_check"-sequence-[OTUs that meet the genetic threshold].
-          For every abundance check, a line "abundance_check"-sequence-[OTUs that meet].
-          For every distribution test, a line "distribution_check"-sequence-OTU-pvalue.
+          Log file reporting the abundance, genetic, and distribution checks.
         '''
         self.seq_table = seq_table
         self.records = records
@@ -129,10 +121,6 @@ class DBCaller:
         self.min_fold = min_fold
         self.threshold_pval = threshold_pval
         self.log = log
-        self.verbose = verbose
-
-        if self.verbose and self.log is None:
-            raise RuntimeError("verbose option requires a log")
 
         # get a list of the names of the sequences in order of their (decreasing) abundance
         self.seq_abunds = self.seq_table.sum(axis=1).sort_values(ascending=False)
@@ -158,7 +146,7 @@ class DBCaller:
         min_abundance = self.min_fold * candidate.abundance
         abundance_matches = [otu for otu in self.otus if otu.abundance > min_abundance]
 
-        if self.verbose:
+        if self.log is not None:
             print(candidate.name, 'abundance_check', *[otu.name for otu in abundance_matches], sep='\t', file=self.log)
 
         if len(abundance_matches) == 0:
@@ -169,7 +157,7 @@ class DBCaller:
             matches_distances.sort(key=lambda x: (x[0], -x[1].abundance, x[1].name))
             matches = [otu for dist, otu in matches_distances if dist < self.max_dist]
 
-            if self.verbose:
+            if self.log is not None:
                 print(candidate.name, 'genetic_check', *[otu.name for otu in matches], sep='\t', file=self.log)
 
             return matches
@@ -184,20 +172,17 @@ class DBCaller:
 
         candidate = OTU(record.id, str(record.seq), self.seq_table.loc[record.id])
 
-        if self.verbose:
+        if self.log is not None:
             print('seq', candidate.name, sep='\t', file=self.log)
 
         merged = False
         for otu in self.ga_matches(candidate):
             test_pval = candidate.distribution_pval(otu)
 
-            if self.verbose:
+            if self.log is not None:
                 print(candidate.name, 'distribution_check', otu.name, test_pval, sep='\t', file=self.log)
 
             if test_pval > self.threshold_pval:
-                if self.log is not None:
-                    print('match', record.id, otu.name, sep='\t', file=self.log)
-
                 otu.absorb(candidate)
                 self.membership[otu.name].append(candidate.name)
                 merged = True
@@ -205,9 +190,6 @@ class DBCaller:
 
         if not merged:
             # form own otu
-            if self.log is not None:
-                print('otu', candidate.name, sep='\t', file=self.log)
-
             self.otus.append(candidate)
             self.membership[candidate.name] = [candidate.name]
 
@@ -261,13 +243,16 @@ if __name__ == '__main__':
     p = argparse.ArgumentParser(description='', )
     p.add_argument('table', type=argparse.FileType('r'), help='sequence count table')
     p.add_argument('fasta', help='sequences (unaligned)')
-    p.add_argument('dist', type=float, help='maximum kmer difference for comparing two OTUs (recommended: kmer size * maximum number of acceptable mismatches)')
-    p.add_argument('--abund', '-a', type=float, default=10.0, help='minimum fold difference for comparing two OTUs (0=no abundance criterion; default 10.0)')
-    p.add_argument('--pval', '-p', type=float, default=0.0005, help='minimum p-value for merging OTUs (default: 0.0005)')
-    p.add_argument('--log', '-l', default=None, type=argparse.FileType('w'), help='log output')
-    p.add_argument('--verbose', '-v', action='store_true', help='record checks in log?')
-    p.add_argument('--output', '-o', default=sys.stdout, help='OTU table output (default: stdout)')
-    p.add_argument('--membership', '-m', type=argparse.FileType('w'), help='QIIME-style OTU mapping file output')
+
+    g = p.add_argument_group(title='criteria')
+    g.add_argument('--dist', '-d', type=float, default=0.1, help='maximum sequence dissimilarity when two sequences (default: 0.1)')
+    g.add_argument('--abund', '-a', type=float, default=10.0, help='minimum fold difference for comparing two OTUs (0=no abundance criterion; default 10.0)')
+    g.add_argument('--pval', '-p', type=float, default=0.0005, help='minimum p-value for merging OTUs (default: 0.0005)')
+
+    g = p.add_argument_group(title='output options')
+    g.add_argument('--output', '-o', default=sys.stdout, help='OTU table output (default: stdout)')
+    g.add_argument('--membership', '-m', type=argparse.FileType('w'), help='QIIME-style OTU mapping file output')
+    g.add_argument('--log', '-l', default=None, type=argparse.FileType('w'), help='log output')
     args = p.parse_args()
 
     assert args.dist >= 0
@@ -282,7 +267,7 @@ if __name__ == '__main__':
     records = SeqIO.index(args.fasta, 'fasta')
 
     # generate the caller object
-    caller = DBCaller(seq_table, records, args.dist, args.abund, args.pval, args.log, args.verbose)
+    caller = DBCaller(seq_table, records, args.dist, args.abund, args.pval, args.log)
     caller.generate_otu_table()
     caller.write_otu_table(args.output)
 
