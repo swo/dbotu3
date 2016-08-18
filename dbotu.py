@@ -159,7 +159,7 @@ class DBCaller:
         abundance_matches = [otu for otu in self.otus if otu.abundance > min_abundance]
 
         if self.verbose:
-            print('abundance_check', *[otu.name for otu in abundance_matches], sep='\t', file=self.log)
+            print(candidate.name, 'abundance_check', *[otu.name for otu in abundance_matches], sep='\t', file=self.log)
 
         if len(abundance_matches) == 0:
             return []
@@ -170,7 +170,7 @@ class DBCaller:
             matches = [otu for dist, otu in matches_distances if dist < self.max_dist]
 
             if self.verbose:
-                print('genetic_check', *[otu.name for otu in matches], sep='\t', file=self.log)
+                print(candidate.name, 'genetic_check', *[otu.name for otu in matches], sep='\t', file=self.log)
 
             return matches
 
@@ -192,7 +192,7 @@ class DBCaller:
             test_pval = candidate.distribution_pval(otu)
 
             if self.verbose:
-                print('distribution_check', otu.name, test_pval, sep='\t', file=self.log)
+                print(candidate.name, 'distribution_check', otu.name, test_pval, sep='\t', file=self.log)
 
             if test_pval > self.threshold_pval:
                 if self.log is not None:
