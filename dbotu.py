@@ -54,7 +54,7 @@ class OTU:
 
         returns: float
         '''
-        return 1.0 - Levenshtein.ratio(self.sequence, other.sequence)
+        return Levenshtein.distance(self.sequence, other.sequence) / (0.5 * (len(self.sequence) + len(other.sequence)))
 
     @staticmethod
     def _D_helper(x):
