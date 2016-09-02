@@ -67,59 +67,26 @@ This implementation
 New approach used in this implementation
 ----------------------------------------
 
-This implementation uses a :math:`k`-mer-based distance to evaluate the
-genetic criterion. A :math:`k`-mer-based method does not require
-aligning the sequences, which eliminates the alignment step and the
-confusing results requiring the minimum of the two distances. If
-:math:`k`-mer compositions are stored in a sparse way, the memory
-requirements for the sequence-based and :math:`k`-mer-based approaches
-are similar.
-
-The disadvantage to using a :math:`k`-mer-based is that the distance
-metrics are not as familiar: it is easy to articulate that two sequences
-should be at most 90% similar to be considered potentially part of the
-same OTU.
-
-I found that, for small genetic distances, :math:`k`-mer distances
-correlate very well with the Jukes-Cantor distance and Hamming distance.
-
-Selecting a distance criterion
-------------------------------
-
-In this implementation, the distance between two sequences is defined as
+This implementation uses the Levenshtein edit distance to measure the
+dissimilarity between two sequences. A sequence is disqualified from
+being merged into an OTU if
 
 .. math::
 
-   d_\text{kmer} \equiv \sum_i \left( c_{1i} - c_{2i} \right) ^2,
+   \frac{E}{\tfrac{1}{2}(\ell_\text{seq} + \ell_\text{OTU})}
 
-where :math:`c_{1i}` is the number of times the :math:`i`-th
-:math:`k`-mer appears in sequence 1. In general, I found that the
-:math:`k`-mer distance relates to the proportion :math:`d` of mismatched 
-positions by
-
-.. math::
-
-   d_\text{kmer} \approx k L d,
-
-where :math:`k` is the length of the :math:`k`-mer and :math:`L` is the
-length of the sequence.
-
-This approximation is easy to derive if you assume that the sequence is
-long compared to the :math:`k`-mer, there are few differences between
-the two sequences, the differences are separated from one another by a
-number of positions greater than :math:`k`, and that each :math:`k`-mer
-either does not appear in a sequence or appears only once. In this
-regime, each different position leads to :math:`k` of the :math:`k`-mers being
-different, changing from zero to one count or vice versa.
+is greater than some threshold, where :math:`E` is the Levenshtein
+edit distance between the sequence and the OTU, :math:`\ell_\text{seq}`
+is the length of the candidate sequence, and :math:`\ell_\text{OTU}` is
+the length of the OTU.
 
 .. _evaluating-genetic-section:
 
 Evaluating a distance criterion
 -------------------------------
 
-It may be worth testing this relationship for your own data. I verified
-this rule of thumb by selecting a set of sequences from a dataset,
-computing their dissimilarities using a variety of methods, and showing
-that, for small genetic dissimilarities, all the results correlate well.
-I regressed :math:`d_\text{kmer}` against :math:`d` to confirm that, in
-the appropriate regime, the slope was approximately :math:`kL`.
+I found that this dissmilarity correlates with the dissimilarity computed
+by a pairwise alignment just as well as the original implementation's
+dissimilarity metric (i.e., the minimum of the aligned and unaligned
+sequence dissimilarity).
+It may be worth testing this relationship for your own data.

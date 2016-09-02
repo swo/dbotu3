@@ -47,7 +47,7 @@ class OTU:
 
     def distance_to(self, other):
         '''
-        Levenshtein ratio "distance" to other OTU
+        Length-adjusted Levenshtein "distance" to other OTU
 
         other: OTU
           distance to this OTU

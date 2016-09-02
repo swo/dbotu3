@@ -45,30 +45,20 @@ You'll need to pick values for a few parameters:
 - The *abundance cutoff*. The original paper suggests using :math:`10.0` to create OTUs
   that account just for sequencing error and :math:`0.0` to create OTUs that merge
   ecological populations. The default is :math:`10.0`.
-- The *genetic cutoff*. As described in :ref:`genetic_section`, the genetic
-  cutoff is a :math:`k`-mer distance. As a rule of thumb, you can use the product
-  of the maximum number of acceptable differences between sequences times the
-  word size. For example, if you have 300 nucleotide amplicons, you want your
-  OTUs to be no larger than 90% (i.e., sequences no more than 10% different from
-  the OTU's representative sequence), and you are using the default word size of 8,
-  then you would want a genetic cutoff :math:`300 \times 0.1 \times 8 = 240`.
-  There is no default value.
+- The *genetic cutoff*. The original paper suggests using :math:`0.10` as a cutoff
+  of genetic dissimilarity. This means that sequences that are :math:`10\%` different
+  will definitely not be put into the same OTU. The default is :math:`0.10`.
 - The *distribution cutoff*. This is the :math:`p`-value from the statistical
   test of distribution described in :ref:`distribution_section`. The default
   value is :math:`0.0005` (as suggested in the original publication).
-- The *word size*. This is the :math:`k` in :math:`k`-mer. The default value is
-  8. I would change this value only if you validate a different size as
-  described in :ref:`evaluating-genetic-section`. 
 
 Engage!
 =======
 
 Push the button::
 
-    dbotu.py my-sequence-table.txt my-fasta.fasta D -o my-otu-table.txt
+    dbotu.py my-sequence-table.txt my-fasta.fasta -o my-otu-table.txt
 
-where ``D`` is the genetic distance you picked (e.g., :math:`240` in the
-example calculation).
 If you wanted to change some of the default parameters, you can find the
 relevant options using::
 

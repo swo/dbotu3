@@ -89,6 +89,14 @@ candidate sequence in each sample is proportional to the relative abundance
 of the OTU in each sample (where the constant of proportionality is the
 same for all samples)?
 
+For one special case, this likelihood ratio test also gives a more sensible
+answer that the :math:`\chi^2` test. If a sequence and an OTU are present
+in only one sample, a distribution test should not disqualify them from
+being merged: the data are perfectly concordant with the model that they
+are distributed "the same". The likelihood ratio test gives :math:`p = 1`
+in this case, but the :math:`\chi^2` test can give really low :math:`p`-values,
+often below the default threshold!
+
 Formulation of the null and alternative hypotheses
 --------------------------------------------------
 
@@ -176,58 +184,3 @@ i.e., one for the OTU and the sequence in each sample, and the null has :math:`N
 for each sample and the scaling factor :math:`\sigma`.) The cumulative
 distribution function of :math:`\chi^2` at :math:`\Lambda` is easy to
 compute.
-
-Mathematical comparison with other approaches
-=============================================
-
-The :math:`\chi^2` test
------------------------
-
-The "vanilla" Pearson's :math:`\chi^2` test has a statistic
-
-.. math::
-
-   \chi^2 = \sum_i \sum_t \frac{(O_{ti} - E_{ti})^2}{E_{ti}},
-
-where :math:`t` stands for the two taxa (:math:`a` and :math:`b`),
-:math:`O_{ti}` is the observed number of counts in that cell of the
-table, and :math:`E_{ti}` is the expected number of counts. The expected
-counts are computed using the marginals, e.g.,
-
-.. math::
-
-   E_{ai} = (a_i + b_i) \frac{A}{A + B}.
-
-Plugging in these values gives
-
-.. math::
-
-   \chi^2 = (A + B) \sum_i \left( \frac{a_i}{a_i + b_i} \frac{a_i}{A} + \frac{b_i}{a_i + b_i} \frac{b_i}{B} - 1 \right),
-
-which does not bear any immediate obvious relationship to our
-statistic :math:`\Lambda`.
-
-JSD
----
-
-Defining :math:`m_i = \tfrac{1}{2}(a_i + b_i)`, then the JSD between the
-two taxa is
-
-.. math::
-
-   \mathrm{JSD} = \frac{1}{2} \sum_i a_i \log \frac{a_i}{m_i} + \frac{1}{2} \sum_i b_i \log \frac{b_i}{m_i},
-
-which simplifies to
-
-.. math::
-
-   \mathrm{JSD} = \sum_i \left[ \frac{1}{2} \left( a_i \log a_i + b_i \log b_i \right) + (a_i + b_i) \log (a_i + b_i) \right].
-
-This bears a greater resemblance to the equation for :math:`\Lambda`,
-excepting some factors of two and the "sum" terms in
-:math:`f(\boldsymbol{x})`.
-
-.. [1]
-   `McMurdie and Holmes,
-   2014 <http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1003531>`__.
-   doi:10.1371/journal.pcbi.1003531

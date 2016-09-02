@@ -135,10 +135,9 @@ This implementation, dbOTU3, aims to improve speed and ease of use. It is writte
 in pure Python 3 and aims to `do one thing <https://en.wikipedia.org/wiki/Unix_philosophy#Do_One_Thing_and_Do_It_Well>`_,
 namely to turn sequence and provenience data into OTUs.
 
-Rather than aligning
-sequences, this implementation uses a :math:`k`-mer-based distance to evaluate
-the genetic dissimilarity criterion. The merit of this choice is discussed in
-:ref:`genetic_section`.
+Rather than requiring aligned sequences, this implementation uses a Levenshtein
+edit distance as an approximation for the aligned sequence dissimilarity.
+The merit of this choice is discussed in :ref:`genetic_section`.
 
 Rather than using an empirical :math:`\chi^2` test, this implementation uses a
 likelihood ratio test. The merit of this choice is discussed in
