@@ -242,7 +242,7 @@ def read_sequence_table(fn):
 if __name__ == '__main__':
     p = argparse.ArgumentParser(description='', )
     p.add_argument('table', type=argparse.FileType('r'), help='sequence count table')
-    p.add_argument('fasta', help='sequences (unaligned)')
+    p.add_argument('fasta', help='sequences (trimmed if unpaired, merged if paired-end; always unaligned)')
 
     g = p.add_argument_group(title='criteria')
     g.add_argument('--dist', '-d', type=float, default=0.1, help='maximum sequence dissimilarity when two sequences (default: 0.1)')

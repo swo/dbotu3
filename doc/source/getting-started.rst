@@ -29,7 +29,9 @@ To run this software, you will need:
   column headers are sample names. Each cell is the number of times that
   sequence appears in that sample.
 - A fasta file containing the sequences to be processed into OTUs. The
-  sequences should *not* be aligned.
+  sequences should *not* be aligned, but they *should* be trimmed to the
+  same length if they are single-end reads. (Paired-end reads should have been
+  merged.)
 
 The table of sequence counts will be read into memory, but the fasta file
 will be indexed. As per the algorithm, the sequences will be processed in
