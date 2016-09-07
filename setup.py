@@ -10,6 +10,6 @@ setup(name='dbotu',
         author_email='swo@mit.edu',
         platforms=['any'],
         license=license,
-        url='http://github.com/swo/dbotu2',
+        url='http://github.com/swo/dbotu3',
         packages=find_packages(),
         )
