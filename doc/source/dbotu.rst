@@ -143,6 +143,10 @@ Rather than using an empirical :math:`\chi^2` test, this implementation uses a
 likelihood ratio test. The merit of this choice is discussed in
 :ref:`distribution_section`.
 
+A more thorough comparison of the implementations and an evaluation of the
+accuracy and speed of this new implementation is in a separate technical
+manuscript [#dbotu3]_.
+
 
 .. [#preheim] Preheim *et al.* Distribution-Based Clustering: Using Ecology To
    Refine the Operational Taxonomic Unit. *Appl Environ Microbiol* (2013)
@@ -151,3 +155,6 @@ likelihood ratio test. The merit of this choice is discussed in
 .. [#nast] DeSantis *et al.* NAST: a multiple sequence alignment server for
    comparative analysis of 16S rRNA genes. *Nucleic Acids Res* (2006)
    doi:`10.1093/nar/gkl244 <https://dx.doi.org/10.1093/nar/gkl244>`_.
+
+.. [#dbotu3] SW Olesen, C Duvallet, EJ Alm. dbOTU3: A new implementation of
+   distribution-based OTU calling. *bioRxiv* (2016) doi:`10.1101/076927 <http://dx.doi.org/10.1101/076927>`_.
