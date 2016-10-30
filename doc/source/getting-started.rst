@@ -52,7 +52,8 @@ You'll need to pick values for a few parameters:
   will definitely not be put into the same OTU. The default is :math:`0.10`.
 - The *distribution cutoff*. This is the :math:`p`-value from the statistical
   test of distribution described in :ref:`distribution_section`. The default
-  value is :math:`0.0005` (as suggested in the original publication).
+  value is :math:`0.0005` (as suggested in the original publication), although some
+  testing has suggested that smaller :math:`p`-values might be more sensible.
 
 Engage!
 =======
@@ -65,6 +66,13 @@ If you wanted to change some of the default parameters, you can find the
 relevant options using::
 
     dbotu.py --help
+
+The `--output` option specifies where the resulting OTU table should go. The
+`--membership` option specifies that a QIIME-style membership file should be
+created (one line for each OTU; the representative sequence ID is the first
+field, all member sequence IDs are tab-separated after that). The `--log`
+option give some verbose information about exactly what tests were run for
+which sequences.
 
 Evaluate
 ========

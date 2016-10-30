@@ -15,3 +15,6 @@ Some basic rules:
 
 * Write unit tests.
 * Write docstrings.
+
+To get started, fork the repository. Work on it and let me know when it does
+something you like!
