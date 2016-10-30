@@ -26,4 +26,4 @@ more technical details about the algorithm.
 
 ## Authors
 
-* **Scott Olesen** - *swo at mit.edu*
+* **Scott Olesen** - *swo at alum.mit.edu*
