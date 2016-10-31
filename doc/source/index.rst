@@ -36,7 +36,6 @@ Indices and tables
 ==================
 
 * :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
 
 .. [#preheim] Preheim *et al.* Distribution-Based Clustering: Using Ecology To

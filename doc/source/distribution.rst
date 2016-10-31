@@ -108,7 +108,7 @@ has :math:`b_i`. Define also :math:`A = \sum_{i=1}^N a_i` and similarly
 The alternative hypothesis is that the OTU and sequence are distributed
 differently, that is, that each of the :math:`a_i` and :math:`b_i` are
 all drawn from different random variables. Technical replicates from
-sequence data seem to be well-modeled by Poisson random variables [1]_,
+sequence data seem to be well-modeled by Poisson random variables [#marioni]_,
 so I formulate this hypothesis as
 
 .. math::
@@ -184,3 +184,7 @@ i.e., one for the OTU and the sequence in each sample, and the null has :math:`N
 for each sample and the scaling factor :math:`\sigma`.) The cumulative
 distribution function of :math:`\chi^2` at :math:`\Lambda` is easy to
 compute.
+
+.. [#marioni] Marioni *et al.* RNA-seq: An assessment of technical
+   reproducibility and comparison with gene expression assays. *Genome Res* (2008)
+   doi:`10.1101/gr.079558.108 <http://dx.doi.org/10.1101/gr.079558.108>`_.
