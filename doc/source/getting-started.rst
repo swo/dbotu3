@@ -5,18 +5,19 @@ Getting started
 Installation
 ============
 
-Sorry, we're still in development, so there isn't a flashy way to install yet.
-I recommend you clone the github repo::
+You will probably want to use `dbotu.py` as a command-line script, so I
+recommend you clone the github repo::
 
     cd directory_for_code
     git clone https://github.com/swo/dbotu3.git
 
-Then set it up in "development" mode with::
+If you want to be able to import the code, you can set it up in "development"
+mode with::
 
     python3 setup.py develop
 
-After that, you should be able to ``import dbotu`` and get everything. If you want to "unlink"
-this development version, you can::
+After that, you should be able to ``import dbotu`` and get everything. If you
+want to "unlink" this development version, you can::
 
     python3 setup.py develop --uninstall
 
