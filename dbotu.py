@@ -10,7 +10,7 @@ import scipy.stats
 
 class OTU:
     '''
-    Object for keeping track of an OTU's kmer content and distribution
+    Object for keeping track of an OTU's distribution and computing genetic distances
     '''
     def __init__(self, name, sequence, counts):
         '''
@@ -106,7 +106,7 @@ class DBCaller:
           Indexed, unaligned input sequences. This could come from BioPython's
           SeqIO.to_dict or SeqIO.index.
         max_dist: float
-          kmer distance cutoff above which a sequence will not be merged into an OTU
+          genetic distance cutoff above which a sequence will not be merged into an OTU
         min_fold: float
           Multiply the sequence's abundance by this fold to get the minimum abundance
           of an OTU for merging
@@ -238,38 +238,54 @@ def read_sequence_table(fn):
     '''
     return pd.read_table(fn, index_col=0, header=0).astype(int)
 
+def call_otus(seq_table_fh, fasta_fh, output_fh, dist_crit, abund_crit, pval_crit, log=None, membership=None):
+    '''
+    Read in input files, call OTUs, and return output.
+
+    seq_table_fh: filehandle
+      sequence count table
+    fasta_fh: filehandle or filename
+      sequences fasta
+    output_fh: filehandle
+      place to write main output OTU table
+    dist_crit, abund_crit, pval_crit: float
+      threshold values for distance, abundance, and pvalue
+    log, membership: filehandles
+      places to write supplementary output
+    '''
+
+    # read in the sequences table
+    seq_table = read_sequence_table(seq_table_fh)
+
+    # set up the input fasta records
+    records = SeqIO.index(fasta_fh, 'fasta')
+
+    # generate the caller object
+    caller = DBCaller(seq_table, records, dist_crit, abund_crit, pval_crit, log)
+    caller.generate_otu_table()
+    caller.write_otu_table(output_fh)
+
+    if membership is not None:
+        caller.write_membership(membership)
 
 if __name__ == '__main__':
-    p = argparse.ArgumentParser(description='', )
+    p = argparse.ArgumentParser(description='dbOTU3: Distribution-based OTU calling')
     p.add_argument('table', type=argparse.FileType('r'), help='sequence count table')
     p.add_argument('fasta', help='sequences (trimmed if unpaired, merged if paired-end; always unaligned)')
 
     g = p.add_argument_group(title='criteria')
-    g.add_argument('--dist', '-d', type=float, default=0.1, help='maximum sequence dissimilarity when two sequences (default: 0.1)')
-    g.add_argument('--abund', '-a', type=float, default=10.0, help='minimum fold difference for comparing two OTUs (0=no abundance criterion; default 10.0)')
-    g.add_argument('--pval', '-p', type=float, default=0.0005, help='minimum p-value for merging OTUs (default: 0.0005)')
+    g.add_argument('--dist', '-d', type=float, default=0.1, metavar='D', help='maximum sequence dissimilarity when two sequences (default: 0.1)')
+    g.add_argument('--abund', '-a', type=float, default=10.0, metavar='A', help='minimum fold difference for comparing two OTUs (0=no abundance criterion; default 10.0)')
+    g.add_argument('--pval', '-p', type=float, default=0.0005, metavar='P', help='minimum p-value for merging OTUs (default: 0.0005)')
 
     g = p.add_argument_group(title='output options')
-    g.add_argument('--output', '-o', default=sys.stdout, help='OTU table output (default: stdout)')
-    g.add_argument('--membership', '-m', type=argparse.FileType('w'), help='QIIME-style OTU mapping file output')
-    g.add_argument('--log', '-l', default=None, type=argparse.FileType('w'), help='log output')
+    g.add_argument('--output', '-o', default=sys.stdout, metavar='FILE', help='OTU table output (default: stdout)')
+    g.add_argument('--membership', '-m', default=None, type=argparse.FileType('w'), metavar='FILE', help='QIIME-style OTU mapping file output')
+    g.add_argument('--log', '-l', default=None, type=argparse.FileType('w'), metavar='FILE', help='log output')
     args = p.parse_args()
 
     assert args.dist >= 0
     assert args.abund >= 0.0
-    assert args.dist >= 0.0
     assert args.pval >= 0.0 and args.pval <= 1.0
 
-    # read in the sequences table
-    seq_table = read_sequence_table(args.table)
-
-    # set up the input fasta records
-    records = SeqIO.index(args.fasta, 'fasta')
-
-    # generate the caller object
-    caller = DBCaller(seq_table, records, args.dist, args.abund, args.pval, args.log)
-    caller.generate_otu_table()
-    caller.write_otu_table(args.output)
-
-    if args.membership is not None:
-        caller.write_membership(args.membership)
+    call_otus(args.table, args.fasta, args.output, args.dist, args.abund, args.pval, args.log, args.membership)

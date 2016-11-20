@@ -37,18 +37,17 @@ def test_process_until_first_merge(caller):
 def test_full_process():
     records = SeqIO.index(fasta_fn, 'fasta')
     table = read_sequence_table(table_fn)
-    test_log_fh = io.StringIO()
-    caller = DBCaller(table, records, max_dist=0.10, min_fold=10.0, threshold_pval=0.0005, log=test_log_fh)
-    caller.generate_otu_table()
 
-    test_log_content = test_log_fh.getvalue()
+    table_fh = open(table_fn)
 
     test_otu_fh = io.StringIO()
-    caller.write_otu_table(test_otu_fh)
-    test_otu_content = test_otu_fh.getvalue()
-
+    test_log_fh = io.StringIO()
     test_membership_fh = io.StringIO()
-    caller.write_membership(test_membership_fh)
+
+    call_otus(table_fh, fasta_fn, test_otu_fh, dist_crit=0.10, abund_crit=10.0, pval_crit=0.0005, log=test_log_fh, membership=test_membership_fh)
+
+    test_log_content = test_log_fh.getvalue()
+    test_otu_content = test_otu_fh.getvalue()
     test_membership_content = test_membership_fh.getvalue()
 
     output_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'data', 'output')
