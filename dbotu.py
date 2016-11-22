@@ -2,6 +2,7 @@
 #
 # author: scott olesen <swo@mit.edu>
 
+from __future__ import print_function
 import argparse, sys
 import pandas as pd, numpy as np
 import Levenshtein
