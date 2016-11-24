@@ -4,7 +4,13 @@ from dbotu import *
 import numpy as np, pandas as pd
 import scipy.stats, scipy.optimize
 from Bio import SeqIO
-import os.path, io
+import os.path
+# For Python 2 compatibility
+try:
+    from StringIO import StringIO
+except:
+    from io import StringIO
+
 
 input_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'data', 'input')
 fasta_fn = os.path.join(input_dir, 'seq.fa')
@@ -40,9 +46,9 @@ def test_full_process():
 
     table_fh = open(table_fn)
 
-    test_otu_fh = io.StringIO()
-    test_log_fh = io.StringIO()
-    test_membership_fh = io.StringIO()
+    test_otu_fh = StringIO()
+    test_log_fh = StringIO()
+    test_membership_fh = StringIO()
 
     call_otus(table_fh, fasta_fn, test_otu_fh, dist_crit=0.10, abund_crit=10.0, pval_crit=0.0005, log=test_log_fh, membership=test_membership_fh)
 

@@ -1,15 +1,21 @@
+from __future__ import print_function
 import pytest
 from dbotu import *
 
-import numpy as np, pandas as pd, io
+import numpy as np, pandas as pd
+# For Python 2 compatibility
+try:
+    from StringIO import StringIO
+except:
+    from io import StringIO
 import scipy.stats, scipy.optimize
 from Bio import SeqIO
 
 @pytest.fixture
 def caller():
-    fasta_fh = io.StringIO("\n".join(['>seq1', 'AAAAAAA', '>seq2', 'AAATAAA', '>seq3', 'AATTTAA']))
+    fasta_fh = StringIO("\n".join(['>seq1', 'AAAAAAA', '>seq2', 'AAATAAA', '>seq3', 'AATTTAA']))
     fasta_fh.seek(0)
-    log_fh = io.StringIO()
+    log_fh = StringIO()
     records = SeqIO.to_dict(SeqIO.parse(fasta_fh, 'fasta'))
     table = pd.DataFrame(np.array([[0, 10, 20], [0, 1, 2], [10, 0, 0]]), index=['seq1', 'seq2', 'seq3'], columns=['sample1', 'sample2', 'sample3'])
     return DBCaller(table, records, max_dist=15, min_fold=0.0, threshold_pval=0.001, log=log_fh)
@@ -41,7 +47,7 @@ def test_process_three(caller):
 
 def test_id_check():
     '''fail if there are IDs in the table that are not in the fasta'''
-    fasta_fh = io.StringIO("\n".join(['>seq1', 'A', '>seq2', 'T']))
+    fasta_fh = StringIO("\n".join(['>seq1', 'A', '>seq2', 'T']))
     fasta_fh.seek(0)
     records = SeqIO.to_dict(SeqIO.parse(fasta_fh, 'fasta'))
     table = pd.DataFrame(np.array([[0, 1], [2, 3], [4, 5]]), index=['seq1', 'seq2', 'seq3'], columns=['sample1', 'sample2'])
