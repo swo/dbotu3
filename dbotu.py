@@ -237,9 +237,12 @@ def read_sequence_table(fn):
 
     returns: pandas.DataFrame
     '''
-    df = pd.read_table(fn, dtype={0: str}, header=0)
-    df.index = df.iloc[:,0]
-    df = df.iloc[:,1:].astype(int)
+
+    # to ensure that the first column is read as a string,
+    # the whole table must initially read as strings
+    df = pd.read_table(fn, dtype={0: str}, header=0) # read in all columns as strings
+    df.index = df.iloc[:,0] # specify the index as the first column
+    df = df.iloc[:,1:].astype(int) # cast all data columns as integers
     return df
 
 def call_otus(seq_table_fh, fasta_fh, output_fh, dist_crit, abund_crit, pval_crit, log=None, membership=None):
@@ -257,6 +260,11 @@ def call_otus(seq_table_fh, fasta_fh, output_fh, dist_crit, abund_crit, pval_cri
     log, membership: filehandles
       places to write supplementary output
     '''
+
+    # ensure valid argument values
+    assert dist_crit >= 0
+    assert abund_crit >= 0.0
+    assert pval_crit >= 0.0 and pval_crit <= 1.0
 
     # read in the sequences table
     seq_table = read_sequence_table(seq_table_fh)
@@ -287,9 +295,5 @@ if __name__ == '__main__':
     g.add_argument('--membership', '-m', default=None, type=argparse.FileType('w'), metavar='FILE', help='QIIME-style OTU mapping file output')
     g.add_argument('--log', '-l', default=None, type=argparse.FileType('w'), metavar='FILE', help='log output')
     args = p.parse_args()
-
-    assert args.dist >= 0
-    assert args.abund >= 0.0
-    assert args.pval >= 0.0 and args.pval <= 1.0
 
     call_otus(args.table, args.fasta, args.output, args.dist, args.abund, args.pval, args.log, args.membership)
