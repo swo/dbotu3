@@ -5,7 +5,7 @@ with open('LICENSE') as f:
     license=f.read()
 
 setup(name='dbotu',
-    version='1.0',
+    version='1.1',
     description='Distribution-based OTU calling',
     long_description=pypandoc.convert('README.md', 'rst'),
     author='Scott Olesen',
