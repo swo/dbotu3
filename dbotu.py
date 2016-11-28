@@ -2,6 +2,7 @@
 #
 # author: scott olesen <swo@mit.edu>
 
+from __future__ import print_function
 import argparse, sys
 import pandas as pd, numpy as np
 import Levenshtein
@@ -236,7 +237,10 @@ def read_sequence_table(fn):
 
     returns: pandas.DataFrame
     '''
-    return pd.read_table(fn, index_col=0, header=0).astype(int)
+    df = pd.read_table(fn, dtype={0: str}, header=0)
+    df.index = df.iloc[:,0]
+    df = df.iloc[:,1:].astype(int)
+    return df
 
 def call_otus(seq_table_fh, fasta_fh, output_fh, dist_crit, abund_crit, pval_crit, log=None, membership=None):
     '''
