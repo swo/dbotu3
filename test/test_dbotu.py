@@ -2,11 +2,13 @@ import pytest
 from dbotu import *
 
 import numpy as np, pandas as pd
+
 # For Python 2 compatibility
 try:
     from StringIO import StringIO
 except:
     from io import StringIO
+
 import scipy.stats, scipy.optimize
 from Bio import SeqIO
 
@@ -52,3 +54,23 @@ def test_id_check():
     table = pd.DataFrame(np.array([[0, 1], [2, 3], [4, 5]]), index=['seq1', 'seq2', 'seq3'], columns=['sample1', 'sample2'])
     with pytest.raises(RuntimeError):
         DBCaller(table, records, max_dist=15, min_fold=0.0, threshold_pval=0.001)
+
+def test_negative_dist_cutoff():
+    '''fail if trying to call with a negative distance criterion'''
+    with pytest.raises(AssertionError):
+        call_otus(None, None, None, -1.0, 1.0, 0.5)
+
+def test_negative_abund_cutoff():
+    '''fail if trying to call with negative abundance criterion'''
+    with pytest.raises(AssertionError):
+        call_otus(None, None, None, 1.0, -1.0, 0.5)
+
+def test_negative_pval_cutoff():
+    '''fail if trying to call with negative pvalue criterion'''
+    with pytest.raises(AssertionError):
+        call_otus(None, None, None, 1.0, 1.0, -0.5)
+
+def test_too_large_pval_cutoff():
+    '''fail if trying to call with pvalue criterion greater than 1'''
+    with pytest.raises(AssertionError):
+        call_otus(None, None, None, 1.0, 1.0, 1.5)
