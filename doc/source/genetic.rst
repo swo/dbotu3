@@ -85,7 +85,18 @@ the length of the OTU.
 Evaluating a distance criterion
 -------------------------------
 
-I found that this dissmilarity correlates with the dissimilarity computed
+The genetic distance threshold you choose is the dissimilarity above which a
+sequence will not be merged into an OTU. For example, the default value
+:math:`0.10` means that, if a sequence is 10% (or more) dissimilar from an
+existing OTU, then that sequence will not end up in that OTU (even if their
+distributions are perfectly identical).
+
+Note that this is more like the "radius" than the "diameter" of the OTU's
+member sequences: two sequences, each 10% (or less) dissimilar to the
+representative sequence and thus up to 20% dissimilar to one another, can end
+up in the same OTU.
+
+I found that the dissmilarity metric shown above correlates with the dissimilarity computed
 by a pairwise alignment just as well as the original implementation's
 dissimilarity metric (i.e., the minimum of the aligned and unaligned
 sequence dissimilarity).

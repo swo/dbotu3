@@ -245,7 +245,7 @@ def read_sequence_table(fn):
     df = df.iloc[:,1:].astype(int) # cast all data columns as integers
     return df
 
-def call_otus(seq_table_fh, fasta_fh, output_fh, dist_crit, abund_crit, pval_crit, log=None, membership=None):
+def call_otus(seq_table_fh, fasta_fh, output_fh, gen_crit, abund_crit, pval_crit, log=None, membership=None):
     '''
     Read in input files, call OTUs, and return output.
 
@@ -255,14 +255,14 @@ def call_otus(seq_table_fh, fasta_fh, output_fh, dist_crit, abund_crit, pval_cri
       sequences fasta
     output_fh: filehandle
       place to write main output OTU table
-    dist_crit, abund_crit, pval_crit: float
-      threshold values for distance, abundance, and pvalue
+    gen_crit, abund_crit, pval_crit: float
+      threshold values for genetic criterion, abundance criterion, and distribution criterion (pvalue)
     log, membership: filehandles
       places to write supplementary output
     '''
 
     # ensure valid argument values
-    assert dist_crit >= 0
+    assert gen_crit >= 0
     assert abund_crit >= 0.0
     assert pval_crit >= 0.0 and pval_crit <= 1.0
 
@@ -273,7 +273,7 @@ def call_otus(seq_table_fh, fasta_fh, output_fh, dist_crit, abund_crit, pval_cri
     records = SeqIO.index(fasta_fh, 'fasta')
 
     # generate the caller object
-    caller = DBCaller(seq_table, records, dist_crit, abund_crit, pval_crit, log)
+    caller = DBCaller(seq_table, records, gen_crit, abund_crit, pval_crit, log)
     caller.generate_otu_table()
     caller.write_otu_table(output_fh)
 
@@ -286,7 +286,7 @@ if __name__ == '__main__':
     p.add_argument('fasta', help='sequences (trimmed if unpaired, merged if paired-end; always unaligned)')
 
     g = p.add_argument_group(title='criteria')
-    g.add_argument('--dist', '-d', type=float, default=0.1, metavar='D', help='maximum sequence dissimilarity when two sequences (default: 0.1)')
+    g.add_argument('--dist', '-d', type=float, default=0.1, metavar='D', help='maximum genetic dissimilarity between sequences; more dissimilar sequence pairs do not pass the genetic criterion (default: 0.1)')
     g.add_argument('--abund', '-a', type=float, default=10.0, metavar='A', help='minimum fold difference for comparing two OTUs (0=no abundance criterion; default 10.0)')
     g.add_argument('--pval', '-p', type=float, default=0.0005, metavar='P', help='minimum p-value for merging OTUs (default: 0.0005)')
 
