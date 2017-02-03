@@ -19,7 +19,8 @@ populations.
 
 This documentation includes a guide to getting started, description of the
 algorithm, a comparison of the methodologies of the different implementations,
-and an API reference.
+and an API reference. The technical details of this implementation are also
+included in a preprint [#olesen]_.
 
 .. toctree::
    :maxdepth: 2
@@ -41,3 +42,6 @@ Indices and tables
 .. [#preheim] Preheim *et al.* Distribution-Based Clustering: Using Ecology To
    Refine the Operational Taxonomic Unit. *Appl Environ Microbiol* (2013)
    doi:`10.1128/AEM.00342-13 <http://dx.doi.org/10.1128/AEM.00342-13>`_.
+.. [#olesen] Olesen SW, Duvallet C, and Alm EJ. dbOTU3: A new implementation of
+   distribution-based OTU calling. *bioRxiv* (2016)
+   doi:`10.1101/076927 <http://doi.org/10.1101/076927>`_.
