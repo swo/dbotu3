@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 #
-# author: scott olesen <swo@mit.edu>
+# author: scott olesen <swo@alum.mit.edu>
 
 from __future__ import print_function
-import argparse, sys
+import argparse, sys, warnings
 import pandas as pd, numpy as np
 import Levenshtein
 from Bio import SeqIO
@@ -241,6 +241,15 @@ def read_sequence_table(fn):
     # to ensure that the first column is read as a string,
     # the whole table must initially read as strings
     df = pd.read_table(fn, dtype={0: str}, header=0) # read in all columns as strings
+
+    # BIOM format things will complain here
+    if type(df.index) is pd.indexes.multi.MultiIndex:
+        warnings.warn('Table was parsed with unusual indexes. Does this table comply with the tab-separated format?', RuntimeWarning)
+
+    # TSV formats will complain here
+    if df.shape[1] == 1:
+        warnings.warn('Only one tab-separated column detected. Does this table comply with the tab-separated format?', RuntimeWarning)
+
     df.index = df.iloc[:,0] # specify the index as the first column
     df = df.iloc[:,1:].astype(int) # cast all data columns as integers
     return df
@@ -296,4 +305,4 @@ if __name__ == '__main__':
     g.add_argument('--log', '-l', default=None, type=argparse.FileType('w'), metavar='FILE', help='log output')
     args = p.parse_args()
 
-    call_otus(args.table, args.fasta, args.output, args.dist, args.abund, args.pval, args.log, args.membership)
+    call_otus(args.table, args.fasta, args.output, args.dist, args.abund, args.pval, log=args.log, membership=args.membership)
