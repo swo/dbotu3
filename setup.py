@@ -4,7 +4,7 @@ with open('README.rst') as f:
     readme=f.read()
 
 setup(name='dbotu',
-    version='1.1',
+    version='1.2',
     description='Distribution-based OTU calling',
     long_description=readme,
     author='Scott Olesen',
@@ -16,7 +16,8 @@ setup(name='dbotu',
     package_date={'dbotu': ['data/input/counts.txt', 'data/input/seq.fa',
         'data/output/log.txt', 'data/output/membership.txt', 'data/output/otu.txt',
         'test/improper_data/counts.csv', 'test/improper_data/counts_biom.txt']},
-    classifiers=['Development Status :: 3', 'Environment :: Console',
-        'Programming Language :: Python :: 3', 'Topic :: Scientific/Engineering :: Bio-Informatics'],
+    classifiers=['Development Status :: 4 - Beta', 'Environment :: Console',
+        'Programming Language :: Python :: 2.7', 'Programming Language :: Python :: 3.6',
+        'Topic :: Scientific/Engineering :: Bio-Informatics'],
     packages=find_packages()
     )
