@@ -5,34 +5,26 @@ Getting started
 Installation
 ============
 
-You will probably want to use `dbotu.py` as a command-line script, so I
-recommend you clone the github repo::
-
-    cd directory_for_code
-    git clone https://github.com/swo/dbotu3.git
-
-If you want to be able to import the code, you can set it up in "development"
-mode with::
-
-    python3 setup.py develop
-
-After that, you should be able to ``import dbotu`` and get everything. If you
-want to "unlink" this development version, you can::
-
-    python3 setup.py develop --uninstall
+You can download dbOTU3 using ``pip install dbotu``. dbOTU3 should be compatible
+with Python 2 and 3. Installing with ``pip`` will add ``dbotu.py`` to your path.
 
 Getting your data in shape
 ==========================
 
 To run this software, you will need:
 
-- A table of sequence counts. The first column is sequence IDs; the rest of the
+- A table of sequence counts. **This table has a very specific format**: the
+  file is tab-separated; the first column is sequence IDs; the rest of the
   column headers are sample names. Each cell is the number of times that
-  sequence appears in that sample.
+  sequence appears in that sample. If you use convert a BIOM_ file to a TSV
+  using ``biom convert --to-tsv``, you will need to remove the first line
+  (i.e., ``# Constructed from biom file``).
 - A fasta file containing the sequences to be processed into OTUs. The
   sequences should *not* be aligned, but they *should* be trimmed to the
   same length if they are single-end reads. (Paired-end reads should have been
   merged.)
+
+.. _BIOM: http://biom-format.org/
 
 The table of sequence counts will be read into memory, but the fasta file
 will be indexed. As per the algorithm, the sequences will be processed in
@@ -68,10 +60,10 @@ relevant options using::
 
     dbotu.py --help
 
-The `--output` option specifies where the resulting OTU table should go. The
-`--membership` option specifies that a QIIME-style membership file should be
+The ``--output`` option specifies where the resulting OTU table should go. The
+``--membership`` option specifies that a QIIME-style membership file should be
 created (one line for each OTU; the representative sequence ID is the first
-field, all member sequence IDs are tab-separated after that). The `--log`
+field, all member sequence IDs are tab-separated after that). The ``--log``
 option give some verbose information about exactly what tests were run for
 which sequences.
 

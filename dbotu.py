@@ -230,8 +230,11 @@ class DBCaller:
 
 def read_sequence_table(fn):
     '''
-    Read in a table of sequences. Expect a header and the sequence IDs in the
-    first column. Samples are on the columns.
+    Read in a table of sequences. The table must be tab-separated with exactly
+    one header line of a field naming the sequences (e.g., "OTU", "OTU_ID",
+    "seq", etc.) followed by tab-separated sample names. Sequence names are the
+    first field of the following rows. The cells in the table are the counts of
+    that sequence in that sample.
 
     fn: filename (or handle)
 
@@ -259,7 +262,7 @@ def call_otus(seq_table_fh, fasta_fh, output_fh, gen_crit, abund_crit, pval_crit
     Read in input files, call OTUs, and return output.
 
     seq_table_fh: filehandle
-      sequence count table
+      sequence count table, tab-separated
     fasta_fh: filehandle or filename
       sequences fasta
     output_fh: filehandle
