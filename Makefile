@@ -10,3 +10,6 @@ build:
 
 upload:
 	twine upload dist/*
+
+update:
+	python3 setup.py sdist upload -r pypi
