@@ -1,13 +1,15 @@
 from setuptools import find_packages, setup
-import pypandoc
 
 with open('LICENSE') as f:
     license=f.read()
 
+with open('README.rst') as f:
+    readme=f.read()
+
 setup(name='dbotu',
     version='1.1',
     description='Distribution-based OTU calling',
-    long_description=pypandoc.convert('README.md', 'rst'),
+    long_description=readme,
     author='Scott Olesen',
     author_email='swo@alum.mit.edu',
     platforms=['any'],
