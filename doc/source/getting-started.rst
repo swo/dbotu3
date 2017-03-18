@@ -20,9 +20,8 @@ To run this software, you will need:
   using ``biom convert --to-tsv``, you will need to remove the first line
   (i.e., ``# Constructed from biom file``).
 - A fasta file containing the sequences to be processed into OTUs. The
-  sequences should *not* be aligned, but they *should* be trimmed to the
-  same length if they are single-end reads. (Paired-end reads should have been
-  merged.)
+  sequences should *not* be aligned. Single-end reads should be trimmed to
+  the same length. Paired-end reads should be merged but not trimmed.
 
 .. _BIOM: http://biom-format.org/
 
@@ -70,5 +69,6 @@ which sequences.
 Evaluate
 ========
 
-If you can validate your choices for parameters, do so. You might also want
-to chimera-check the OTUs, possibly with the script in ``tools/``.
+If you can validate your choices for parameters, do so. You might also want to
+chimera-check the OTUs, possibly with a script like my `UCHIME chimera checker
+<https://github.com/swo/uchime-chimera-check>`_.
