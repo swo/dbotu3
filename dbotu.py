@@ -135,6 +135,14 @@ class DBCaller:
         self.membership = {}
         self.otus = []
 
+    def _print_log(self, *fields):
+        '''
+        Write fields to the log file (if present)
+        '''
+
+        if self.log is not None:
+            print(*fields, sep='\t', file=self.log)
+
     def ga_matches(self, candidate):
         '''
         OTUs that meet the genetic and abundance criteria
@@ -147,8 +155,7 @@ class DBCaller:
         min_abundance = self.min_fold * candidate.abundance
         abundance_matches = [otu for otu in self.otus if otu.abundance > min_abundance]
 
-        if self.log is not None:
-            print(candidate.name, 'abundance_check', *[otu.name for otu in abundance_matches], sep='\t', file=self.log)
+        self._print_log(candidate.name, 'abundance_check', *[otu.name for otu in abundance_matches])
 
         if len(abundance_matches) == 0:
             return []
@@ -158,8 +165,7 @@ class DBCaller:
             matches_distances.sort(key=lambda x: (x[0], -x[1].abundance, x[1].name))
             matches = [otu for dist, otu in matches_distances if dist < self.max_dist]
 
-            if self.log is not None:
-                print(candidate.name, 'genetic_check', *[otu.name for otu in matches], sep='\t', file=self.log)
+            self._print_log(candidate.name, 'genetic_check', *[otu.name for otu in matches])
 
             return matches
 
@@ -177,16 +183,14 @@ class DBCaller:
         for otu in self.ga_matches(candidate):
             test_pval = candidate.distribution_pval(otu)
 
-            if self.log is not None:
-                print(candidate.name, 'distribution_check', otu.name, test_pval, sep='\t', file=self.log)
+            self._print_log(candidate.name, 'distribution_check', otu.name, test_pval)
 
             if test_pval > self.threshold_pval:
                 otu.absorb(candidate)
                 self.membership[otu.name].append(candidate.name)
                 merged = True
 
-                if self.log is not None:
-                    print(candidate.name, 'merged_into', otu.name, sep='\t', file=self.log)
+                self._print_log(candidate.name, 'merged_into', otu.name)
 
                 break
 
@@ -195,8 +199,7 @@ class DBCaller:
             self.otus.append(candidate)
             self.membership[candidate.name] = [candidate.name]
 
-            if self.log is not None:
-                print(candidate.name, 'new_otu', sep='\t', file=self.log)
+            self._print_log(candidate.name, 'new_otu')
 
     def generate_otu_table(self):
         '''
@@ -220,6 +223,7 @@ class DBCaller:
 
         output: filehandle
         '''
+
         self.otu_table.to_csv(output, sep='\t', index_label='OTU_ID')
 
     def write_membership(self, output):
@@ -228,6 +232,7 @@ class DBCaller:
 
         output: filehandle
         '''
+
         for otu in self.otus:
             print(otu.name, *self.membership[otu.name], sep='\t', file=output)
 
