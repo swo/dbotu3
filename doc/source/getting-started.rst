@@ -72,3 +72,21 @@ Evaluate
 If you can validate your choices for parameters, do so. You might also want to
 chimera-check the OTUs, possibly with a script like my `UCHIME chimera checker
 <https://github.com/swo/uchime-chimera-check>`_.
+
+If you want to get into the specifics of what the algorithm did, you can read
+the log file (produced by using the ``--log`` option). The log file has 5 types
+of lines, all of which are tab-separated:
+
+- Lines like ``A abundance_check B C`` show that the abundance criterion was
+  applied to sequence ``A`` and all existing OTUs, of which OTUs ``B`` and
+  ``C`` passed. Thus, the genetic similarity of ``A`` will be tested against
+  ``B`` and ``C``. If no fields follow ``abundance_check``, no OTUs passed the
+  abundance criterion.
+- Lines with ``genetic_check`` are like ``abundance_check``: the sequence in
+  the first field was sufficiently genetically similar to the OTUs after the
+  ``genetic_check`` field to qualify for a distrubtion test.
+- Lines like ``A distribution_check B 0.001`` mean that the distribution of
+  sequence ``A`` was compared with that of OTU ``B`` and the distribution
+  criterion returned a :math:`p`-value of 0.001.
+- Lines like ``A new_otu`` show that sequence ``A`` was made into a new OTU.
+- Lines like ``A new_otu B`` show that sequence ``A`` was merged into OTU ``B``.

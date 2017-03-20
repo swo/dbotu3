@@ -173,9 +173,6 @@ class DBCaller:
 
         candidate = OTU(record.id, str(record.seq), self.seq_table.loc[record.id])
 
-        if self.log is not None:
-            print('seq', candidate.name, sep='\t', file=self.log)
-
         merged = False
         for otu in self.ga_matches(candidate):
             test_pval = candidate.distribution_pval(otu)
@@ -187,12 +184,19 @@ class DBCaller:
                 otu.absorb(candidate)
                 self.membership[otu.name].append(candidate.name)
                 merged = True
+
+                if self.log is not None:
+                    print(candidate.name, 'merged_into', otu.name, sep='\t', file=self.log)
+
                 break
 
         if not merged:
             # form own otu
             self.otus.append(candidate)
             self.membership[candidate.name] = [candidate.name]
+
+            if self.log is not None:
+                print(candidate.name, 'new_otu', sep='\t', file=self.log)
 
     def generate_otu_table(self):
         '''
@@ -216,7 +220,7 @@ class DBCaller:
 
         output: filehandle
         '''
-        self.otu_table.to_csv(output, sep='\t')
+        self.otu_table.to_csv(output, sep='\t', index_label='OTU_ID')
 
     def write_membership(self, output):
         '''
