@@ -1,120 +1,132 @@
-seq106	new_otu
-seq53	new_otu
-seq86	new_otu
-seq89	new_otu
-seq118	new_otu
-seq0	new_otu
-seq7	new_otu
-seq47	new_otu
-seq17	new_otu
-seq67	new_otu
-seq38	new_otu
-seq87	new_otu
-seq62	new_otu
-seq50	new_otu
-seq60	new_otu
-seq48	new_otu
-seq93	new_otu
-seq34	new_otu
-seq110	new_otu
-seq65	new_otu
-seq6	new_otu
-seq79	new_otu
-seq85	new_otu
-seq72	new_otu
-seq28	new_otu
-seq91	new_otu
-seq109	new_otu
-seq96	new_otu
-seq74	new_otu
-seq10	new_otu
-seq71	new_otu
-seq75	new_otu
-seq76	new_otu
-seq84	new_otu
-seq108	new_otu
-seq13	new_otu
-seq78	new_otu
-seq44	new_otu
-seq9	new_otu
-seq113	new_otu
-seq57	new_otu
-seq8	new_otu
-seq12	new_otu
-seq64	new_otu
-seq63	new_otu
-seq56	new_otu
-seq25	new_otu
-seq31	new_otu
-seq92	new_otu
-seq29	new_otu
-seq95	new_otu
-seq82	new_otu
-seq20	new_otu
-seq15	new_otu
-seq54	new_otu
-seq21	new_otu
-seq80	new_otu
-seq27	new_otu
-seq99	new_otu
-seq102	new_otu
-seq5	new_otu
-seq112	new_otu
-seq2	new_otu
-seq43	new_otu
-seq24	new_otu
-seq14	new_otu
-seq49	new_otu
-seq41	new_otu
-seq94	new_otu
-seq68	new_otu
-seq77	new_otu
-seq52	new_otu
-seq37	new_otu
-seq104	new_otu
-seq32	merged_into	seq84
-seq40	merged_into	seq84
-seq3	new_otu
-seq16	merged_into	seq84
-seq103	merged_into	seq84
-seq45	merged_into	seq84
-seq55	merged_into	seq84
-seq58	new_otu
-seq30	new_otu
-seq19	merged_into	seq84
-seq97	new_otu
-seq88	new_otu
-seq115	merged_into	seq17
-seq4	merged_into	seq64
-seq66	new_otu
-seq73	merged_into	seq34
-seq1	new_otu
-seq22	new_otu
-seq105	merged_into	seq34
-seq11	merged_into	seq58
-seq70	new_otu
-seq18	new_otu
-seq119	merged_into	seq109
-seq23	new_otu
-seq83	merged_into	seq63
-seq117	merged_into	seq84
-seq116	merged_into	seq41
-seq114	new_otu
-seq111	merged_into	seq110
-seq107	merged_into	seq86
-seq101	new_otu
-seq100	new_otu
-seq98	new_otu
-seq90	merged_into	seq29
-seq81	merged_into	seq86
-seq26	merged_into	seq30
-seq69	merged_into	seq2
-seq61	merged_into	seq15
-seq51	merged_into	seq31
-seq46	merged_into	seq63
-seq42	merged_into	seq12
-seq39	merged_into	seq14
-seq36	merged_into	seq38
-seq35	new_otu
-seq33	merged_into	seq17
-seq59	merged_into	seq24
+---
+time_started: 2017-04-20 21:46:20.718213
+genetic_criterion_threhsold: 0.1
+abundance_criterion_threshold: 10.0
+distribution_criterion_threshold: 0.0005
+sequence_table_filename: /Users/scott/lib/dbotu/data/input/counts.txt
+fasta_filename: /Users/scott/lib/dbotu/data/input/seq.fa
+otu_table_output_filename: /Users/scott/lib/dbotu/data/output/otu.txt
+progress_log_output_filename: /Users/scott/lib/dbotu/data/output/log.txt
+membership_output_filename: /Users/scott/lib/dbotu/data/output/membership.txt
+debug_log_output_filename: /Users/scott/lib/dbotu/data/output/debug_log.txt
+---
+"seq106": "seq106"
+"seq53": "seq53"
+"seq86": "seq86"
+"seq89": "seq89"
+"seq118": "seq118"
+"seq0": "seq0"
+"seq7": "seq7"
+"seq47": "seq47"
+"seq17": "seq17"
+"seq67": "seq67"
+"seq38": "seq38"
+"seq87": "seq87"
+"seq62": "seq62"
+"seq50": "seq50"
+"seq60": "seq60"
+"seq48": "seq48"
+"seq93": "seq93"
+"seq34": "seq34"
+"seq110": "seq110"
+"seq65": "seq65"
+"seq6": "seq6"
+"seq79": "seq79"
+"seq85": "seq85"
+"seq72": "seq72"
+"seq28": "seq28"
+"seq91": "seq91"
+"seq109": "seq109"
+"seq96": "seq96"
+"seq74": "seq74"
+"seq10": "seq10"
+"seq71": "seq71"
+"seq75": "seq75"
+"seq76": "seq76"
+"seq84": "seq84"
+"seq108": "seq108"
+"seq13": "seq13"
+"seq78": "seq78"
+"seq44": "seq44"
+"seq9": "seq9"
+"seq113": "seq113"
+"seq57": "seq57"
+"seq8": "seq8"
+"seq12": "seq12"
+"seq64": "seq64"
+"seq63": "seq63"
+"seq56": "seq56"
+"seq25": "seq25"
+"seq31": "seq31"
+"seq92": "seq92"
+"seq29": "seq29"
+"seq95": "seq95"
+"seq82": "seq82"
+"seq20": "seq20"
+"seq15": "seq15"
+"seq54": "seq54"
+"seq21": "seq21"
+"seq80": "seq80"
+"seq27": "seq27"
+"seq99": "seq99"
+"seq102": "seq102"
+"seq5": "seq5"
+"seq112": "seq112"
+"seq2": "seq2"
+"seq43": "seq43"
+"seq24": "seq24"
+"seq14": "seq14"
+"seq49": "seq49"
+"seq41": "seq41"
+"seq94": "seq94"
+"seq68": "seq68"
+"seq77": "seq77"
+"seq52": "seq52"
+"seq37": "seq37"
+"seq104": "seq104"
+"seq32": "seq84"
+"seq40": "seq84"
+"seq3": "seq3"
+"seq16": "seq84"
+"seq103": "seq84"
+"seq45": "seq84"
+"seq55": "seq84"
+"seq58": "seq58"
+"seq30": "seq30"
+"seq19": "seq84"
+"seq97": "seq97"
+"seq88": "seq88"
+"seq115": "seq17"
+"seq4": "seq64"
+"seq66": "seq66"
+"seq73": "seq34"
+"seq1": "seq1"
+"seq22": "seq22"
+"seq105": "seq34"
+"seq11": "seq58"
+"seq70": "seq70"
+"seq18": "seq18"
+"seq119": "seq109"
+"seq23": "seq23"
+"seq83": "seq63"
+"seq117": "seq84"
+"seq116": "seq41"
+"seq114": "seq114"
+"seq111": "seq110"
+"seq107": "seq86"
+"seq101": "seq101"
+"seq100": "seq100"
+"seq98": "seq98"
+"seq90": "seq29"
+"seq81": "seq86"
+"seq26": "seq30"
+"seq69": "seq2"
+"seq61": "seq15"
+"seq51": "seq31"
+"seq46": "seq63"
+"seq42": "seq12"
+"seq39": "seq14"
+"seq36": "seq38"
+"seq35": "seq35"
+"seq33": "seq17"
+"seq59": "seq24"

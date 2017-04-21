@@ -3,7 +3,7 @@
 # author: scott olesen <swo@alum.mit.edu>
 
 from __future__ import print_function
-import argparse, sys, warnings
+import argparse, sys, warnings, os, datetime
 import pandas as pd, numpy as np
 import Levenshtein
 from Bio import SeqIO
@@ -145,12 +145,12 @@ class DBCaller:
         if self.debug_log is not None:
             print(*fields, sep='\t', file=self.debug_log)
 
-    def _print_progress_log(self, *fields):
+    def _print_progress_log(self, field1, field2):
         '''
         Write fields to progress log file (if present)
         '''
         if self.progress_log is not None:
-            print(*fields, sep='\t', file=self.progress_log)
+            print('"{}": "{}"'.format(field1, field2), file=self.progress_log)
 
     def ga_matches(self, candidate):
         '''
@@ -199,7 +199,7 @@ class DBCaller:
                 self.membership[otu.name].append(candidate.name)
                 merged = True
 
-                self._print_progress_log(candidate.name, 'merged_into', otu.name)
+                self._print_progress_log(candidate.name, otu.name)
                 self._print_debug_log(candidate.name, 'merged_into', otu.name)
 
                 break
@@ -209,7 +209,7 @@ class DBCaller:
             self.otus.append(candidate)
             self.membership[candidate.name] = [candidate.name]
 
-            self._print_progress_log(candidate.name, 'new_otu')
+            self._print_progress_log(candidate.name, candidate.name)
             self._print_debug_log(candidate.name, 'new_otu')
 
     def generate_otu_table(self):
@@ -277,14 +277,14 @@ def read_sequence_table(fn):
     df = df.iloc[:,1:].astype(int) # cast all data columns as integers
     return df
 
-def call_otus(seq_table_fh, fasta_fh, output_fh, gen_crit, abund_crit, pval_crit, log=None, membership=None, debug=None):
+def call_otus(seq_table_fh, fasta_fn, output_fh, gen_crit, abund_crit, pval_crit, log=None, membership=None, debug=None):
     '''
     Read in input files, call OTUs, and return output.
 
     seq_table_fh: filehandle
       sequence count table, tab-separated
-    fasta_fh: filehandle or filename
-      sequences fasta
+    fasta_fn: str
+      sequences fasta filename
     output_fh: filehandle
       place to write main output OTU table
     gen_crit, abund_crit, pval_crit: float
@@ -302,7 +302,27 @@ def call_otus(seq_table_fh, fasta_fh, output_fh, gen_crit, abund_crit, pval_crit
     seq_table = read_sequence_table(seq_table_fh)
 
     # set up the input fasta records
-    records = SeqIO.index(fasta_fh, 'fasta')
+    records = SeqIO.index(fasta_fn, 'fasta')
+
+    # write the setup values to the log file, if present
+    if log is not None:
+        print('---', file=log)
+        print('time_started:', datetime.datetime.now(), file=log)
+        print('genetic_criterion_threhsold:', gen_crit, file=log)
+        print('abundance_criterion_threshold:', abund_crit, file=log)
+        print('distribution_criterion_threshold:', pval_crit, file=log)
+        print('sequence_table_filename:', os.path.realpath(seq_table_fh.name), file=log)
+        print('fasta_filename:', os.path.realpath(fasta_fn), file=log)
+        print('otu_table_output_filename:', os.path.realpath(output_fh.name), file=log)
+        print('progress_log_output_filename:', os.path.realpath(log.name), file=log)
+
+        if membership is not None:
+            print('membership_output_filename:', os.path.realpath(membership.name), file=log)
+
+        if debug is not None:
+            print('debug_log_output_filename:', os.path.realpath(debug.name), file=log)
+
+        print('---', file=log)
 
     # generate the caller object
     caller = DBCaller(seq_table, records, gen_crit, abund_crit, pval_crit, log, debug)
@@ -323,7 +343,7 @@ if __name__ == '__main__':
     g.add_argument('--pval', '-p', type=float, default=0.0005, metavar='P', help='minimum p-value for merging OTUs (default: 0.0005)')
 
     g = p.add_argument_group(title='output options')
-    g.add_argument('--output', '-o', default=sys.stdout, metavar='FILE', help='OTU table output (default: stdout)')
+    g.add_argument('--output', '-o', default=sys.stdout, type=argparse.FileType('w'), metavar='FILE', help='OTU table output (default: stdout)')
     g.add_argument('--membership', '-m', default=None, type=argparse.FileType('w'), metavar='FILE', help='QIIME-style OTU mapping file output')
     g.add_argument('--log', '-l', default=None, type=argparse.FileType('w'), metavar='FILE', help='progress log output')
     g.add_argument('--debug', default=None, type=argparse.FileType('w'), metavar='FILE', help='debug log output')
