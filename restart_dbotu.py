@@ -39,27 +39,24 @@ def restart_dbotu_run(log_fn):
 
     seq_table = dbotu.read_sequence_table(seq_table_fh)
     records = SeqIO.index(fasta_fn, 'fasta')
-    caller = dbotu.DBCaller(seq_table, records, gen_crit, abund_crit, pval_crit, log, debug)
 
-    # assert that the already-processed sequences are in a block at the top of the caller's to-do list
-    # swo> sort the progress keys by their abundance to maintain order
-    # swo> or, don't use a dictionary for the log, since the ordering does matter
-    already_processed_seq_idx = sorted([caller.seq_abunds.index.get_loc(seq) for seq in progress.keys()])
-    n_already_processed = len(already_processed_seq_idx)
-    if not already_processed_seq_idx == list(range(n_already_processed)):
-        raise RuntimeError('{} sequences were already processed, but they are not 0 through {}, instead {}'.format(n_already_processed, n_already_processed-1, already_processed_seq_idx))
+    # create the caller. give it log file as None so that it doesn't write anything
+    # to the log file yet
+    caller = dbotu.DBCaller(seq_table, records, gen_crit, abund_crit, pval_crit, log=None, debug=debug)
 
-    # make all the otus
-    for seq_id, otu_id in progress.items():
-        if seq_id == otu_id:
-            assert otu_id in caller.seq_table.index
-            record = caller.records[otu_id]
+    for elt_i, elt in enumerate(progress):
+        if isinstance(elt, str):
+            # this is a new otu
+            seq_id = elt
+            assert seq_id in caller.seq_table.index
+            record = caller.records[seq_id]
             otu = dbotu.OTU(record.id, str(record.seq), caller.seq_table.loc[record.id])
             caller._make_otu(otu)
+            print(elt_i, 'new otu', seq_id)
+        elif isinstance(elt, list) and len(elt) == 2:
+            # this is a merging
+            seq_id, otu_id = elt
 
-    # merge all the sequences
-    for seq_id, otu_id in progress.items():
-        if seq_id != otu_id:
             # find the otu with that name
             otu = [o for o in caller.otus if o.name == otu_id][0]
 
@@ -69,6 +66,18 @@ def restart_dbotu_run(log_fn):
             member = dbotu.OTU(record.id, str(record.seq), caller.seq_table.loc[record.id])
 
             caller._merge_sequence(member, otu)
+            print(elt_i, 'merge', seq_id, otu_id)
+        else:
+            raise RuntimeError('progress log item "{}" is not a string or 2-item list'.format(elt))
+
+        # make sure that sequence we processed was the right one
+        expected_id = caller.seq_abunds.index[elt_i]
+        if not seq_id == expected_id:
+            raise RuntimeError('the {}-th sequence already processed was "{}" but the data makes it look like it should be "{}"'.format(elt_i + 1, member_id, expected_id))
+
+    # now that we are processing real data, the logging should start again
+    # swo> or, read in the original log, then create a new one with a new header, updated with the start time
+    caller.progress_log = log
 
     # process the rest of the samples
     for record_id in caller.seq_abunds.index[n_already_processed:]:

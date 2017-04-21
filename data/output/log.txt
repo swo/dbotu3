@@ -1,5 +1,5 @@
 ---
-time_started: 2017-04-21 15:57:44.341285
+time_started: 2017-04-21 16:13:03.611172
 genetic_criterion_threshold: 0.1
 abundance_criterion_threshold: 10.0
 distribution_criterion_threshold: 0.0005
