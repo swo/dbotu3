@@ -4,7 +4,7 @@
 
 from __future__ import print_function
 
-import argparse, yaml, os.path
+import argparse, yaml, os.path, datetime
 from Bio import SeqIO
 import dbotu
 
@@ -25,7 +25,7 @@ def restart_dbotu_run(log_fn):
     seq_table_fh = open(header['sequence_table_filename'])
     fasta_fn = header['fasta_filename']
     output_fh = open(header['otu_table_output_filename'], 'w')
-    log = open(log_fn, 'a')  # append to existing log
+    log = open(log_fn, 'w')  # append to existing log
 
     if 'membership_output_filename' in header:
         membership_fh = open(header['membership_output_filename'], 'w')
@@ -33,16 +33,23 @@ def restart_dbotu_run(log_fn):
         membership_fh = None
 
     if 'debug_log_output_filename' in header:
-        debug = open(header['debug_log_output_filename'], 'a')  # append to existing debug log
+        debug = open(header['debug_log_output_filename'], 'w')
+        print('restarted_run', file=debug)
     else:
         debug = None
+
+    # update the header and write it to the new log file
+    header.update({'restarted_run': True, 'time_restarted': datetime.datetime.now()})
+    print('---', file=log)
+    print(yaml.dump(header, default_flow_style=False).strip(), file=log)
+    print('---', file=log)
 
     seq_table = dbotu.read_sequence_table(seq_table_fh)
     records = SeqIO.index(fasta_fn, 'fasta')
 
     # create the caller. give it log file as None so that it doesn't write anything
     # to the log file yet
-    caller = dbotu.DBCaller(seq_table, records, gen_crit, abund_crit, pval_crit, log=None, debug=debug)
+    caller = dbotu.DBCaller(seq_table, records, gen_crit, abund_crit, pval_crit, log, debug)
 
     for elt_i, elt in enumerate(progress):
         if isinstance(elt, str):
@@ -52,7 +59,6 @@ def restart_dbotu_run(log_fn):
             record = caller.records[seq_id]
             otu = dbotu.OTU(record.id, str(record.seq), caller.seq_table.loc[record.id])
             caller._make_otu(otu)
-            print(elt_i, 'new otu', seq_id)
         elif isinstance(elt, list) and len(elt) == 2:
             # this is a merging
             seq_id, otu_id = elt
@@ -66,7 +72,6 @@ def restart_dbotu_run(log_fn):
             member = dbotu.OTU(record.id, str(record.seq), caller.seq_table.loc[record.id])
 
             caller._merge_sequence(member, otu)
-            print(elt_i, 'merge', seq_id, otu_id)
         else:
             raise RuntimeError('progress log item "{}" is not a string or 2-item list'.format(elt))
 
@@ -75,12 +80,8 @@ def restart_dbotu_run(log_fn):
         if not seq_id == expected_id:
             raise RuntimeError('the {}-th sequence already processed was "{}" but the data makes it look like it should be "{}"'.format(elt_i + 1, member_id, expected_id))
 
-    # now that we are processing real data, the logging should start again
-    # swo> or, read in the original log, then create a new one with a new header, updated with the start time
-    caller.progress_log = log
-
     # process the rest of the samples
-    for record_id in caller.seq_abunds.index[n_already_processed:]:
+    for record_id in caller.seq_abunds.index[elt_i + 1:]:
         caller._process_record(record_id)
 
     # write the output
