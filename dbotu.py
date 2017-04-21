@@ -99,7 +99,7 @@ class DBCaller:
     '''
     Object for processing the sequence table and distance matrix into an OTU table.
     '''
-    def __init__(self, seq_table, records, max_dist, min_fold, threshold_pval, log=None):
+    def __init__(self, seq_table, records, max_dist, min_fold, threshold_pval, log=None, debug=None):
         '''
         seq_table: pandas.DataFrame
           Samples on the columns; sequences on the rows
@@ -114,14 +114,17 @@ class DBCaller:
         threshold_pval: float
           P-value below which a sequence will not be merged into an OTU
         log: filehandle
-          Log file reporting the abundance, genetic, and distribution checks.
+          Log file reporting which sequences became OTUs and which were merged
+        debug: filehandle
+          Log file reporting the abundance, genetic, and distribution checks
         '''
         self.seq_table = seq_table
         self.records = records
         self.max_dist = max_dist
         self.min_fold = min_fold
         self.threshold_pval = threshold_pval
-        self.log = log
+        self.progress_log = log
+        self.debug_log = debug
 
         # get a list of the names of the sequences in order of their (decreasing) abundance
         self.seq_abunds = self.seq_table.sum(axis=1).sort_values(ascending=False)
@@ -135,13 +138,19 @@ class DBCaller:
         self.membership = {}
         self.otus = []
 
-    def _print_log(self, *fields):
+    def _print_debug_log(self, *fields):
         '''
-        Write fields to the log file (if present)
+        Write fields to the debug log file (if present)
         '''
+        if self.debug_log is not None:
+            print(*fields, sep='\t', file=self.debug_log)
 
-        if self.log is not None:
-            print(*fields, sep='\t', file=self.log)
+    def _print_progress_log(self, *fields):
+        '''
+        Write fields to progress log file (if present)
+        '''
+        if self.progress_log is not None:
+            print(*fields, sep='\t', file=self.progress_log)
 
     def ga_matches(self, candidate):
         '''
@@ -155,7 +164,7 @@ class DBCaller:
         min_abundance = self.min_fold * candidate.abundance
         abundance_matches = [otu for otu in self.otus if otu.abundance > min_abundance]
 
-        self._print_log(candidate.name, 'abundance_check', *[otu.name for otu in abundance_matches])
+        self._print_debug_log(candidate.name, 'abundance_check', *[otu.name for otu in abundance_matches])
 
         if len(abundance_matches) == 0:
             return []
@@ -165,7 +174,7 @@ class DBCaller:
             matches_distances.sort(key=lambda x: (x[0], -x[1].abundance, x[1].name))
             matches = [otu for dist, otu in matches_distances if dist < self.max_dist]
 
-            self._print_log(candidate.name, 'genetic_check', *[otu.name for otu in matches])
+            self._print_debug_log(candidate.name, 'genetic_check', *[otu.name for otu in matches])
 
             return matches
 
@@ -183,14 +192,15 @@ class DBCaller:
         for otu in self.ga_matches(candidate):
             test_pval = candidate.distribution_pval(otu)
 
-            self._print_log(candidate.name, 'distribution_check', otu.name, test_pval)
+            self._print_debug_log(candidate.name, 'distribution_check', otu.name, test_pval)
 
             if test_pval > self.threshold_pval:
                 otu.absorb(candidate)
                 self.membership[otu.name].append(candidate.name)
                 merged = True
 
-                self._print_log(candidate.name, 'merged_into', otu.name)
+                self._print_progress_log(candidate.name, 'merged_into', otu.name)
+                self._print_debug_log(candidate.name, 'merged_into', otu.name)
 
                 break
 
@@ -199,7 +209,8 @@ class DBCaller:
             self.otus.append(candidate)
             self.membership[candidate.name] = [candidate.name]
 
-            self._print_log(candidate.name, 'new_otu')
+            self._print_progress_log(candidate.name, 'new_otu')
+            self._print_debug_log(candidate.name, 'new_otu')
 
     def generate_otu_table(self):
         '''
@@ -266,7 +277,7 @@ def read_sequence_table(fn):
     df = df.iloc[:,1:].astype(int) # cast all data columns as integers
     return df
 
-def call_otus(seq_table_fh, fasta_fh, output_fh, gen_crit, abund_crit, pval_crit, log=None, membership=None):
+def call_otus(seq_table_fh, fasta_fh, output_fh, gen_crit, abund_crit, pval_crit, log=None, membership=None, debug=None):
     '''
     Read in input files, call OTUs, and return output.
 
@@ -278,7 +289,7 @@ def call_otus(seq_table_fh, fasta_fh, output_fh, gen_crit, abund_crit, pval_crit
       place to write main output OTU table
     gen_crit, abund_crit, pval_crit: float
       threshold values for genetic criterion, abundance criterion, and distribution criterion (pvalue)
-    log, membership: filehandles
+    log, membership, debug: filehandles
       places to write supplementary output
     '''
 
@@ -294,7 +305,7 @@ def call_otus(seq_table_fh, fasta_fh, output_fh, gen_crit, abund_crit, pval_crit
     records = SeqIO.index(fasta_fh, 'fasta')
 
     # generate the caller object
-    caller = DBCaller(seq_table, records, gen_crit, abund_crit, pval_crit, log)
+    caller = DBCaller(seq_table, records, gen_crit, abund_crit, pval_crit, log, debug)
     caller.generate_otu_table()
     caller.write_otu_table(output_fh)
 
@@ -314,7 +325,8 @@ if __name__ == '__main__':
     g = p.add_argument_group(title='output options')
     g.add_argument('--output', '-o', default=sys.stdout, metavar='FILE', help='OTU table output (default: stdout)')
     g.add_argument('--membership', '-m', default=None, type=argparse.FileType('w'), metavar='FILE', help='QIIME-style OTU mapping file output')
-    g.add_argument('--log', '-l', default=None, type=argparse.FileType('w'), metavar='FILE', help='log output')
+    g.add_argument('--log', '-l', default=None, type=argparse.FileType('w'), metavar='FILE', help='progress log output')
+    g.add_argument('--debug', default=None, type=argparse.FileType('w'), metavar='FILE', help='debug log output')
     args = p.parse_args()
 
-    call_otus(args.table, args.fasta, args.output, args.dist, args.abund, args.pval, log=args.log, membership=args.membership)
+    call_otus(args.table, args.fasta, args.output, args.dist, args.abund, args.pval, log=args.log, membership=args.membership, debug=args.debug)
