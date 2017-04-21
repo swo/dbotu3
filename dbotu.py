@@ -195,38 +195,43 @@ class DBCaller:
             self._print_debug_log(candidate.name, 'distribution_check', otu.name, test_pval)
 
             if test_pval > self.threshold_pval:
-                otu.absorb(candidate)
-                self.membership[otu.name].append(candidate.name)
+                self._merge_sequence(candidate, otu)
                 merged = True
-
-                self._print_progress_log(candidate.name, otu.name)
-                self._print_debug_log(candidate.name, 'merged_into', otu.name)
-
                 break
 
         if not merged:
-            # form own otu
-            self.otus.append(candidate)
-            self.membership[candidate.name] = [candidate.name]
+            self._make_otu(candidate)
 
-            self._print_progress_log(candidate.name, candidate.name)
-            self._print_debug_log(candidate.name, 'new_otu')
+    def _merge_sequence(self, member, otu):
+        '''Merge member into OTU'''
+        otu.absorb(member)
+        self.membership[otu.name].append(member.name)
 
-    def generate_otu_table(self):
-        '''
-        Process all the input sequences to make an OTU table.
+        self._print_progress_log(member.name, otu.name)
+        self._print_debug_log(member.name, 'merged_into', otu.name)
 
-        returns: pandas.DataFrame
-          OTU table (which can also be found at instance.otu_table)
-        '''
+    def _make_otu(self, otu):
+        '''Make the sequence into its own OTU'''
+        self.otus.append(otu)
+        self.membership[otu.name] = [otu.name]
+
+        self._print_progress_log(otu.name, otu.name)
+        self._print_debug_log(otu.name, 'new_otu')
+
+    def run(self):
+        '''Process all the input sequences.'''
+
         for record_id in self.seq_abunds.index:
             self._process_record(record_id)
 
-        self.otus.sort(key=lambda otu: otu.abundance, reverse=True)
-        self.otu_table = pd.DataFrame([otu.counts for otu in self.otus], index=[otu.name for otu in self.otus])
-        self.otu_table.columns = self.seq_table.columns
+    def otu_table(self):
+        '''Generate OTU table'''
+        sorted_otus = sorted(self.otus, key=lambda otu: otu.abundance, reverse=True)
 
-        return self.otu_table
+        otu_table = pd.DataFrame([otu.counts for otu in sorted_otus], index=[otu.name for otu in sorted_otus])
+        otu_table.columns = self.seq_table.columns
+
+        return otu_table
 
     def write_otu_table(self, output):
         '''
@@ -235,7 +240,7 @@ class DBCaller:
         output: filehandle
         '''
 
-        self.otu_table.to_csv(output, sep='\t', index_label='OTU_ID')
+        self.otu_table().to_csv(output, sep='\t', index_label='OTU_ID')
 
     def write_membership(self, output):
         '''
@@ -244,7 +249,8 @@ class DBCaller:
         output: filehandle
         '''
 
-        for otu in self.otus:
+        sorted_otus = sorted(self.otus, key=lambda otu: otu.abundance, reverse=True)
+        for otu in sorted_otus:
             print(otu.name, *self.membership[otu.name], sep='\t', file=output)
 
 
@@ -326,7 +332,7 @@ def call_otus(seq_table_fh, fasta_fn, output_fh, gen_crit, abund_crit, pval_crit
 
     # generate the caller object
     caller = DBCaller(seq_table, records, gen_crit, abund_crit, pval_crit, log, debug)
-    caller.generate_otu_table()
+    caller.run()
     caller.write_otu_table(output_fh)
 
     if membership is not None:

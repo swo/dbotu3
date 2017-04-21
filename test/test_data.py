@@ -11,6 +11,11 @@ try:
 except:
     from io import StringIO
 
+def named_stringio(contents, name='stringio'):
+    x = StringIO(contents)
+    x.name = name
+    return x
+
 
 input_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'data', 'input')
 fasta_fn = os.path.join(input_dir, 'seq.fa')
@@ -46,9 +51,9 @@ def test_full_process():
 
     table_fh = open(table_fn)
 
-    test_otu_fh = StringIO()
-    test_log_fh = StringIO()
-    test_membership_fh = StringIO()
+    test_otu_fh = named_stringio('', 'otu_filename')
+    test_log_fh = named_stringio('', 'log_filename')
+    test_membership_fh = named_stringio('', 'membership_filename')
 
     call_otus(table_fh, fasta_fn, test_otu_fh, gen_crit=0.10, abund_crit=10.0, pval_crit=0.0005, log=test_log_fh, membership=test_membership_fh)
 

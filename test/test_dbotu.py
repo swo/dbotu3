@@ -12,11 +12,16 @@ except:
 import scipy.stats, scipy.optimize
 from Bio import SeqIO
 
+def named_stringio(contents, name='stringio'):
+    x = StringIO(contents)
+    x.name = name
+    return x
+
 @pytest.fixture
 def caller():
-    fasta_fh = StringIO("\n".join(['>seq1', 'AAAAAAA', '>seq2', 'AAATAAA', '>seq3', 'AATTTAA']))
+    fasta_fh = named_stringio("\n".join(['>seq1', 'AAAAAAA', '>seq2', 'AAATAAA', '>seq3', 'AATTTAA']), name='fasta_stringio')
     fasta_fh.seek(0)
-    log_fh = StringIO()
+    log_fh = named_stringio('', name='log_stringio')
     records = SeqIO.to_dict(SeqIO.parse(fasta_fh, 'fasta'))
     table = pd.DataFrame(np.array([[0, 10, 20], [0, 1, 2], [10, 0, 0]]), index=['seq1', 'seq2', 'seq3'], columns=['sample1', 'sample2', 'sample3'])
     return DBCaller(table, records, max_dist=15, min_fold=0.0, threshold_pval=0.001, log=log_fh)
