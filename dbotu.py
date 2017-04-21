@@ -140,14 +140,18 @@ class DBCaller:
 
     def _print_debug_log(self, *fields):
         '''
-        Write fields to the debug log file (if present)
+        Write fields to the debug log file (if present).
+
+        returns: nothing
         '''
         if self.debug_log is not None:
             print(*fields, sep='\t', file=self.debug_log)
 
     def _print_progress_log(self, line):
         '''
-        Write fields to progress log file (if present)
+        Write fields to progress log file (if present).
+
+        returns: nothing
         '''
         if self.progress_log is not None:
             print(line, file=self.progress_log)
@@ -158,6 +162,8 @@ class DBCaller:
 
         candidate: OTU
           sequence to evaluate
+
+        returns: nothing
         '''
 
         # find abundance matches
@@ -182,6 +188,11 @@ class DBCaller:
         '''
         Process the next sequence: run the genetic, abundance, and distribution checks, either
         merging the sequence into an existing OTU or creating a new OTU.
+
+        record_id: str
+          ID of the sequence to be processed. Should match fasta and seq table.
+
+        returns: nothing
         '''
         assert record_id in self.seq_table.index
         record = self.records[record_id]
@@ -203,7 +214,14 @@ class DBCaller:
             self._make_otu(candidate)
 
     def _merge_sequence(self, member, otu):
-        '''Merge member into OTU'''
+        '''
+        Merge member into OTU, making log entries if applicable.
+
+        member, otu: OTU
+          objects to be merged
+
+        returns: nothing
+        '''
         otu.absorb(member)
         self.membership[otu.name].append(member.name)
 
@@ -211,7 +229,14 @@ class DBCaller:
         self._print_debug_log(member.name, 'merged_into', otu.name)
 
     def _make_otu(self, otu):
-        '''Make the sequence into its own OTU'''
+        '''
+        Make the sequence into its own OTU, recording log entries if applicable.
+
+        otu: OTU
+          sequence object to be designated as an OTU
+
+        returns: nothing
+        '''
         self.otus.append(otu)
         self.membership[otu.name] = [otu.name]
 
@@ -219,13 +244,21 @@ class DBCaller:
         self._print_debug_log(otu.name, 'new_otu')
 
     def run(self):
-        '''Process all the input sequences.'''
+        '''
+        Process all the input sequences in order of their abundance.
+
+        returns: nothing
+        '''
 
         for record_id in self.seq_abunds.index:
             self._process_record(record_id)
 
     def otu_table(self):
-        '''Generate OTU table'''
+        '''
+        Generate OTU table.
+
+        returns: pandas.DataFrame
+        '''
         sorted_otus = sorted(self.otus, key=lambda otu: otu.abundance, reverse=True)
 
         otu_table = pd.DataFrame([otu.counts for otu in sorted_otus], index=[otu.name for otu in sorted_otus])
@@ -238,6 +271,8 @@ class DBCaller:
         Write the QIIME-style OTU table to a file.
 
         output: filehandle
+
+        returns: nothing
         '''
 
         self.otu_table().to_csv(output, sep='\t', index_label='OTU_ID')
@@ -247,6 +282,8 @@ class DBCaller:
         Write the QIIME-style OTU mapping information to a file.
 
         output: filehandle
+
+        returns: nothing
         '''
 
         sorted_otus = sorted(self.otus, key=lambda otu: otu.abundance, reverse=True)

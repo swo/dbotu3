@@ -77,11 +77,10 @@ invoking dbOTU3.
 .. _YAML: http://www.yaml.org/
 
 The second part (after the dashes) is a history of the algorithm's progress.
-Each line is a mapping from a sequence ID to the OTU to which it was assigned.
-The first few lines will have the same ID on both sides: that means that the
-sequence was set as its own OTU. Further down, you'll see different IDs,
-meaning that the sequence whose ID is on the left was merged into the sequence
-whose ID is on the right. You can use this file, which is written on the fly,
+Each line is either a string or a two-element list. A string means that the
+sequence with that ID was assigned as its own OTU. A list means that the sequence
+specificed by the first element was merged as a member into the OTU specified
+by the second element.  You can use this file, which is written on the fly,
 to see what you asked for and how far through your data dbOTU3 has gotten.
 
 Evaluate
