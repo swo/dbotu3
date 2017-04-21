@@ -145,12 +145,12 @@ class DBCaller:
         if self.debug_log is not None:
             print(*fields, sep='\t', file=self.debug_log)
 
-    def _print_progress_log(self, field1, field2):
+    def _print_progress_log(self, line):
         '''
         Write fields to progress log file (if present)
         '''
         if self.progress_log is not None:
-            print('"{}": "{}"'.format(field1, field2), file=self.progress_log)
+            print(line, file=self.progress_log)
 
     def ga_matches(self, candidate):
         '''
@@ -207,7 +207,7 @@ class DBCaller:
         otu.absorb(member)
         self.membership[otu.name].append(member.name)
 
-        self._print_progress_log(member.name, otu.name)
+        self._print_progress_log('- ["{}", "{}"]'.format(member.name, otu.name))
         self._print_debug_log(member.name, 'merged_into', otu.name)
 
     def _make_otu(self, otu):
@@ -215,7 +215,7 @@ class DBCaller:
         self.otus.append(otu)
         self.membership[otu.name] = [otu.name]
 
-        self._print_progress_log(otu.name, otu.name)
+        self._print_progress_log('- "{}"'.format(otu.name))
         self._print_debug_log(otu.name, 'new_otu')
 
     def run(self):
