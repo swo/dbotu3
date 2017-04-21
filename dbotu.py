@@ -308,7 +308,7 @@ def call_otus(seq_table_fh, fasta_fn, output_fh, gen_crit, abund_crit, pval_crit
     if log is not None:
         print('---', file=log)
         print('time_started:', datetime.datetime.now(), file=log)
-        print('genetic_criterion_threhsold:', gen_crit, file=log)
+        print('genetic_criterion_threshold:', gen_crit, file=log)
         print('abundance_criterion_threshold:', abund_crit, file=log)
         print('distribution_criterion_threshold:', pval_crit, file=log)
         print('sequence_table_filename:', os.path.realpath(seq_table_fh.name), file=log)
