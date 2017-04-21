@@ -66,6 +66,24 @@ field, all member sequence IDs are tab-separated after that). The ``--log``
 option give some verbose information about exactly what tests were run for
 which sequences.
 
+Monitor
+=======
+
+The ``--log`` option produces a YAML_ file with two parts ("documents" in YAML
+jargon). The first is a header with information about the program run: it has
+the algorithm parameters and the input/output filenames you specified when
+invoking dbOTU3.
+
+.. _YAML: http://www.yaml.org/
+
+The second part (after the dashes) is a history of the algorithm's progress.
+Each line is a mapping from a sequence ID to the OTU to which it was assigned.
+The first few lines will have the same ID on both sides: that means that the
+sequence was set as its own OTU. Further down, you'll see different IDs,
+meaning that the sequence whose ID is on the left was merged into the sequence
+whose ID is on the right. You can use this file, which is written on the fly,
+to see what you asked for and how far through your data dbOTU3 has gotten.
+
 Evaluate
 ========
 
@@ -74,8 +92,8 @@ chimera-check the OTUs, possibly with a script like my `UCHIME chimera checker
 <https://github.com/swo/uchime-chimera-check>`_.
 
 If you want to get into the specifics of what the algorithm did, you can read
-the log file (produced by using the ``--log`` option). The log file has 5 types
-of lines, all of which are tab-separated:
+the debug log file (produced by using the ``--debug`` option). The debug log
+file has 5 types of lines, all of which are tab-separated:
 
 - Lines like ``A abundance_check B C`` show that the abundance criterion was
   applied to sequence ``A`` and all existing OTUs, of which OTUs ``B`` and
