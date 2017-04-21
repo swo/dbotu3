@@ -44,7 +44,7 @@ Version history
 - 1.1: Corrected error where sequence IDs that could be read as integers would not be found in the table
 - 1.2: Python 2 compatibility, tox test framework, warnings for improperly-formatted sequence count tables
 - 1.2.1: Added setup requirements
-- 1.2.2: Improved OTU file header, log file, log file documentation
+- 1.3.0: Improved OTU file header. Split the log file into a debug and progress log.
 
 To-do
 -----
