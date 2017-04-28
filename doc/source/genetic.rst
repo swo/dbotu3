@@ -73,12 +73,42 @@ being merged into an OTU if
 
 .. math::
 
-   \frac{E}{\tfrac{1}{2}(\ell_\text{seq} + \ell_\text{OTU})}
+   \frac{E}{\ell_\text{seq} + N_d}
 
 is greater than some threshold, where :math:`E` is the Levenshtein
 edit distance between the sequence and the OTU, :math:`\ell_\text{seq}`
-is the length of the candidate sequence, and :math:`\ell_\text{OTU}` is
-the length of the OTU.
+is the length of the candidate sequence, and :math:`N_d` is
+the number of deletion operations in the Levenshtein edit distance.
+
+The rationale is that this metric reflects the sequence dissimilarity
+between two aligned sequences. In that case, the number of mismatched
+sites is the number of substitutions, insertions, and deletions (that
+is, :math:`E`), and the number of total sites is the length of the
+alignment (that is, :math:`\ell_\text{seq} + N_d`, or, equivalently,
+:math:`\ell_\text{OTU} + N_i`, where :math:`i` is the number of insertions).
+
+.. _genetic_caveat:
+
+Caveat about the publication's genetic criterion
+------------------------------------------------
+
+In the publication, we define the Levenshtein metric with a denominator
+:math:`\tfrac{1}{2}(\ell_\text{seq} + \ell_\text{OTU})`. For the reasons
+described above, we believe this denominator was consistently smaller than
+the correct one, so the Levenshtein-based dissimilarities reported in
+the paper are higher than expected.
+
+We also used alignments from Clustal Omega as our gold standard. Unfortunately,
+we believe that Clustal Omega's alignments were not very good for these
+purposes, and thus significantly overestimated the distance between sequences.
+When using a more appropriate gold standard (a Needleman-Wunsch alignment with
+a match score of 1, a mismatch penalty of 2, and a linear gap penalty of 2), it
+becomes clear that the corrected Levenshtein edit distance only very minorly
+overestimates the dissimilarity between sequences (see figure). We therefore
+encourage dbOTU3 users to ignore some of the warnings made about the use of the
+Levenshtein distance discussed in the paper.
+
+.. image:: img/diss.png
 
 .. _evaluating-genetic-section:
 

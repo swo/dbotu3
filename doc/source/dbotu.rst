@@ -145,7 +145,7 @@ likelihood ratio test. The merit of this choice is discussed in
 
 A more thorough comparison of the implementations and an evaluation of the
 accuracy and speed of this new implementation is in a separate technical
-manuscript [#dbotu3]_.
+manuscript [#dbotu3]_ (although note the :ref:`genetic_caveat`).
 
 
 .. [#preheim] Preheim *et al.* Distribution-Based Clustering: Using Ecology To

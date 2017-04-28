@@ -20,7 +20,7 @@ populations.
 This documentation includes a guide to getting started, description of the
 algorithm, a comparison of the methodologies of the different implementations,
 and an API reference. The technical details of this implementation are also
-included in a preprint [#olesen]_.
+included in a preprint [#olesen]_ (although note the :ref:`genetic_caveat`).
 
 .. toctree::
    :maxdepth: 2
