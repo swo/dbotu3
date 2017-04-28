@@ -50,7 +50,7 @@ To-do
 -----
 
 - Fix the output format (maybe put ``OTU_ID`` in the first field and row?)
-- Find a way to avoid reading the entire count and fasta files?
+- Find a way to avoid reading the entire count file? (The fasta file is not all loaded because we use ``SeqIO.index``.)
 - Better coverage for unit tests
 
 Author
