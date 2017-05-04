@@ -15,10 +15,10 @@ Read the documentation_ for:
 
 .. _documentation: http://dbotu3.readthedocs.io/en/latest/
 
-You can also read our new manuscript_ for more technical details about the
+You can also read our new paper_ for more technical details about the
 algorithm.  The Alm Lab website_ also has a short page with information.
 
-.. _manuscript: http://dx.doi.org/10.1101/076927
+.. _paper: https://doi.org/10.1371/journal.pone.0176335
 .. _website: http://almlab.mit.edu/dbotu3.html
 
 Installation
@@ -45,6 +45,7 @@ Version history
 - 1.2: Python 2 compatibility, tox test framework, warnings for improperly-formatted sequence count tables
 - 1.2.1: Added setup requirements
 - 1.3.0: Improved OTU file header. Split the log file into a debug and progress log.
+- 1.4.0: Made an improvement to the Levenshtein-based genetic dissimilarity metric.
 
 To-do
 -----
