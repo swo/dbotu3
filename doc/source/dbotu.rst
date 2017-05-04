@@ -145,7 +145,7 @@ likelihood ratio test. The merit of this choice is discussed in
 
 A more thorough comparison of the implementations and an evaluation of the
 accuracy and speed of this new implementation is in a separate technical
-manuscript [#dbotu3]_.
+publication [#dbotu3]_ (although note the :ref:`genetic_caveat`).
 
 
 .. [#preheim] Preheim *et al.* Distribution-Based Clustering: Using Ecology To
@@ -156,5 +156,6 @@ manuscript [#dbotu3]_.
    comparative analysis of 16S rRNA genes. *Nucleic Acids Res* (2006)
    doi:`10.1093/nar/gkl244 <https://dx.doi.org/10.1093/nar/gkl244>`_.
 
-.. [#dbotu3] SW Olesen, C Duvallet, EJ Alm. dbOTU3: A new implementation of
-   distribution-based OTU calling. *bioRxiv* (2016) doi:`10.1101/076927 <http://dx.doi.org/10.1101/076927>`_.
+.. [#dbotu3] Olesen SW, Duvallet C, and Alm EJ. dbOTU3: A new implementation of
+   distribution-based OTU calling. *PLoS ONE* (2017)
+   doi:`10.1371/journal.pone.0176335 <http://doi.org/10.1371/journal.pone.0176335>`_.

@@ -2,7 +2,7 @@
 #
 # author: scott olesen <swo@alum.mit.edu>
 
-from __future__ import print_function
+from __future__ import print_function, division
 import argparse, sys, warnings, os, datetime
 import pandas as pd, numpy as np
 import Levenshtein
@@ -55,7 +55,8 @@ class OTU:
 
         returns: float
         '''
-        return Levenshtein.distance(self.sequence, other.sequence) / (0.5 * (len(self.sequence) + len(other.sequence)))
+        ops = Levenshtein.editops(self.sequence, other.sequence)
+        return len(ops) / (len(self.sequence) + len([o for o in ops if o[0] == 'delete']))
 
     @staticmethod
     def _D_helper(x):
