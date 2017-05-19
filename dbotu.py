@@ -310,7 +310,7 @@ def read_sequence_table(fn):
     df = pd.read_table(fn, dtype={0: str}, header=0) # read in all columns as strings
 
     # BIOM format things will complain here
-    if type(df.index) is pd.indexes.multi.MultiIndex:
+    if type(df.index) is pd.MultiIndex:
         warnings.warn('Table was parsed with unusual indexes. Does this table comply with the tab-separated format?', RuntimeWarning)
 
     # TSV formats will complain here

@@ -46,6 +46,7 @@ Version history
 - 1.2.1: Added setup requirements
 - 1.3.0: Improved OTU file header. Split the log file into a debug and progress log.
 - 1.4.0: Made an improvement to the Levenshtein-based genetic dissimilarity metric.
+- 1.4.1: Account for pandas API change to ``MultiIndex``
 
 To-do
 -----
