@@ -55,6 +55,18 @@ To-do
 - Find a way to avoid reading the entire count file? (The fasta file is not all loaded because we use ``SeqIO.index``.)
 - Better coverage for unit tests
 
+Citation
+--------
+
+If you use dbOTU3 in a scientific paper, we ask that you cite the
+original dbOTU publication (Preheim *et al*.) or the dbOTU3 publication:
+
+Preheim *et al*. Distribution-Based Clustering: Using Ecology To Refine the
+Operational Taxonomic Unit. *Appl Environ Microbiol* (2013) doi:10.1128/AEM.00342-13.
+
+Olesen SW, Duvallet C, and Alm EJ. dbOTU3: A new implementation of
+distribution-based OTU calling. *PLoS ONE* (2017) doi:10.1371/journal.pone.0176335.
+
 Author
 ------
 
