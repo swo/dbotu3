@@ -83,12 +83,20 @@ specificed by the first element was merged as a member into the OTU specified
 by the second element.  You can use this file, which is written on the fly,
 to see what you asked for and how far through your data dbOTU3 has gotten.
 
+The log file includes enough information that a dbOTU run can be restarted.
+(This might be handy if, say, you're running dbOTU on a computing cluster and
+your jobs is killed after hitting a time limit.) The script
+``dbotu_restart.py`` included in the package will restart a run using this log
+file.
+
 Evaluate
 ========
 
 If you can validate your choices for parameters, do so. You might also want to
 chimera-check the OTUs, possibly with a script like my `UCHIME chimera checker
-<https://github.com/swo/uchime-chimera-check>`_.
+<https://github.com/swo/uchime-chimera-check>`_. The script
+``dbotu_rep_seqs.py`` included in the package will extract OTU representative
+sequence and annotate their sizes.
 
 If you want to get into the specifics of what the algorithm did, you can read
 the debug log file (produced by using the ``--debug`` option). The debug log
