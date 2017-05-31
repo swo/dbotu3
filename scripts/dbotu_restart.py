@@ -8,11 +8,44 @@ import argparse, yaml, os.path, datetime
 from Bio import SeqIO
 import dbotu
 
+REQUIRED_HEADER_KEYS = ['genetic_criterion_threshold', 'abundance_criterion_threshold',
+        'distribution_criterion_threshold', 'sequence_table_filename',
+        'fasta_filename', 'otu_table_output_filename']
+
+OPTIONAL_HEADER_KEYS = ['membership_output_filename', 'debug_log_output_filename',
+        'restarted_run', 'time_restarted']
+
+def parse_log(log_fh):
+    '''
+    Parse a log file. Ensure that all the fields are as expected before
+    proceeding.
+    '''
+
+    header, progress = yaml.load_all(log_fh)
+
+    # header should be a dictionary with the required keys, potentially some of
+    # the optional keys, but nothing else
+    assert isinstance(header, dict)
+
+    missing_keys = [k for k in REQUIRED_HEADER_KEYS if k not in header]
+    if len(missing_keys) > 0:
+        missing_keys_str = ', '.join('"' + k + '"' for k in missing_keys)
+        raise RuntimeError('malformed log file: header does not have required keys: ' + missing_keys_str)
+
+    # check that all the rest of the file is a list whose items are individual
+    # strings (new OTUs) or a length 2 list (a seq belonging to an OTU)
+    assert isinstance(progress, list)
+
+    for elt in progress:
+        assert isinstance(elt, str) or (isinstance(elt, list) and len(elt) == 2)
+
+    return header, progress
+
 def restart_dbotu_run(log_fn):
     log_fn = os.path.realpath(log_fn)
 
     with open(log_fn) as f:
-        header, progress = yaml.load_all(f)
+        header, progress = parse_log(f)
 
     # assert logs are the same
     if not header['progress_log_output_filename'] == log_fn:

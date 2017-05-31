@@ -1,14 +1,16 @@
 ---
-time_started: 2017-04-21 16:13:03.611172
-genetic_criterion_threshold: 0.1
 abundance_criterion_threshold: 10.0
+debug_log_output_filename: /Users/scott/lib/dbotu/data/output/debug_log.txt
 distribution_criterion_threshold: 0.0005
-sequence_table_filename: /Users/scott/lib/dbotu/data/input/counts.txt
 fasta_filename: /Users/scott/lib/dbotu/data/input/seq.fa
+genetic_criterion_threshold: 0.1
+membership_output_filename: /Users/scott/lib/dbotu/data/output/membership.txt
 otu_table_output_filename: /Users/scott/lib/dbotu/data/output/otu.txt
 progress_log_output_filename: /Users/scott/lib/dbotu/data/output/log.txt
-membership_output_filename: /Users/scott/lib/dbotu/data/output/membership.txt
-debug_log_output_filename: /Users/scott/lib/dbotu/data/output/debug_log.txt
+restarted_run: true
+sequence_table_filename: /Users/scott/lib/dbotu/data/input/counts.txt
+time_restarted: 2017-05-31 11:33:54.784080
+time_started: 2017-04-21 16:13:03.611172
 ---
 - "seq106"
 - "seq53"

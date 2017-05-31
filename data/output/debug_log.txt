@@ -1,360 +1,121 @@
-seq106	abundance_check
+restarted_run
 seq106	new_otu
-seq53	abundance_check
 seq53	new_otu
-seq86	abundance_check
 seq86	new_otu
-seq89	abundance_check
 seq89	new_otu
-seq118	abundance_check
 seq118	new_otu
-seq0	abundance_check
 seq0	new_otu
-seq7	abundance_check
 seq7	new_otu
-seq47	abundance_check
 seq47	new_otu
-seq17	abundance_check
 seq17	new_otu
-seq67	abundance_check
 seq67	new_otu
-seq38	abundance_check
 seq38	new_otu
-seq87	abundance_check
 seq87	new_otu
-seq62	abundance_check
 seq62	new_otu
-seq50	abundance_check
 seq50	new_otu
-seq60	abundance_check
 seq60	new_otu
-seq48	abundance_check
 seq48	new_otu
-seq93	abundance_check
 seq93	new_otu
-seq34	abundance_check
 seq34	new_otu
-seq110	abundance_check
 seq110	new_otu
-seq65	abundance_check
 seq65	new_otu
-seq6	abundance_check
 seq6	new_otu
-seq79	abundance_check
 seq79	new_otu
-seq85	abundance_check
 seq85	new_otu
-seq72	abundance_check
 seq72	new_otu
-seq28	abundance_check
 seq28	new_otu
-seq91	abundance_check
 seq91	new_otu
-seq109	abundance_check
 seq109	new_otu
-seq96	abundance_check
 seq96	new_otu
-seq74	abundance_check
 seq74	new_otu
-seq10	abundance_check
 seq10	new_otu
-seq71	abundance_check
 seq71	new_otu
-seq75	abundance_check
 seq75	new_otu
-seq76	abundance_check
 seq76	new_otu
-seq84	abundance_check
 seq84	new_otu
-seq108	abundance_check
 seq108	new_otu
-seq13	abundance_check
 seq13	new_otu
-seq78	abundance_check
 seq78	new_otu
-seq44	abundance_check
 seq44	new_otu
-seq9	abundance_check
 seq9	new_otu
-seq113	abundance_check
 seq113	new_otu
-seq57	abundance_check
 seq57	new_otu
-seq8	abundance_check
 seq8	new_otu
-seq12	abundance_check
 seq12	new_otu
-seq64	abundance_check
 seq64	new_otu
-seq63	abundance_check
 seq63	new_otu
-seq56	abundance_check
 seq56	new_otu
-seq25	abundance_check
 seq25	new_otu
-seq31	abundance_check	seq106
-seq31	genetic_check
 seq31	new_otu
-seq92	abundance_check	seq106
-seq92	genetic_check
 seq92	new_otu
-seq29	abundance_check	seq106
-seq29	genetic_check
 seq29	new_otu
-seq95	abundance_check	seq106
-seq95	genetic_check
 seq95	new_otu
-seq82	abundance_check	seq106	seq53	seq86
-seq82	genetic_check
 seq82	new_otu
-seq20	abundance_check	seq106	seq53	seq86	seq89	seq118
-seq20	genetic_check
 seq20	new_otu
-seq15	abundance_check	seq106	seq53	seq86	seq89	seq118
-seq15	genetic_check
 seq15	new_otu
-seq54	abundance_check	seq106	seq53	seq86	seq89	seq118
-seq54	genetic_check
 seq54	new_otu
-seq21	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0
-seq21	genetic_check
 seq21	new_otu
-seq80	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0
-seq80	genetic_check
 seq80	new_otu
-seq27	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7
-seq27	genetic_check
 seq27	new_otu
-seq99	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7
-seq99	genetic_check
 seq99	new_otu
-seq102	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7
-seq102	genetic_check
 seq102	new_otu
-seq5	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47
-seq5	genetic_check
 seq5	new_otu
-seq112	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17
-seq112	genetic_check
 seq112	new_otu
-seq2	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17
-seq2	genetic_check
 seq2	new_otu
-seq43	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38
-seq43	genetic_check
 seq43	new_otu
-seq24	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38
-seq24	genetic_check
 seq24	new_otu
-seq14	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87
-seq14	genetic_check
 seq14	new_otu
-seq49	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62
-seq49	genetic_check
 seq49	new_otu
-seq41	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110
-seq41	genetic_check
 seq41	new_otu
-seq94	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110
-seq94	genetic_check	seq67
-seq94	distribution_check	seq67	1.15821564579e-188
 seq94	new_otu
-seq68	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110
-seq68	genetic_check
 seq68	new_otu
-seq77	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85
-seq77	genetic_check
 seq77	new_otu
-seq52	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71
-seq52	genetic_check	seq28
-seq52	distribution_check	seq28	5.47012546953e-09
 seq52	new_otu
-seq37	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13
-seq37	genetic_check	seq7
-seq37	distribution_check	seq7	1.6728374678e-43
 seq37	new_otu
-seq104	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64
-seq104	genetic_check
 seq104	new_otu
-seq32	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92
-seq32	genetic_check	seq84	seq63	seq28	seq31	seq25
-seq32	distribution_check	seq84	0.00174084423376
 seq32	merged_into	seq84
-seq40	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95
-seq40	genetic_check	seq29	seq84	seq63	seq28	seq31	seq25
-seq40	distribution_check	seq29	3.88080999916e-14
-seq40	distribution_check	seq84	0.000653107619523
 seq40	merged_into	seq84
-seq3	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95
-seq3	genetic_check
 seq3	new_otu
-seq16	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95
-seq16	genetic_check	seq28	seq76	seq84	seq12	seq25	seq31	seq29	seq63	seq9
-seq16	distribution_check	seq28	7.24215853138e-37
-seq16	distribution_check	seq76	1.47368977133e-23
-seq16	distribution_check	seq84	0.146899941799
 seq16	merged_into	seq84
-seq103	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20
-seq103	genetic_check	seq28	seq84	seq76	seq12	seq29	seq20	seq31	seq63	seq25	seq9
-seq103	distribution_check	seq28	3.15150370505e-31
-seq103	distribution_check	seq84	0.100151937774
 seq103	merged_into	seq84
-seq45	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80
-seq45	genetic_check	seq20	seq28	seq15	seq80	seq84	seq9	seq29	seq76	seq12	seq63	seq31	seq25
-seq45	distribution_check	seq20	7.19575851145e-15
-seq45	distribution_check	seq28	8.61264718772e-45
-seq45	distribution_check	seq15	0.000244655999421
-seq45	distribution_check	seq80	1.95456710002e-06
-seq45	distribution_check	seq84	0.000672627737437
 seq45	merged_into	seq84
-seq55	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102
-seq55	genetic_check	seq28	seq80	seq20	seq15	seq84	seq29	seq27	seq99	seq102	seq76	seq9	seq12	seq63	seq31	seq25
-seq55	distribution_check	seq28	6.9905801901e-30
-seq55	distribution_check	seq80	4.8232506969e-09
-seq55	distribution_check	seq20	4.45324044264e-06
-seq55	distribution_check	seq15	3.84691796578e-07
-seq55	distribution_check	seq84	0.107344153688
 seq55	merged_into	seq84
-seq58	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43
-seq58	genetic_check
 seq58	new_otu
-seq30	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14
-seq30	genetic_check	seq82
-seq30	distribution_check	seq82	1.15748562738e-22
 seq30	new_otu
-seq19	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49
-seq19	genetic_check	seq28	seq84	seq102	seq76	seq12	seq29	seq20	seq5	seq43	seq31	seq27	seq14	seq63	seq25	seq15	seq80	seq99	seq9
-seq19	distribution_check	seq28	8.1486658074e-19
-seq19	distribution_check	seq84	0.125604257313
 seq19	merged_into	seq84
-seq97	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37
-seq97	genetic_check
 seq97	new_otu
-seq88	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37
-seq88	genetic_check
 seq88	new_otu
-seq115	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104
-seq115	genetic_check	seq17
-seq115	distribution_check	seq17	0.704827677617
 seq115	merged_into	seq17
-seq4	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104
-seq4	genetic_check	seq64	seq109	seq92	seq56	seq54
-seq4	distribution_check	seq64	0.25032373975
 seq4	merged_into	seq64
-seq66	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104	seq3
-seq66	genetic_check
 seq66	new_otu
-seq73	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104	seq3
-seq73	genetic_check	seq34	seq0	seq91
-seq73	distribution_check	seq34	0.00216279419867
 seq73	merged_into	seq34
-seq1	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104	seq3
-seq1	genetic_check
 seq1	new_otu
-seq22	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104	seq3
-seq22	genetic_check
 seq22	new_otu
-seq105	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104	seq3	seq58	seq30
-seq105	genetic_check	seq34	seq0	seq91
-seq105	distribution_check	seq34	0.0718809064777
 seq105	merged_into	seq34
-seq11	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104	seq3	seq58	seq30
-seq11	genetic_check	seq58
-seq11	distribution_check	seq58	0.0344807034341
 seq11	merged_into	seq58
-seq70	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104	seq3	seq58	seq30
-seq70	genetic_check
 seq70	new_otu
-seq18	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104	seq3	seq58	seq30	seq97	seq88
-seq18	genetic_check
 seq18	new_otu
-seq119	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104	seq3	seq58	seq30	seq97	seq88
-seq119	genetic_check	seq109	seq54	seq64	seq56	seq92
-seq119	distribution_check	seq109	0.777510693584
 seq119	merged_into	seq109
-seq23	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104	seq3	seq58	seq30	seq97	seq88
-seq23	genetic_check
 seq23	new_otu
-seq83	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104	seq3	seq58	seq30	seq97	seq88
-seq83	genetic_check	seq63	seq28	seq52	seq31	seq29	seq102	seq14	seq84	seq12	seq25	seq5
-seq83	distribution_check	seq63	0.842905023288
 seq83	merged_into	seq63
-seq117	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104	seq3	seq58	seq30	seq97	seq88
-seq117	genetic_check	seq84	seq28	seq52	seq15	seq5	seq63	seq80	seq99	seq102	seq14	seq41	seq76	seq12	seq29	seq20	seq27	seq43
-seq117	distribution_check	seq84	0.0252572611587
 seq117	merged_into	seq84
-seq116	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104	seq3	seq58	seq30	seq97	seq88
-seq116	genetic_check	seq41	seq28	seq52	seq29	seq102	seq12	seq14	seq5	seq84	seq43	seq76	seq63	seq31	seq9	seq25	seq20	seq15	seq80
-seq116	distribution_check	seq41	0.0193514059958
 seq116	merged_into	seq41
-seq114	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104	seq3	seq58	seq30	seq97	seq88
-seq114	genetic_check
 seq114	new_otu
-seq111	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104	seq3	seq58	seq30	seq97	seq88
-seq111	genetic_check	seq110
-seq111	distribution_check	seq110	0.962485520549
 seq111	merged_into	seq110
-seq107	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104	seq3	seq58	seq30	seq97	seq88
-seq107	genetic_check	seq86	seq60
-seq107	distribution_check	seq86	0.773851059872
 seq107	merged_into	seq86
-seq101	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104	seq3	seq58	seq30	seq97	seq88
-seq101	genetic_check
 seq101	new_otu
-seq100	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104	seq3	seq58	seq30	seq97	seq88
-seq100	genetic_check
 seq100	new_otu
-seq98	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104	seq3	seq58	seq30	seq97	seq88
-seq98	genetic_check
 seq98	new_otu
-seq90	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104	seq3	seq58	seq30	seq97	seq88
-seq90	genetic_check	seq29	seq14	seq5	seq28	seq41	seq52	seq63	seq27	seq20	seq102	seq84	seq12
-seq90	distribution_check	seq29	0.00779874650343
 seq90	merged_into	seq29
-seq81	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104	seq3	seq58	seq30	seq97	seq88
-seq81	genetic_check	seq86
-seq81	distribution_check	seq86	0.773938232376
 seq81	merged_into	seq86
-seq26	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104	seq3	seq58	seq30	seq97	seq88
-seq26	genetic_check	seq30	seq86
-seq26	distribution_check	seq30	0.0940454265374
 seq26	merged_into	seq30
-seq69	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104	seq3	seq58	seq30	seq97	seq88
-seq69	genetic_check	seq2	seq24
-seq69	distribution_check	seq2	0.0137931694922
 seq69	merged_into	seq2
-seq61	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104	seq3	seq58	seq30	seq97	seq88
-seq61	genetic_check	seq15	seq80	seq99	seq76	seq84	seq31
-seq61	distribution_check	seq15	0.813455185346
 seq61	merged_into	seq15
-seq51	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104	seq3	seq58	seq30	seq97	seq88
-seq51	genetic_check	seq31	seq25
-seq51	distribution_check	seq31	0.900966803497
 seq51	merged_into	seq31
-seq46	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104	seq3	seq58	seq30	seq97	seq88
-seq46	genetic_check	seq63	seq28	seq52	seq14	seq29	seq84	seq102	seq41
-seq46	distribution_check	seq63	0.846016035854
 seq46	merged_into	seq63
-seq42	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104	seq3	seq58	seq30	seq97	seq88
-seq42	genetic_check	seq12
-seq42	distribution_check	seq12	0.765498057907
 seq42	merged_into	seq12
-seq39	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104	seq3	seq58	seq30	seq97	seq88
-seq39	genetic_check	seq14	seq29	seq5	seq28	seq52	seq41	seq63	seq84	seq102	seq12	seq31	seq80	seq27
-seq39	distribution_check	seq14	0.891997059594
 seq39	merged_into	seq14
-seq36	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104	seq3	seq58	seq30	seq97	seq88
-seq36	genetic_check	seq38
-seq36	distribution_check	seq38	0.846721075986
 seq36	merged_into	seq38
-seq35	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104	seq3	seq58	seq30	seq97	seq88
-seq35	genetic_check
 seq35	new_otu
-seq33	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104	seq3	seq58	seq30	seq97	seq88
-seq33	genetic_check	seq17
-seq33	distribution_check	seq17	0.947939974219
 seq33	merged_into	seq17
-seq59	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104	seq3	seq58	seq30	seq97	seq88
-seq59	genetic_check	seq24	seq2
-seq59	distribution_check	seq24	0.0144500720895
 seq59	merged_into	seq24
