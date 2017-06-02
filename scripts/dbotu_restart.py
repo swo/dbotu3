@@ -4,16 +4,28 @@
 
 from __future__ import print_function
 
-import argparse, yaml, os.path, datetime
+import argparse, os.path, datetime, shutil
 from Bio import SeqIO
 import dbotu
 
 REQUIRED_HEADER_KEYS = ['genetic_criterion_threshold', 'abundance_criterion_threshold',
         'distribution_criterion_threshold', 'sequence_table_filename',
-        'fasta_filename', 'otu_table_output_filename']
+        'fasta_filename', 'otu_table_output_filename', 'progress_log_output_filename']
 
 OPTIONAL_HEADER_KEYS = ['membership_output_filename', 'debug_log_output_filename',
-        'restarted_run', 'time_restarted']
+        'restarted_run', 'time_started', 'time_restarted']
+
+HEADER_KEYS = REQUIRED_HEADER_KEYS + OPTIONAL_HEADER_KEYS
+
+def backup_log(log_fn):
+    target_fn = log_fn + '.bak'
+    res = input('Backup log file by copying {} to {}? [Y/n] '.format(log_fn, target_fn)).lower()
+
+    if res == 'n':
+        print('not backing up')
+    else:
+        print('backing up')
+        shutil.copy2(log_fn, target_fn)
 
 def parse_log(log_fh):
     '''
@@ -21,23 +33,44 @@ def parse_log(log_fh):
     proceeding.
     '''
 
-    header, progress = yaml.load_all(log_fh)
+    header = {}
+    progress = []
+    state = 'start'
+    for line_i, line in enumerate(log_fh):
+        line = line.rstrip()
+        if state == 'start':
+            # the first line we should see is the three dashes
+            if line == '---':
+                state = 'header'
+            else:
+                raise RuntimeError('malformed log file: expect "---" on first line')
+        elif state == 'header':
+            if line == '---':
+                # leaving the header
+                # check that header has the required keys
+                missing_keys = [k for k in REQUIRED_HEADER_KEYS if k not in header]
+                if len(missing_keys) > 0:
+                    missing_keys_str = ', '.join('"' + k + '"' for k in missing_keys)
+                    raise RuntimeError('malformed log file: header does not have required keys: ' + missing_keys_str)
 
-    # header should be a dictionary with the required keys, potentially some of
-    # the optional keys, but nothing else
-    assert isinstance(header, dict)
-
-    missing_keys = [k for k in REQUIRED_HEADER_KEYS if k not in header]
-    if len(missing_keys) > 0:
-        missing_keys_str = ', '.join('"' + k + '"' for k in missing_keys)
-        raise RuntimeError('malformed log file: header does not have required keys: ' + missing_keys_str)
-
-    # check that all the rest of the file is a list whose items are individual
-    # strings (new OTUs) or a length 2 list (a seq belonging to an OTU)
-    assert isinstance(progress, list)
-
-    for elt in progress:
-        assert isinstance(elt, str) or (isinstance(elt, list) and len(elt) == 2)
+                state = 'progress'
+            else:
+                fields = line.split('\t')
+                if len(fields) == 2:
+                    key, value = fields
+                    # check that the key is one of the known header keys
+                    if key in HEADER_KEYS:
+                        header[key] = value
+                    else:
+                        raise RuntimeError('malformed log file: line {} (in header) has unknown key "{}"'.format(line_i + 1, key))
+                else:
+                    raise RuntimeError('malformed log file: line {} (in header) has {} (not 2) tab-separated fields'.format(line_i + 1, len(fields)))
+        elif state == 'progress':
+            fields = line.split('\t')
+            if len(fields) in [1, 2]:
+                progress.append((line_i + 1, fields))
+            else:
+                raise RuntimeError('malformed log file: line {} (in progress) has {} (not 1 or 2) tab-separated fields'.format(line_i + 1, len(fields)))
 
     return header, progress
 
@@ -52,13 +85,12 @@ def restart_dbotu_run(log_fn):
         raise RuntimeError('log filenames do not match')
 
     # extract header data
-    gen_crit = header['genetic_criterion_threshold']
-    abund_crit = header['abundance_criterion_threshold']
-    pval_crit = header['distribution_criterion_threshold']
+    gen_crit = float(header['genetic_criterion_threshold'])
+    abund_crit = float(header['abundance_criterion_threshold'])
+    pval_crit = float(header['distribution_criterion_threshold'])
     seq_table_fh = open(header['sequence_table_filename'])
     fasta_fn = header['fasta_filename']
     output_fh = open(header['otu_table_output_filename'], 'w')
-    log = open(log_fn, 'w')  # append to existing log
 
     if 'membership_output_filename' in header:
         membership_fh = open(header['membership_output_filename'], 'w')
@@ -71,28 +103,42 @@ def restart_dbotu_run(log_fn):
     else:
         debug = None
 
+    seq_table = dbotu.read_sequence_table(seq_table_fh)
+    records = SeqIO.index(fasta_fn, 'fasta')
+
+    # check that the progress items in the log are all known sequences
+    for line_no, elt in progress:
+        seqs_missing_from_table = [x for x in elt if x not in seq_table.index]
+        seqs_missing_from_fasta = [x for x in elt if x not in records]
+        if len(seqs_missing_from_table) > 0:
+            raise RuntimeError('bad log file: seq(s) {} on line {} not in seq table'.format(seqs_missing_from_table, line_no))
+        if len(seqs_missing_from_fasta) > 0:
+            raise RuntimeError('bad log file: seq(s) {} on line {} not in fasta'.format(seqs_missing_from_fasta, line_no))
+
+    # open the new log file
+    log = open(log_fn, 'w')  # append to existing log
+
     # update the header and write it to the new log file
     header.update({'restarted_run': True, 'time_restarted': datetime.datetime.now()})
     print('---', file=log)
-    print(yaml.dump(header, default_flow_style=False).strip(), file=log)
+    for k, v in header.items():
+        print(k, v, sep='\t', file=log)
     print('---', file=log)
-
-    seq_table = dbotu.read_sequence_table(seq_table_fh)
-    records = SeqIO.index(fasta_fn, 'fasta')
 
     # create the caller. give it log file as None so that it doesn't write anything
     # to the log file yet
     caller = dbotu.DBCaller(seq_table, records, gen_crit, abund_crit, pval_crit, log, debug)
 
-    for elt_i, elt in enumerate(progress):
-        if isinstance(elt, str):
+    for progress_i, progress_elt in enumerate(progress):
+        line_no, elt = progress_elt
+        if len(elt) == 1:
             # this is a new otu
-            seq_id = elt
+            seq_id = elt[0]
             assert seq_id in caller.seq_table.index
             record = caller.records[seq_id]
             otu = dbotu.OTU(record.id, str(record.seq), caller.seq_table.loc[record.id])
             caller._make_otu(otu)
-        elif isinstance(elt, list) and len(elt) == 2:
+        elif len(elt) == 2:
             # this is a merging
             seq_id, otu_id = elt
 
@@ -106,15 +152,15 @@ def restart_dbotu_run(log_fn):
 
             caller._merge_sequence(member, otu)
         else:
-            raise RuntimeError('progress log item "{}" is not a string or 2-item list'.format(elt))
+            raise RuntimeError('progress log item on line {} is not a string or 2-item list'.format(line_no))
 
         # make sure that sequence we processed was the right one
-        expected_id = caller.seq_abunds.index[elt_i]
+        expected_id = caller.seq_abunds.index[progress_i]
         if not seq_id == expected_id:
-            raise RuntimeError('the {}-th sequence already processed was "{}" but the data makes it look like it should be "{}"'.format(elt_i + 1, member_id, expected_id))
+            raise RuntimeError('the {}-th sequence already processed was "{}" but the data makes it look like it should be "{}"'.format(progress_i + 1, member_id, expected_id))
 
     # process the rest of the samples
-    for record_id in caller.seq_abunds.index[elt_i + 1:]:
+    for record_id in caller.seq_abunds.index[progress_i + 1:]:
         caller._process_record(record_id)
 
     # write the output
@@ -128,4 +174,5 @@ if __name__ == '__main__':
     p.add_argument('log', help='progress log from stopped run')
     args = p.parse_args()
 
+    backup_log(args.log)
     restart_dbotu_run(args.log)

@@ -115,7 +115,18 @@ seq51	merged_into	seq31
 seq46	merged_into	seq63
 seq42	merged_into	seq12
 seq39	merged_into	seq14
+seq36	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104	seq3	seq58	seq30	seq97	seq88
+seq36	genetic_check	seq38
+seq36	distribution_check	seq38	0.846721075986
 seq36	merged_into	seq38
+seq35	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104	seq3	seq58	seq30	seq97	seq88
+seq35	genetic_check
 seq35	new_otu
+seq33	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104	seq3	seq58	seq30	seq97	seq88
+seq33	genetic_check	seq17
+seq33	distribution_check	seq17	0.947939974219
 seq33	merged_into	seq17
+seq59	abundance_check	seq106	seq53	seq86	seq89	seq118	seq0	seq7	seq47	seq17	seq67	seq38	seq87	seq62	seq50	seq60	seq48	seq93	seq34	seq110	seq65	seq6	seq79	seq85	seq72	seq28	seq91	seq109	seq96	seq74	seq10	seq71	seq75	seq76	seq84	seq108	seq13	seq78	seq44	seq9	seq113	seq57	seq8	seq12	seq64	seq63	seq56	seq25	seq31	seq92	seq29	seq95	seq82	seq20	seq15	seq54	seq21	seq80	seq27	seq99	seq102	seq5	seq112	seq2	seq43	seq24	seq14	seq49	seq41	seq94	seq68	seq77	seq52	seq37	seq104	seq3	seq58	seq30	seq97	seq88
+seq59	genetic_check	seq24	seq2
+seq59	distribution_check	seq24	0.0144500720895
 seq59	merged_into	seq24

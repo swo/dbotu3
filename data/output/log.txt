@@ -1,134 +1,132 @@
 ---
-abundance_criterion_threshold: 10.0
-debug_log_output_filename: /Users/scott/lib/dbotu/data/output/debug_log.txt
-distribution_criterion_threshold: 0.0005
-fasta_filename: /Users/scott/lib/dbotu/data/input/seq.fa
-genetic_criterion_threshold: 0.1
-membership_output_filename: /Users/scott/lib/dbotu/data/output/membership.txt
-otu_table_output_filename: /Users/scott/lib/dbotu/data/output/otu.txt
-progress_log_output_filename: /Users/scott/lib/dbotu/data/output/log.txt
-restarted_run: true
-sequence_table_filename: /Users/scott/lib/dbotu/data/input/counts.txt
-time_restarted: 2017-05-31 11:33:54.784080
-time_started: 2017-04-21 16:13:03.611172
+time_started	2017-06-02 12:20:26.231840
+genetic_criterion_threshold	0.1
+abundance_criterion_threshold	10.0
+distribution_criterion_threshold	0.0005
+sequence_table_filename	/Users/scott/lib/dbotu/data/input/counts.txt
+fasta_filename	/Users/scott/lib/dbotu/data/input/seq.fa
+otu_table_output_filename	/Users/scott/lib/dbotu/data/output/otu.txt
+progress_log_output_filename	/Users/scott/lib/dbotu/data/output/log.txt
+membership_output_filename	/Users/scott/lib/dbotu/data/output/membership.txt
+debug_log_output_filename	/Users/scott/lib/dbotu/data/output/debug_log.txt
 ---
-- "seq106"
-- "seq53"
-- "seq86"
-- "seq89"
-- "seq118"
-- "seq0"
-- "seq7"
-- "seq47"
-- "seq17"
-- "seq67"
-- "seq38"
-- "seq87"
-- "seq62"
-- "seq50"
-- "seq60"
-- "seq48"
-- "seq93"
-- "seq34"
-- "seq110"
-- "seq65"
-- "seq6"
-- "seq79"
-- "seq85"
-- "seq72"
-- "seq28"
-- "seq91"
-- "seq109"
-- "seq96"
-- "seq74"
-- "seq10"
-- "seq71"
-- "seq75"
-- "seq76"
-- "seq84"
-- "seq108"
-- "seq13"
-- "seq78"
-- "seq44"
-- "seq9"
-- "seq113"
-- "seq57"
-- "seq8"
-- "seq12"
-- "seq64"
-- "seq63"
-- "seq56"
-- "seq25"
-- "seq31"
-- "seq92"
-- "seq29"
-- "seq95"
-- "seq82"
-- "seq20"
-- "seq15"
-- "seq54"
-- "seq21"
-- "seq80"
-- "seq27"
-- "seq99"
-- "seq102"
-- "seq5"
-- "seq112"
-- "seq2"
-- "seq43"
-- "seq24"
-- "seq14"
-- "seq49"
-- "seq41"
-- "seq94"
-- "seq68"
-- "seq77"
-- "seq52"
-- "seq37"
-- "seq104"
-- ["seq32", "seq84"]
-- ["seq40", "seq84"]
-- "seq3"
-- ["seq16", "seq84"]
-- ["seq103", "seq84"]
-- ["seq45", "seq84"]
-- ["seq55", "seq84"]
-- "seq58"
-- "seq30"
-- ["seq19", "seq84"]
-- "seq97"
-- "seq88"
-- ["seq115", "seq17"]
-- ["seq4", "seq64"]
-- "seq66"
-- ["seq73", "seq34"]
-- "seq1"
-- "seq22"
-- ["seq105", "seq34"]
-- ["seq11", "seq58"]
-- "seq70"
-- "seq18"
-- ["seq119", "seq109"]
-- "seq23"
-- ["seq83", "seq63"]
-- ["seq117", "seq84"]
-- ["seq116", "seq41"]
-- "seq114"
-- ["seq111", "seq110"]
-- ["seq107", "seq86"]
-- "seq101"
-- "seq100"
-- "seq98"
-- ["seq90", "seq29"]
-- ["seq81", "seq86"]
-- ["seq26", "seq30"]
-- ["seq69", "seq2"]
-- ["seq61", "seq15"]
-- ["seq51", "seq31"]
-- ["seq46", "seq63"]
-- ["seq42", "seq12"]
-- ["seq39", "seq14"]
-- ["seq36", "seq38"]
-- "seq35"
-- ["seq33", "seq17"]
-- ["seq59", "seq24"]
+seq106
+seq53
+seq86
+seq89
+seq118
+seq0
+seq7
+seq47
+seq17
+seq67
+seq38
+seq87
+seq62
+seq50
+seq60
+seq48
+seq93
+seq34
+seq110
+seq65
+seq6
+seq79
+seq85
+seq72
+seq28
+seq91
+seq109
+seq96
+seq74
+seq10
+seq71
+seq75
+seq76
+seq84
+seq108
+seq13
+seq78
+seq44
+seq9
+seq113
+seq57
+seq8
+seq12
+seq64
+seq63
+seq56
+seq25
+seq31
+seq92
+seq29
+seq95
+seq82
+seq20
+seq15
+seq54
+seq21
+seq80
+seq27
+seq99
+seq102
+seq5
+seq112
+seq2
+seq43
+seq24
+seq14
+seq49
+seq41
+seq94
+seq68
+seq77
+seq52
+seq37
+seq104
+seq32	seq84
+seq40	seq84
+seq3
+seq16	seq84
+seq103	seq84
+seq45	seq84
+seq55	seq84
+seq58
+seq30
+seq19	seq84
+seq97
+seq88
+seq115	seq17
+seq4	seq64
+seq66
+seq73	seq34
+seq1
+seq22
+seq105	seq34
+seq11	seq58
+seq70
+seq18
+seq119	seq109
+seq23
+seq83	seq63
+seq117	seq84
+seq116	seq41
+seq114
+seq111	seq110
+seq107	seq86
+seq101
+seq100
+seq98
+seq90	seq29
+seq81	seq86
+seq26	seq30
+seq69	seq2
+seq61	seq15
+seq51	seq31
+seq46	seq63
+seq42	seq12
+seq39	seq14
+seq36	seq38
+seq35
+seq33	seq17
+seq59	seq24
