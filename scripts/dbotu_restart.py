@@ -25,7 +25,6 @@ def restart_dbotu_run(log_fn):
     seq_table_fh = open(header['sequence_table_filename'])
     fasta_fn = header['fasta_filename']
     output_fh = open(header['otu_table_output_filename'], 'w')
-    log = open(log_fn, 'w')  # append to existing log
 
     if 'membership_output_filename' in header:
         membership_fh = open(header['membership_output_filename'], 'w')
@@ -37,6 +36,8 @@ def restart_dbotu_run(log_fn):
         print('restarted_run', file=debug)
     else:
         debug = None
+
+    log = open(log_fn, 'w')  # append to existing log
 
     # update the header and write it to the new log file
     header.update({'restarted_run': True, 'time_restarted': datetime.datetime.now()})
