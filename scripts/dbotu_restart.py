@@ -4,7 +4,7 @@
 
 from __future__ import print_function
 
-import argparse, os.path, datetime, shutil
+import argparse, os.path, datetime, shutil, textwrap
 from Bio import SeqIO
 import dbotu
 
@@ -17,15 +17,13 @@ OPTIONAL_HEADER_KEYS = ['membership_output_filename', 'debug_log_output_filename
 
 HEADER_KEYS = REQUIRED_HEADER_KEYS + OPTIONAL_HEADER_KEYS
 
-def backup_log(log_fn):
+def backup_log(log_fn, force=False):
     target_fn = log_fn + '.bak'
-    res = input('Backup log file by copying {} to {}? [Y/n] '.format(log_fn, target_fn)).lower()
 
-    if res == 'n':
-        print('not backing up')
-    else:
-        print('backing up')
-        shutil.copy2(log_fn, target_fn)
+    if os.path.exists(target_fn) and not force:
+        raise RuntimeError('backup file destination {} already exists. delete it or re-run with --force'.format(target_fn))
+
+    shutil.copy2(log_fn, target_fn)
 
 def parse_log(log_fh):
     '''
@@ -74,11 +72,15 @@ def parse_log(log_fh):
 
     return header, progress
 
-def restart_dbotu_run(log_fn):
+def restart_dbotu_run(log_fn, drop_last=False):
     log_fn = os.path.realpath(log_fn)
 
     with open(log_fn) as f:
         header, progress = parse_log(f)
+
+    # drop the last entry in the progress section
+    if drop_last:
+        progress.pop()
 
     # assert logs are the same
     if not header['progress_log_output_filename'] == log_fn:
@@ -170,9 +172,30 @@ def restart_dbotu_run(log_fn):
         caller.write_membership(membership_fh)
 
 if __name__ == '__main__':
-    p = argparse.ArgumentParser(description='Restart a dbOTU3 run')
+    epilog = textwrap.dedent('''This script reads the log file and writes a new
+    file at that location, overwriting the old file. The default behavior is to
+    also back up the original log file by copying it to a new file with the
+    additional extension .bak. If a file with that .bak name already exists,
+    this script will quit. If --force is on, then the .bak will be overwritten.
+    If --no_backup is on, then the original log file will not be backed up. The
+    --drop_last option aims to sanitize log files produced by dbOTU runs that
+    were interrupted (e.g., jobs on a compute cluster that got killed) by
+    dropping the last entry in the log file (i.e., the last new OTU creation or
+    sequence-into-OTU merger). If the log file was truncated in the middle of
+    a line after the header, then this should be equivalent to dropping the
+    last line of the log file.''')
+
+    p = argparse.ArgumentParser(description='Restart a dbOTU3 run', epilog=epilog)
     p.add_argument('log', help='progress log from stopped run')
+    p.add_argument('--force', '-f', action='store_true', help='force overwrite of backup log file?')
+    p.add_argument('--no_backup', '-b', action='store_false', dest='backup', help='do not create backup?')
+    p.add_argument('--drop_last', '-d', action='store_true', help='drop last log progress item (new OTU or seq assignment)?')
     args = p.parse_args()
 
-    backup_log(args.log)
-    restart_dbotu_run(args.log)
+    if args.force and not args.backup:
+        raise RuntimeError("incompatible command-line arguments: can't force overwrite if not writing a backup")
+
+    if args.backup:
+        backup_log(args.log, args.force)
+
+    restart_dbotu_run(args.log, drop_last=args.drop_last)
