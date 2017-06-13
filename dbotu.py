@@ -148,14 +148,14 @@ class DBCaller:
         if self.debug_log is not None:
             print(*fields, sep='\t', file=self.debug_log)
 
-    def _print_progress_log(self, line):
+    def _print_progress_log(self, *fields):
         '''
         Write fields to progress log file (if present).
 
         returns: nothing
         '''
         if self.progress_log is not None:
-            print(line, file=self.progress_log)
+            print(*fields, sep='\t', file=self.progress_log)
 
     def ga_matches(self, candidate):
         '''
@@ -226,7 +226,7 @@ class DBCaller:
         otu.absorb(member)
         self.membership[otu.name].append(member.name)
 
-        self._print_progress_log('- ["{}", "{}"]'.format(member.name, otu.name))
+        self._print_progress_log(member.name, otu.name)
         self._print_debug_log(member.name, 'merged_into', otu.name)
 
     def _make_otu(self, otu):
@@ -241,7 +241,7 @@ class DBCaller:
         self.otus.append(otu)
         self.membership[otu.name] = [otu.name]
 
-        self._print_progress_log('- "{}"'.format(otu.name))
+        self._print_progress_log(otu.name)
         self._print_debug_log(otu.name, 'new_otu')
 
     def run(self):
@@ -348,28 +348,29 @@ def call_otus(seq_table_fh, fasta_fn, output_fh, gen_crit, abund_crit, pval_crit
     # set up the input fasta records
     records = SeqIO.index(fasta_fn, 'fasta')
 
-    # write the setup values to the log file, if present
-    if log is not None:
-        print('---', file=log)
-        print('time_started:', datetime.datetime.now(), file=log)
-        print('genetic_criterion_threshold:', gen_crit, file=log)
-        print('abundance_criterion_threshold:', abund_crit, file=log)
-        print('distribution_criterion_threshold:', pval_crit, file=log)
-        print('sequence_table_filename:', os.path.realpath(seq_table_fh.name), file=log)
-        print('fasta_filename:', os.path.realpath(fasta_fn), file=log)
-        print('otu_table_output_filename:', os.path.realpath(output_fh.name), file=log)
-        print('progress_log_output_filename:', os.path.realpath(log.name), file=log)
-
-        if membership is not None:
-            print('membership_output_filename:', os.path.realpath(membership.name), file=log)
-
-        if debug is not None:
-            print('debug_log_output_filename:', os.path.realpath(debug.name), file=log)
-
-        print('---', file=log)
-
     # generate the caller object
     caller = DBCaller(seq_table, records, gen_crit, abund_crit, pval_crit, log, debug)
+
+    # write the setup values to the log file (if present)
+    caller._print_progress_log('---')
+    caller._print_progress_log('time_started', datetime.datetime.now())
+    caller._print_progress_log('genetic_criterion_threshold', gen_crit)
+    caller._print_progress_log('abundance_criterion_threshold', abund_crit)
+    caller._print_progress_log('distribution_criterion_threshold', pval_crit)
+    caller._print_progress_log('sequence_table_filename', os.path.realpath(seq_table_fh.name))
+    caller._print_progress_log('fasta_filename', os.path.realpath(fasta_fn))
+    caller._print_progress_log('otu_table_output_filename', os.path.realpath(output_fh.name))
+    caller._print_progress_log('progress_log_output_filename', os.path.realpath(log.name))
+
+    if membership is not None:
+        caller._print_progress_log('membership_output_filename', os.path.realpath(membership.name))
+
+    if debug is not None:
+        caller._print_progress_log('debug_log_output_filename', os.path.realpath(debug.name))
+
+    caller._print_progress_log('---')
+
+    # run it!
     caller.run()
     caller.write_otu_table(output_fh)
 

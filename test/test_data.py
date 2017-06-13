@@ -4,7 +4,7 @@ from dbotu import *
 import numpy as np, pandas as pd
 import scipy.stats, scipy.optimize
 from Bio import SeqIO
-import os.path
+import os.path, itertools
 # For Python 2 compatibility
 try:
     from StringIO import StringIO
@@ -28,22 +28,29 @@ def caller():
     return DBCaller(table, records, max_dist=0.10, min_fold=10.0, threshold_pval=0.0005)
 
 def test_init(caller):
-    assert all(caller.seq_abunds[0:3] == pd.Series([2523, 1831, 1793], index=['seq9', 'seq0', 'seq2']))
+    assert all(caller.seq_abunds[0:3] == pd.Series([11184, 8896, 8723], index=['seq106', 'seq53', 'seq86']))
 
 def test_process_one(caller):
     caller._process_record(caller.seq_abunds.index[0])
-    assert caller.otus[0] == OTU('seq9', 'GGAATATTGGTCAATGGAGGCAACTCTGAACCAGCCATGCCGCGTGCAGGATGACGGCCCTATGGGTTGTAAACTGCTTTTGTACCAGAGAAAACCCGAGTACGTGTACTCGGTTGATAGTATGGTAAGAATAAGCATCGGCTAACTTCGTGCCAGCAGCCGCGGTAAGACGAAGGATGCAAGCGTTATCCGGATTCATTGGGTTTAAAGGGTGCGTAGGCGGACCTGTAAGTCAGTGGTGAAATCTCTTTGCTTAACAAAGAAACTGCCATTGATACTGCAAGTCTAGAGTATAGATGACGTTGGCGGAATATGACATGTAGTGGTGAAATACTTAGATATGTCATAGAACACCGATTGCGAAGGCAGC', [947, 749, 274, 162, 391])
+    assert caller.otus[0] == OTU('seq106', 'TGCTGCCTCCCGTAGGAGTCTGGGCCGTGTCTCAGTCCCAGTGTGGCCGGTCACCCTCTCAGGTCGGCTACGCATCGTCGCCTTGGTGGGCCGTTACCCCGCCAACCAGCTAATGCGCCATAAGTCCATCCTCTACCAGTGCTTTGAGGCACTTTTAATACGGTCACCATGCAGTGTCCGTACCTAT', [2484, 2151, 2341, 3474, 724, 10])
 
 def test_process_until_first_merge(caller):
-    for i in range(17):
+    member_id = 'seq32'
+    otu_id = 'seq84'
+    otu_seq = 'TGCTGCCTCCCGTAGGAGTTTGGGCCGTGTCTCAGTCCCAATGTGGCCGTTCACCCTCTCAGGCCGGCTACTGATCGTCGCCTTGGTAGGCCGTTACCCCACCAACTAGCTAATCAGACGCGGGTCCATCTCATACCACCGGAGTTTTTCACACTGTGCCATGCAGCACTGTGCGCTTATGCGGTAT'
+    member_counts = np.array([26, 28, 40, 5, 0, 0])
+    otu_counts = np.array([462, 398, 622, 17, 96, 1])
+    merged_counts = member_counts + otu_counts
+
+    for i in itertools.count():
         caller._process_record(caller.seq_abunds.index[i])
 
-    seq9_counts = np.array([947, 749, 274, 162, 391])
-    seq1537_counts = np.array([38, 25, 8, 5, 10])
-    new_counts = seq9_counts + seq1537_counts
+        if caller.seq_abunds.index[i] == member_id:
+            break
 
-    assert caller.membership['seq9'] == ['seq9', 'seq1537']
-    assert caller.otus[0] == OTU('seq9', 'GGAATATTGGTCAATGGAGGCAACTCTGAACCAGCCATGCCGCGTGCAGGATGACGGCCCTATGGGTTGTAAACTGCTTTTGTACCAGAGAAAACCCGAGTACGTGTACTCGGTTGATAGTATGGTAAGAATAAGCATCGGCTAACTTCGTGCCAGCAGCCGCGGTAAGACGAAGGATGCAAGCGTTATCCGGATTCATTGGGTTTAAAGGGTGCGTAGGCGGACCTGTAAGTCAGTGGTGAAATCTCTTTGCTTAACAAAGAAACTGCCATTGATACTGCAAGTCTAGAGTATAGATGACGTTGGCGGAATATGACATGTAGTGGTGAAATACTTAGATATGTCATAGAACACCGATTGCGAAGGCAGC', new_counts)
+    assert caller.membership[otu_id] == [otu_id, member_id]
+    print([o.name for o in caller.otus])
+    assert [o for o in caller.otus if o.name == otu_id][0] == OTU(otu_id, otu_seq, merged_counts)
 
 def test_full_process():
     records = SeqIO.index(fasta_fn, 'fasta')

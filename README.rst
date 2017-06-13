@@ -47,12 +47,12 @@ Version history
 - 1.3.0: Improved OTU file header. Split the log file into a debug and progress log.
 - 1.4.0: Made an improvement to the Levenshtein-based genetic dissimilarity metric.
 - 1.4.1: Account for pandas API change to ``MultiIndex``
+- 1.5.0: Added the restart and rep seq scripts
 
 To-do
 -----
 
-- Fix the output format (maybe put ``OTU_ID`` in the first field and row?)
-- Find a way to avoid reading the entire count file? (The fasta file is not all loaded because we use ``SeqIO.index``.)
+- Testing for the restart scripts
 - Better coverage for unit tests
 
 Citation
@@ -69,5 +69,9 @@ distribution-based OTU calling. *PLoS ONE* (2017) doi:10.1371/journal.pone.01763
 
 Author
 ------
+
+If you find a bug or have a request for a new feature, open an issue_.
+
+.. _issue: https://github.com/swo/dbotu3/issues
 
 Scott Olesen / *swo at alum.mit.edu*

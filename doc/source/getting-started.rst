@@ -62,33 +62,32 @@ relevant options using::
 The ``--output`` option specifies where the resulting OTU table should go. The
 ``--membership`` option specifies that a QIIME-style membership file should be
 created (one line for each OTU; the representative sequence ID is the first
-field, all member sequence IDs are tab-separated after that). The ``--log``
-option give some verbose information about exactly what tests were run for
-which sequences.
+field, all member sequence IDs are tab-separated after that).
+
+If you are interested in only the sequences that were selected as OTUs, you can
+use the script ``dbotu_rep_seqs.py``, which uses the OTU table output by dbOTU
+and the input fasta file to produce a fasta file of representative sequences.
 
 Monitor
 =======
 
-The ``--log`` option produces a YAML_ file with two parts ("documents" in YAML
-jargon). The first is a header with information about the program run: it has
+The ``--log`` option produces (mostly) tab-separated file with two parts. The
+first part, set off by three hyphens, is a header with information about the
+program run: it has
 the algorithm parameters and the input/output filenames you specified when
 invoking dbOTU3.
 
-.. _YAML: http://www.yaml.org/
-
 The second part (after the dashes) is a history of the algorithm's progress.
-Each line is either a string or a two-element list. A string means that the
-sequence with that ID was assigned as its own OTU. A list means that the sequence
-specificed by the first element was merged as a member into the OTU specified
-by the second element.  You can use this file, which is written on the fly,
-to see what you asked for and how far through your data dbOTU3 has gotten.
+Each line has one or two (tab-separated) IDs. A single ID means that that
+sequence was assigned as its own OTU. Two IDs means that the first sequence was
+merged into the second. You can use this file, which is written on the fly, to
+see what you asked for and how far through your data dbOTU3 has gotten.
 
-Evaluate
-========
-
-If you can validate your choices for parameters, do so. You might also want to
-chimera-check the OTUs, possibly with a script like my `UCHIME chimera checker
-<https://github.com/swo/uchime-chimera-check>`_.
+The log file includes enough information that a dbOTU run can be restarted.
+(This might be handy if, say, you're running dbOTU on a computing cluster and
+your jobs is killed after hitting a time limit.) The script
+``dbotu_restart.py`` included in the package will restart a run using this log
+file.
 
 If you want to get into the specifics of what the algorithm did, you can read
 the debug log file (produced by using the ``--debug`` option). The debug log
@@ -107,3 +106,14 @@ file has 5 types of lines, all of which are tab-separated:
   criterion returned a :math:`p`-value of 0.001.
 - Lines like ``A new_otu`` show that sequence ``A`` was made into a new OTU.
 - Lines like ``A new_otu B`` show that sequence ``A`` was merged into OTU ``B``.
+
+Evaluate
+========
+
+If you can validate your choices for parameters, do so! There is no guarantee
+that the default parameters are the ones that will give most biologically
+meaningful results.
+
+You might also want to
+chimera-check the OTUs, possibly with a script like my `UCHIME chimera checker
+<https://github.com/swo/uchime-chimera-check>`_.

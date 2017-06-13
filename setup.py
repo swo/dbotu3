@@ -4,7 +4,7 @@ with open('README.rst') as f:
     readme=f.read()
 
 setup(name='dbotu',
-    version='1.4.1',
+    version='1.5.0',
     description='Distribution-based OTU calling',
     long_description=readme,
     author='Scott Olesen',
@@ -12,7 +12,7 @@ setup(name='dbotu',
     platforms=['any'],
     license='License :: OSI Approved :: MIT License',
     url='http://github.com/swo/dbotu3',
-    scripts=['dbotu.py'],
+    scripts=['dbotu.py', 'scripts/dbotu_restart.py', 'scripts/dbotu_rep_seqs.py'],
     install_requires=['numpy', 'pandas', 'scipy', 'biopython', 'python-Levenshtein'],
     package_date={'dbotu': ['data/input/counts.txt', 'data/input/seq.fa',
         'data/output/log.txt', 'data/output/membership.txt', 'data/output/otu.txt',
