@@ -49,11 +49,14 @@ Version history
 To-do
 -----
 
-- Fix the output format (maybe put ``OTU_ID`` in the first field and row?)
-- Find a way to avoid reading the entire count and fasta files?
+- Testing for the restart scripts
 - Better coverage for unit tests
 
 Author
 ------
+
+If you find a bug or have a request for a new feature, open an issue_.
+
+.. _issue: https://github.com/swo/dbotu3/issues
 
 Scott Olesen / *swo at alum.mit.edu*
