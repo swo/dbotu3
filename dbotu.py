@@ -146,7 +146,7 @@ class DBCaller:
         returns: nothing
         '''
         if self.debug_log is not None:
-            print(*fields, sep='\t', file=self.debug_log)
+            print(*fields, sep='\t', file=self.debug_log, flush=True)
 
     def _print_progress_log(self, *fields):
         '''
@@ -155,7 +155,7 @@ class DBCaller:
         returns: nothing
         '''
         if self.progress_log is not None:
-            print(*fields, sep='\t', file=self.progress_log)
+            print(*fields, sep='\t', file=self.progress_log, flush=True)
 
     def ga_matches(self, candidate):
         '''
