@@ -48,10 +48,12 @@ Version history
 - 1.4.0: Made an improvement to the Levenshtein-based genetic dissimilarity metric.
 - 1.4.1: Account for pandas API change to ``MultiIndex``
 - 1.5.0: Added the restart and rep seq scripts
+- 1.5.1: Fixed log printing problem
 
 To-do
 -----
 
+- Testing for the script itself, especially log files
 - Testing for the restart scripts
 - Better coverage for unit tests
 

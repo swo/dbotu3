@@ -361,8 +361,14 @@ def call_otus(seq_table_fh, fasta_fn, output_fh, gen_crit, abund_crit, pval_crit
     caller._print_progress_log('distribution_criterion_threshold', pval_crit)
     caller._print_progress_log('sequence_table_filename', os.path.realpath(seq_table_fh.name))
     caller._print_progress_log('fasta_filename', os.path.realpath(fasta_fn))
-    caller._print_progress_log('otu_table_output_filename', os.path.realpath(output_fh.name))
-    caller._print_progress_log('progress_log_output_filename', os.path.realpath(log.name))
+
+    if output_fh is sys.stdout:
+        caller._print_progress_log('otu_table_output_filename', '<stdout>')
+    else:
+        caller._print_progress_log('otu_table_output_filename', os.path.realpath(output_fh.name))
+
+    if log is not None:
+        caller._print_progress_log('progress_log_output_filename', os.path.realpath(log.name))
 
     if membership is not None:
         caller._print_progress_log('membership_output_filename', os.path.realpath(membership.name))
