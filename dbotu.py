@@ -291,6 +291,17 @@ class DBCaller:
         for otu in sorted_otus:
             print(otu.name, *self.membership[otu.name], sep='\t', file=output)
 
+    def write_fasta(self, output):
+        '''
+        Write the output fasta with dbOTU representative sequences.
+
+        output: filehandle
+
+        returns: nothing
+        '''
+        for otu in self.otus:
+            rec = ['>', otu.name, '\n', otu.sequence]
+            print(*rec, sep='', file=output)
 
 def read_sequence_table(fn):
     '''
