@@ -38,7 +38,7 @@ dbotu3 is also on conda_ and can be installed as follows:
 
 .. code-block::
 
-    conda install -c cduvallet dbotu
+    conda install -c cduvallet -c conda-forge dbotu
 
 For `QIIME 2`_ users, dbotu3 is also available as a plugin_.
 
