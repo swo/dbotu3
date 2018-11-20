@@ -35,9 +35,26 @@ algorithm.  The Alm Lab website_ also has a short page with information.
 Installation
 ------------
 
-dbotu3 is on PyPi_ and can be installed with pip.
+dbotu3 is on PyPi_ and can be installed with pip:
 
 .. _PyPi: https://pypi.python.org/pypi/dbotu
+
+.. code-block::
+
+    pip install dbotu
+
+dbotu3 is also on conda_ and can be installed as follows:
+
+.. _conda: https://anaconda.org/cduvallet/dbotu
+
+.. code-block::
+
+    conda install -c cduvallet -c conda-forge dbotu
+
+For `QIIME 2`_ users, dbotu3 is also available as a plugin_.
+
+.. _plugin: https://github.com/cduvallet/q2-dbotu
+.. _`QIIME 2`: https://qiime2.org/
 
 Requirements
 ------------
