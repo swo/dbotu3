@@ -1,6 +1,17 @@
 Distribution-based OTU calling
 ==============================
 
+Disclaimer
+----------
+
+**I no longer maintain this repo.** If you want to fork this project, use the
+Alm Lab's version_.
+
+.. _version: https://github.com/almlab/dbotu3
+
+Introduction
+------------
+
 *dbotu3* is a new implementation of Sarah Preheim's dbOTU_ algorithm.  The
 scope is narrower, the numerical comparisons are faster, and the interface is
 more user-friendly.
